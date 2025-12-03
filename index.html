@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Portfolio Site</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            // ★ ご指定の色 #13a4ec に変更
+            "primary": "#13a4ec",
+            "secondary": "#13a4ec", // アイコンとボタンの色を統一
+            "background-light": "#F8F9FA",
+            "background-dark": "#101c22",
+            "text-light": "#343A40",
+            "text-dark": "#F8F9FA",
+            "text-muted-light": "#6c757d",
+            "text-muted-dark": "#adb5bd"
+          },
+          fontFamily: {
+            display: ["Manrope", "Noto Sans JP", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+
+  <header class="sticky top-0 z-50 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html" id="header-branding" class="flex items-center gap-4 text-text-light dark:text-text-dark flex-shrink-0"></a>
+        
+        <div class="hidden lg:flex flex-1 justify-end items-center gap-8">
+          <nav class="flex items-center gap-5 lg:gap-6" id="main-nav">
+            <div id="main-nav-loader" class="flex gap-4">
+              <div class="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded-md animate-pulse"></div>
+              <div class="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded-md animate-pulse"></div>
+              <div class="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded-md animate-pulse"></div>
+            </div>
+          </nav>
+          <div id="header-cta-container">
+            <div class="h-10 w-24 bg-slate-200 dark:bg-slate-700 rounded-lg animate-pulse"></div>
+          </div>
+        </div>
+        
+        <div class="lg:hidden flex items-center gap-4"> 
+           <div id="mobile-cta-container">
+            <div class="h-10 w-24 bg-slate-200 dark:bg-slate-700 rounded-lg animate-pulse"></div>
+           </div>
+          <button id="mobile-menu-toggle" class="text-text-light dark:text-text-dark p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    
+    <div id="mobile-menu" class="hidden lg:hidden absolute top-16 left-0 w-full bg-background-light dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 shadow-lg z-40">
+      <nav class="flex flex-col gap-4 p-4" id="mobile-nav">
+        <div id="mobile-nav-loader" class="flex flex-col gap-4 p-4">
+          <div class="h-6 w-3/4 bg-slate-200 dark:bg-slate-700 rounded-md animate-pulse"></div>
+          <div class="h-6 w-3/4 bg-slate-200 dark:bg-slate-700 rounded-md animate-pulse"></div>
+          <div class="h-6 w-3/4 bg-slate-200 dark:bg-slate-700 rounded-md animate-pulse"></div>
+        </div>
+      </nav>
+    </div>
+  </header>
+  
+  <main class="flex flex-1 justify-center py-5">
+    <div class="layout-content-container flex flex-col max-w-5xl flex-1 px-4 sm:px-6 lg:px-8">
+      <section class="py-16 sm:py-24">
+        <div class="@container">
+          <div class="flex flex-col gap-10 @[864px]:flex-row @[864px]:items-center">
+            <div class="flex flex-col gap-6 text-center @[864px]:text-left @[864px]:w-1/2">
+              <div class="flex flex-col gap-4">
+                <h1 class="text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl">収入のポケットを、もう一つ。</h1>
+                <h2 class="text-base font-normal leading-relaxed text-text-muted-light dark:text-text-muted-dark @[480px]:text-lg">あなたの中にある「誰かを幸せにする何か」が、「自分サイズの仕事」に変わる...</h2>
+              </div>
+              <a href="free-course.html" role="button" class="flex w-full @[480px]:w-auto @[864px]:self-start min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity">
+                <span class="truncate">「最初のポケット」の設計図を手に入れる</span>
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </a>
+            </div>
+            <div class="w-full @[864px]:w-1/2">
+              <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl" data-alt="Abstract gradient waves in blue and gold" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAlmfAahwZtJ0XDR41LOJSUBB-AXvbZJruE4F_t94IblcTPfM0NMIPKcPnLhPALorwxKN4Gn2dVjKi5iqrTZ_vk3U7El6uxXx-OxAB-s2_F4eGvu_MCdFdiFiGDzvoznB9jFtcxp2ihRoEaB-SMdo9ndP7qDLwxxDXBDcXJyKAHDRAtvCKUscTgErOi6GwFroSCHXiPny-m3eeP069k2aU1AdiNBCbAPeIBDC5WyX29Tw2YJSDXg1F8yHAZE9sncTieYDuCLr4Qm2M2");'></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-16 sm:py-24">
+        <div class="flex flex-col gap-10 @container">
+          <div class="flex flex-col gap-4 text-center">
+            <h2 class="text-3xl font-bold leading-tight tracking-[-0.015em] @[480px]:text-4xl">こんな不安を抱えていませんか？</h2>
+            <p class="text-base font-normal leading-relaxed text-text-muted-light dark:text-text-muted-dark max-w-3xl mx-auto">時代の変化が速く、先行きの見えない現代。多くの人が将来に対する漠然とした不安を感じています。</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 p-0">
+            <div class="flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark p-6 text-center items-center">
+              <div class="flex items-center justify-center size-12 rounded-full bg-secondary/20 text-secondary">
+                <span class="material-symbols-outlined text-3xl">smart_toy</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <h3 class="text-lg font-bold leading-tight">AIの台頭による仕事の喪失</h3>
+                <p class="text-sm font-normal leading-normal text-text-muted-light dark:text-text-muted-dark">「自分の仕事はAIに奪われるのではないか」という不安。</p>
+              </div>
+            </div>
+            <div class="flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark p-6 text-center items-center">
+              <div class="flex items-center justify-center size-12 rounded-full bg-secondary/20 text-secondary">
+                <span class="material-symbols-outlined text-3xl">trending_up</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <h3 class="text-lg font-bold leading-tight">将来への漠然とした焦り</h3>
+                <p class="text-sm font-normal leading-normal text-text-muted-light dark:text-text-muted-dark">「このままでいいのだろうか」というキャリアへの焦り。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-16 sm:py-24 bg-white dark:bg-background-dark rounded-xl">
+        <div class="px-6 lg:px-10 @container">
+          <div class="flex flex-col gap-10 @[864px]:flex-row @[864px]:items-center">
+            <div class="w-full @[864px]:w-1/3">
+              <div class="aspect-square bg-center bg-no-repeat bg-cover rounded-xl mx-auto max-w-xs @[864px]:max-w-none" data-alt="Professional portrait of a smiling woman with a blurred office background." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBhIu4uSaUqt4SiJO7wc0DMib-QVHKBsMWrLH6fBY3PEZPnYkV1sQv7RTrJxdm1aE_Bj2jyKmnUErxapsA2mCyrEa_VZp-JLD3dyz-1IiaIg4j75GL2Hks9cKiWYVX2uIOLommNfle9jSuO0jnzuwP5XpKEfmsz1q80Y_MK5Gxgn9WirBZD9XJ7VafMJMmHj_dGFXq4WOj5ox6qxi70z0mAZfchfuhiXRdWNWJKFboH6XApF2VFFjFP4udjw7zPzSKXBgYTUosoErqB");'></div>
+            </div>
+            <div class="flex flex-col gap-4 @[864px]:w-2/3">
+              <h2 class="text-3xl font-bold leading-tight tracking-[-0.015em]">信頼できる導き手</h2>
+              <p class="text-base leading-relaxed text-text-muted-light dark:text-text-muted-dark">こんにちは、山田花子です。10年以上にわたり、個人の才能をビジネスに変えるお手伝いをしてきました。私の使命は、あなたの中に眠る価値を見つけ出し、それを「自分サイズの仕事」として形にするための、具体的で再現性の高い計画を提供することです。一緒に、未来への確かな一歩を踏み出しましょう。</p>
+              <a class="text-primary dark:text-secondary font-bold hover:underline" href="profile.html">詳しいプロフィールを見る →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-16 sm:py-24" id="top-books-section">
+        <div class="flex flex-col gap-10 @container">
+          <div class="flex flex-col gap-4 text-center">
+            <h2 class="text-3xl font-bold leading-tight tracking-[-0.015em] @[480px]:text-4xl">おすすめの書籍</h2>
+            <p class="text-base font-normal leading-relaxed text-text-muted-light dark:text-text-muted-dark max-w-3xl mx-auto">
+              ビジネスのパフォーマンス向上に役立つ、おすすめの書籍を紹介します。
+            </p>
+          </div>
+          <div id="top-books-container" class="flex flex-col gap-6">
+            <div id="top-books-loader" class="flex justify-center py-8">
+                <div class="w-12 h-12 border-4 border-slate-200 dark:border-slate-700 border-t-primary rounded-full animate-spin"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="pt-16 sm:pt-24 pb-8">
+        <h2 class="text-3xl font-bold leading-tight tracking-[-0.015em] text-center">最新のお知らせ</h2>
+      </section>
+      <section class="pb-16 sm:pb-24">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="flex flex-col gap-3 group">
+            <div class="overflow-hidden rounded-lg">
+              <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg group-hover:scale-105 transition-transform duration-300" data-alt="A person typing on a laptop with a cup of coffee nearby." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA04GI2a5qpcMnfBHOpoqNmcxX3RnnYhk0RkZt7SfqZzCbZXh5yeljgtiXqWdXzrYkYZ21jNP2w09EPLGjZAOtG49Je0MKSQlBxQqIZxoLEeLMDbyZwQGT8zOB284K8uK2-R7kR4mP_KvqPOKO37GL1QJSOQukAZbkM92znC6lT-u3NiQBFkRS_pPHk63eu_F-8VVvaCqvEk2ALpbGaB2qcjZPRz0mmj29lzVW4yFZ7f4Bmj_AHkhvbFOZOW3oXUtMddOA1cAFkkuKY");'></div>
+            </div>
+            <div>
+              <p class="text-xs text-text-muted-light dark:text-text-muted-dark">2023年10月26日</p>
+              <p class="text-base font-bold leading-normal mt-1">新しいブログ記事を公開しました</p>
+              <a class="text-sm font-medium leading-normal text-primary dark:text-secondary hover:underline" href="info.html">続きを読む</a>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3 group">
+            <div class="overflow-hidden rounded-lg">
+              <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg group-hover:scale-105 transition-transform duration-300" data-alt="A conference room with people attending a seminar." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuApo3Hy_Wxe2gAZfrNX7T0w4_TJhfDiikKEmvxeedPj6c9WoZIb77ZuGIi2td88nTjj-zfr94AfAjOtpC3RDhaHnre1y_HnZ08TsvujVFvJDliiMpxPWzr0sf5EW96WuS516VCOdRQH8yi5Rprdho3AQsBhijPxp7OxIO4gk-h4YsVgPQeCq2qCBxVTq5AyNNtHDXFPQK2iYcFMEWieA6-9lk8YEx-LDIepLpO408GM0rRjIjkE2AKqomD8FQv-zDd4oZJEZfpD0C0_");'></div>
+            </div>
+            <div>
+              <p class="text-xs text-text-muted-light dark:text-text-muted-dark">2023年10月24日</p>
+              <p class="text-base font-bold leading-normal mt-1">セミナー開催のお知らせ</p>
+              <a class="text-sm font-medium leading-normal text-primary dark:text-secondary hover:underline" href="info.html">続きを読む</a>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3 group">
+            <div class="overflow-hidden rounded-lg">
+              <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg group-hover:scale-105 transition-transform duration-300" data-alt="A collection of magazines and newspapers on a table." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDygmsKSzQlh2R-odzbwr732q2T09CIwlVuj9TL8g7qQoRI1wddgR8YuAZOpzIqoqAZ_4_RA8zyLv88gAPyHKlHQrbyD5f69GAQy9aloyXlJPBXlf-H5txUkiGOv1sXoRcMYa2cK9_YvNjogOenB4co-r6DlADxncrSz8dkR_wBm-dGwgKHaEa3s27HPrWsviyTAI4_mi2POkf8RZYfIv8vT4Htno-C03lBBcfgntuJSnkg2rT7O9eeR5UvNFexu3ozo6zhbLchwy3o");'></div>
+            </div>
+            <div>
+              <p class="text-xs text-text-muted-light dark:text-text-muted-dark">2023年10月20日</p>
+              <p class="text-base font-bold leading-normal mt-1">メディア掲載情報</p>
+              <a class="text-sm font-medium leading-normal text-primary dark:text-secondary hover:underline" href="info.html">続きを読む</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-16 sm:py-24">
+        <div class="flex flex-col gap-10 text-center">
+          <div class="flex flex-col gap-4">
+            <h2 class="text-3xl font-bold leading-tight tracking-[-0.015em] @[480px]:text-4xl">成功への計画</h2>
+            <p class="text-base font-normal leading-relaxed text-text-muted-light dark:text-text-muted-dark max-w-3xl mx-auto">３つのシンプルなステップで、あなたの価値を収入に変える方法を学びます。</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="flex flex-col items-center gap-4">
+              <div class="flex items-center justify-center size-16 rounded-full bg-secondary/20 text-secondary">
+                <span class="material-symbols-outlined text-4xl">lightbulb</span>
+              </div>
+              <h3 class="text-xl font-bold">Step 1: 価値の発見</h3>
+              <p class="text-sm text-text-muted-light dark:text-text-muted-dark">自分だけの強みと情熱を見つけ出し、誰を幸せにできるのかを明確にします。</p>
+            </div>
+            <div class="flex flex-col items-center gap-4">
+              <div class="flex items-center justify-center size-16 rounded-full bg-secondary/20 text-secondary">
+                <span class="material-symbols-outlined text-4xl">architecture</span>
+              </div>
+              <h3 class="text-xl font-bold">Step 2: 設計図の作成</h3>
+              <p class="text-sm text-text-muted-light dark:text-text-muted-dark">発見した価値を具体的なサービスや商品に変えるためのビジネスモデルを構築します。</p>
+            </div>
+            <div class="flex flex-col items-center gap-4">
+              <div class="flex items-center justify-center size-16 rounded-full bg-secondary/20 text-secondary">
+                <span class="material-symbols-outlined text-4xl">rocket_launch</span>
+              </div>
+              <h3 class="text-xl font-bold">Step 3: 世界への発信</h3>
+              <p class="text-sm text-text-muted-light dark:text-text-muted-dark">構築したビジネスを必要としている人々に届け、最初の収益を生み出します。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-16 sm:py-24">
+        <div class="bg-primary dark:bg-secondary/20 rounded-xl p-10 sm:p-16 text-center">
+          <div class="flex flex-col items-center gap-6 max-w-2xl mx-auto">
+            <h2 class="text-3xl font-bold text-white dark:text-text-dark">さあ、あなたも「最初のポケット」を作りましょう</h2>
+            <p class="text-base text-slate-200 dark:text-text-muted-dark">もう将来に悩むのは終わりにしませんか？無料講座で、あなたの可能性を最大限に引き出すための具体的な第一歩を踏み出しましょう。</p>
+            <a href="free-course.html" role="button" class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-14 px-8 bg-white dark:bg-secondary text-primary dark:text-black text-lg font-bold tracking-[0.015em] hover:opacity-90 transition-opacity">
+              <span class="truncate">無料講座を今すぐ始める</span>
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <div id="global-footer-container"></div>
+</div>
+<nav id="bottom-nav" class="lg:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-t border-slate-200 dark:border-slate-800 shadow-2xl hidden">
+    <div id="bottom-nav-container" class="flex justify-around items-center h-full max-w-lg mx-auto">
+    </div>
+</nav>
+<script type="module" src="js/common.js"></script>
+</body>
+</html>

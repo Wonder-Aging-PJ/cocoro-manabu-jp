@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>わたしの歩み - ポートフォリオ</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              // ★ メインカラーを #00bfff に変更
+              primary: "#00bfff",
+              accent: "#00bfff",
+              "accent-secondary": "#00bfff",
+              secondary: "#00bfff",
+              "background-light": "#ecf0f1",
+              "background-dark": "#101c22",
+              "card-light": "#f5f5f5",
+              "card-dark": "#2c3e50",
+              "text-light": "#2c3e50",
+              "text-dark": "#ecf0f1",
+              "text-muted-light": "#7f8c8d",
+              "text-muted-dark": "#bdc3c7",
+            },
+            fontFamily: {
+              display: ["Manrope", "Noto Sans JP", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            // ★ 新しいアニメーションのキーフレームを追加
+            keyframes: {
+              wiggle: {
+                "0%, 100%": { transform: "rotate(-3deg)" },
+                "50%": { transform: "rotate(3deg)" },
+              },
+              squish: {
+                "0%, 100%": { transform: "scale(1)" },
+                "50%": { transform: "scale(1.05, 0.95)" },
+              },
+              flash: {
+                "0%, 100%": { opacity: "1" },
+                "50%": { opacity: "0.3" },
+              },
+              heartbeat: {
+                "0%": { transform: "scale(1)" },
+                "14%": { transform: "scale(1.1)" },
+                "28%": { transform: "scale(1)" },
+                "42%": { transform: "scale(1.1)" },
+                "70%": { transform: "scale(1)" },
+              },
+            },
+            // ★ アニメーションをTailwindで使えるように登録
+            animation: {
+              wiggle: "wiggle 1s ease-in-out infinite",
+              squish: "squish 0.5s ease-in-out infinite alternate",
+              flash: "flash 1.5s ease-in-out infinite",
+              heartbeat: "heartbeat 1.5s ease-in-out infinite",
+              // pulse (ゆっくり光る) はTailwind標準搭載
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+      .loader {
+        border: 4px solid #f3f3f3;
+        /* ★ スピナーの色を #00bfff に変更 */
+        border-top: 4px solid #00bfff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark"
+  >
+    <!-- 共通ヘッダー (変更なし) -->
+    <header
+      class="sticky top-0 z-50 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800"
+    >
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <a
+            href="index.html"
+            id="header-branding"
+            class="flex items-center gap-4 text-text-light dark:text-text-dark flex-shrink-0"
+          ></a>
+          <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+            <nav class="flex items-center gap-5 lg:gap-6" id="main-nav"></nav>
+            <a
+              href="free-course.html"
+              role="button"
+              class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0"
+            >
+              <span class="truncate">無料講座</span>
+            </a>
+          </div>
+          <div class="md:hidden flex items-center gap-4">
+            <a
+              href="free-course.html"
+              role="button"
+              class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0"
+            >
+              <span class="truncate">無料講座</span>
+            </a>
+            <button
+              id="mobile-menu-toggle"
+              class="text-text-light dark:text-text-dark p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              <span class="material-symbols-outlined">menu</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden absolute top-16 left-0 w-full bg-background-light dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 shadow-lg z-40"
+      >
+        <nav class="flex flex-col gap-4 p-4" id="mobile-nav"></nav>
+      </div>
+    </header>
+
+    <div
+      class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden"
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <div
+          class="px-4 sm:px-10 md:px-20 lg:px-40 flex flex-1 justify-center py-5"
+        >
+          <main
+            class="layout-content-container flex flex-col max-w-[960px] flex-1"
+          >
+            <!-- HeroSection (変更なし) -->
+            <div class="@container">
+              <div
+                class="flex flex-col gap-6 px-4 py-10 text-center @[864px]:flex-row @[864px]:text-left @[864px]:gap-12"
+              >
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg @[480px]:h-auto @[480px]:min-w-[300px] @[864px]:w-full @[864px]:max-w-md"
+                  data-alt="Abstract image representing an archive, with geometric patterns in shades of blue and gray."
+                  style="
+                    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBNf-OXG3_ICnea-zZ33-vtrwNHEj_nCLurYCBqqKOMXUPs3WKmRkDBJ7gNdT9Cjcqor7w_BvRjC-4KU8-axDS1H6orYO_ckZA1cyKZQGF_6utE1J4UavV7epSczKSOF2HDS5wOyWOiieLGIPc1Y2NHTuyL9DeHNEUpzce5p4gP3MSAhSIDn8SHaxacY6UA5ZeS8-X2FufOd_JVJLTGy-ptA8uZZpN9AzCKs5AlfvN-b82iNNJJHxgZZdicOtedibtd4V-ecD3zE027');
+                  "
+                ></div>
+                <div class="flex flex-col gap-6 @[864px]:justify-center">
+                  <div class="flex flex-col gap-2">
+                    <h1
+                      class="text-text-light dark:text-text-dark text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl"
+                    >
+                      わたしの歩み (My Story & Works)
+                    </h1>
+                    <h2
+                      class="text-text-muted-light dark:text-text-muted-dark text-sm font-normal leading-normal @[480px]:text-base"
+                    >
+                      これまで考えてきたこと、創ってきたもの。誠実に向き合った日々の記録です。
+                    </h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 1: 書籍 (Firebaseから読み込み) (変更なし) -->
+            <section class="flex flex-col gap-2 mt-12">
+              <h2
+                class="text-text-light dark:text-text-dark text-2xl font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5 border-b border-primary/20"
+              >
+                大切にしてきた考え｜書籍 (Books)
+              </h2>
+              <p
+                class="text-text-muted-light dark:text-text-muted-dark text-base font-normal leading-normal px-4 pt-2 pb-2"
+              >
+                精一杯の想いを、書籍に込めました。あなたの明日に、そっと寄り添える一冊になれば嬉しいです。
+              </p>
+              <div id="books-container" class="p-4 flex flex-col gap-6">
+                <div id="books-loader" class="flex justify-center py-8">
+                  <div class="loader"></div>
+                  <p class="ml-4 text-text-muted-light">
+                    書籍情報を読み込んでいます...
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- ★★★ Section 2: メディア(アイコン) (動的化) ★★★ -->
+            <section class="flex flex-col gap-2 mt-12">
+              <h2
+                class="text-text-light dark:text-text-dark text-2xl font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5 border-b border-primary/20"
+              >
+                日々のことば：メディア (Media)
+              </h2>
+              <p
+                class="text-text-muted-light dark:text-text-muted-dark text-base font-normal leading-normal px-4 pt-2 pb-2"
+              >
+                好みのメディアで情報を受け取ってください。
+              </p>
+
+              <!-- ★ 静的なHTMLを削除し、動的コンテナに置き換え ★ -->
+              <div
+                id="media-icons-container"
+                class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-4 p-4"
+              >
+                <!-- 読み込み中スピナー -->
+                <div
+                  id="media-icons-loader"
+                  class="flex justify-center py-8 col-span-full"
+                >
+                  <div class="loader"></div>
+                  <p class="ml-4 text-text-muted-light">
+                    メディア(アイコン)を読み込んでいます...
+                  </p>
+                </div>
+              </div>
+
+              <!-- ★★★ Section 2.5: メディア(バナー) (動的化) ★★★ -->
+              <!-- ★ 静的なHTMLを削除し、動的コンテナに置き換え ★ -->
+              <div
+                id="media-banners-container"
+                class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4"
+              >
+                <!-- 読み込み中スピナー -->
+                <div
+                  id="media-banners-loader"
+                  class="flex justify-center py-8 col-span-full"
+                >
+                  <div class="loader"></div>
+                  <p class="ml-4 text-text-muted-light">
+                    メディア(バナー)を読み込んでいます...
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- ★★★ Section 3: ブログ・HP (動的化) ★★★ -->
+            <section class="flex flex-col gap-2 mt-12 mb-12">
+              <h2
+                class="text-text-light dark:text-text-dark text-2xl font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5 border-b border-primary/20"
+              >
+                目的別ブログ・HPのご紹介
+              </h2>
+              <p
+                class="text-text-muted-light dark:text-text-muted-dark text-base font-normal leading-normal px-4 pt-2 pb-2"
+              >
+                わたしの想いを、誰かの役立つカタチへ。ひとつひとつ大切に育てています。
+              </p>
+
+              <!-- ★ 静的なHTMLを削除し、動的コンテナに置き換え ★ -->
+              <div
+                id="sites-container"
+                class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4"
+              >
+                <!-- 読み込み中スピナー -->
+                <div
+                  id="sites-loader"
+                  class="flex justify-center py-8 col-span-full"
+                >
+                  <div class="loader"></div>
+                  <p class="ml-4 text-text-muted-light">
+                    ブログ・HP情報を読み込んでいます...
+                  </p>
+                </div>
+              </div>
+            </section>
+
+          </main>
+        </div>
+      </div>
+    <nav id="bottom-nav" class="hidden fixed bottom-0 left-0 w-full z-40 bg-surface-light dark:bg-background-dark/80 border-t border-slate-200 dark:border-slate-800">
+      <div id="bottom-nav-container" class="flex justify-around max-w-lg mx-auto">
+        </div>
+    </nav>
+    <div id="global-footer-container"></div>
+    </div>
+    <script type="module" src="js/common.js"></script>
+  </body>
+</html>

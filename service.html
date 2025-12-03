@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>ビジネスメンタルマネジメント講座 | ストーリーブランド戦略</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800;900&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            // service.html 固有のカラー
+            "primary": "#13a4ec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101c22",
+
+            // text-light は body の text-[#0d171b] と合わせる
+            "text-light": "#0d171b",
+            // text-dark は body の dark:text-slate-200 と近い info.html の定義を採用
+            "text-dark": "#e7eff3",
+
+            // 共通ヘッダーで必要な index.html 由来の色定義を追加
+            "secondary": "#F2B705",
+            "text-muted-light": "#6c757d",
+            "text-muted-dark": "#adb5bd"
+          },
+          fontFamily: {
+            "display": ["Manrope", "Noto Sans JP", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+</head>
+<!-- ★ service.html の body タグ ( text-[#0d171b] dark:text-slate-200 を text-text-light dark:text-text-dark に置き換え) ★ -->
+<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+
+  <!-- ★ 共通ヘッダー (レスポンシブ対応) ★ -->
+  <header class="sticky top-0 z-50 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- 共通ロゴとタイトル -->
+        <a href="index.html" id="header-branding" class="flex items-center gap-4 text-text-light dark:text-text-dark flex-shrink-0"></a>
+        
+        <!-- PC用メニュー (md以上で表示) -->
+        <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+          <nav class="flex items-center gap-5 lg:gap-6" id="main-nav"></nav>
+          <a href="free-course.html" role="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0">
+            <span class="truncate">無料講座</span>
+          </a>
+        </div>
+        
+        <!-- スマホ用メニューボタン (md未満で表示) -->
+        <div class="md:hidden flex items-center gap-4">
+           <a href="free-course.html" role="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0">
+            <span class="truncate">無料講座</span>
+          </a>
+          <button id="mobile-menu-toggle" class="text-text-light dark:text-text-dark p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    
+    <!-- スマホ用ドロップダウンメニュー (JSで hidden をトグル) -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-16 left-0 w-full bg-background-light dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 shadow-lg z-40">
+      <nav class="flex flex-col gap-4 p-4" id="mobile-nav"></nav>
+    </div>
+  </header>
+  
+  <!-- ★ ここから下は service.html 本来のコンテンツ ★ -->
+  <div class="relative flex min-h-screen w-full flex-col">
+    <!-- TopNavBar (削除 - 共通ヘッダーに置き換え) -->
+    <main class="flex-grow">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- HeroSection -->
+        <section class="py-16 md:py-24">
+          <div class="@container">
+            <div class="flex flex-col gap-8 lg:flex-row lg:items-center">
+              <div class="flex flex-col gap-6 text-left lg:w-1/2">
+                <h1 class="text-4xl font-black leading-tight tracking-tighter sm:text-5xl text-text-light dark:text-text-dark">
+                  あなたのビジネスを成功に導く、ストーリーブランド戦略
+                </h1>
+                <h2 class="text-base font-normal leading-relaxed text-slate-600 dark:text-slate-400">
+                  ビジネスメンタルマネジメント講座で、理想の未来を実現する具体的な計画を手に入れましょう。
+                </h2>
+                <div class="flex-wrap gap-3 flex">
+                  <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-slate-50 text-base font-bold shadow-sm hover:bg-primary/90 transition-colors" href="#curriculum">
+                    <span class="truncate">講座の詳細を見る</span>
+                  </a>
+                  <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-slate-200 dark:bg-slate-800 text-text-light dark:text-text-dark text-base font-bold hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors" href="#application">
+                    <span class="truncate">無料相談に申込む</span>
+                  </a>
+                </div>
+              </div>
+              <div class="lg:w-1/2">
+                <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl" data-alt="A person giving a presentation in a modern office, symbolizing business success and strategy." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBFMrQMPI2IYygPbYEBpLYr2Q0mGtVJlvPujSR0qi9C5f6ZEXfTvcBOoiUhi8UvhqJ826YVbOZwLlDODvbkBlst5ftx0hp_mVjEWHdam-M4XKZ3iEQUYEqgiO4WrYPnvVbnIdDHE7iA_hbDro4-2V-1NvVZUBArs0tSbRhHRIqSxzCosLKdhoB8M421AqbGVQFi2mW3i6UJ6Cpk9URQxYOejGuBVpxpLI5zDFb0E8gB94PURZf02P0ycW7b7Oql6JAmKAyjWUsXlTYM");'></div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Problem Section -->
+        <section class="py-16">
+          <div class="text-center">
+            <h2 class="text-2xl font-bold leading-tight tracking-tight text-text-light dark:text-text-dark">こんなことで悩んでいませんか？</h2>
+            <p class="mt-2 text-base text-slate-600 dark:text-slate-400">ターゲット顧客が直面している具体的な悩みや課題をリストアップし、共感を呼び起こします。</p>
+          </div>
+          <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div class="bg-white dark:bg-slate-800/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+              <p class="font-semibold text-slate-700 dark:text-slate-300">集客に繋がらない</p>
+            </div>
+            <div class="bg-white dark:bg-slate-800/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+              <p class="font-semibold text-slate-700 dark:text-slate-300">自分の強みがわからない</p>
+            </div>
+            <div class="bg-white dark:bg-slate-800/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+              <p class="font-semibold text-slate-700 dark:text-slate-300">価格競争から抜け出せない</p>
+            </div>
+          </div>
+        </section>
+        <!-- FeatureSection -->
+        <section class="py-16" id="features">
+          <div class="flex flex-col gap-10">
+            <div class="flex flex-col gap-4 text-center">
+              <h2 class="text-3xl font-black leading-tight tracking-tighter sm:text-4xl text-text-light dark:text-text-dark">この講座で得られる3つのこと</h2>
+              <p class="text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">この講座がどのような「計画」を提供し、どんな「理想の未来」を実現できるのかを簡潔に説明します。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="flex flex-col gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 p-6">
+                <div class="text-primary"><span class="material-symbols-outlined !text-3xl">psychology</span></div>
+                <div class="flex flex-col gap-1">
+                  <h3 class="text-lg font-bold text-text-light dark:text-text-dark">強固なビジネスメンタル</h3>
+                  <p class="text-sm font-normal leading-relaxed text-slate-600 dark:text-slate-400">困難な状況でも揺らがない、プロフェッショナルとしての精神力を養います。</p>
+                </div>
+              </div>
+              <div class="flex flex-col gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 p-6">
+                <div class="text-primary"><span class="material-symbols-outlined !text-3xl">auto_stories</span></div>
+                <div class="flex flex-col gap-1">
+                  <h3 class="text-lg font-bold text-text-light dark:text-text-dark">顧客を惹きつけるストーリー</h3>
+                  <p class="text-sm font-normal leading-relaxed text-slate-600 dark:text-slate-400">あなた独自のブランドストーリーを構築し、理想の顧客を引き寄せます。</p>
+                </div>
+              </div>
+              <div class="flex flex-col gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 p-6">
+                <div class="text-primary"><span class="material-symbols-outlined !text-3xl">checklist</span></div>
+                <div class="flex flex-col gap-1">
+                  <h3 class="text-lg font-bold text-text-light dark:text-text-dark">具体的な行動計画</h3>
+                  <p class="text-sm font-normal leading-relaxed text-slate-600 dark:text-slate-400">目標達成までのロードマップを明確にし、着実に成果を出すための計画を立てます。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Instructor Section -->
+        <section class="py-16">
+          <div class="text-center mb-10">
+            <h2 class="text-3xl font-black leading-tight tracking-tighter text-text-light dark:text-text-dark">講師紹介</h2>
+            <p class="mt-2 text-base text-slate-600 dark:text-slate-400">信頼と実績のある講師があなたをサポートします。</p>
+          </div>
+          <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12 bg-white dark:bg-slate-800/50 p-8 rounded-xl border border-slate-200 dark:border-slate-800">
+            <img class="w-40 h-40 rounded-full object-cover" data-alt="Portrait of the course instructor, a smiling professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgI9ZLluAGAJFBiIg0WDMkCnqGuEdTgyaUscWYQurY-NeDIqEKxAFEGVdYUa_byMiGMGS78l6k2eJw1woCTPRjVWCr_gnWAHxQbXhSsFJ5hcreax-isvI7mmxcPsUR9NhRWmAUI0FsD_D5SPKMipL-xMI50qUVnidu7wkGO4UHU0C3mfkXBZ2d9QGF2l5lCRjL-cP9lCoQC7-mqRwUFUhsxeS-O9wnIVbyNHaYYzjPOC2wCO-9DeOG5N9iylQc0OPMN667Jx6ovE1U" />
+            <div class="text-center md:text-left">
+              <h3 class="text-2xl font-bold text-text-light dark:text-text-dark">山田 太郎</h3>
+              <p class="text-primary font-semibold mt-1">ストーリーブランド戦略コンサルタント</p>
+              <p class="mt-4 text-slate-600 dark:text-slate-400 leading-relaxed">10年以上にわたり、数々の企業のブランド構築を支援。心理学とマーケティングを融合させた独自のメソッドで、クライアントのビジネスを成功に導いてきました。自身の経験から、成功の鍵は「強固なメンタル」と「共感を呼ぶストーリー」にあると確信し、本講座を開設。</p>
+            </div>
+          </div>
+        </section>
+        <!-- Pricing Table -->
+        <section class="py-16" id="pricing">
+          <div class="text-center mb-10">
+            <h2 class="text-3xl font-black leading-tight tracking-tighter text-text-light dark:text-text-dark">料金プラン</h2>
+            <p class="mt-2 text-base text-slate-600 dark:text-slate-400">あなたの目標に合わせたプランをお選びいただけます。</p>
+          </div>
+          <div class="bg-white dark:bg-slate-800/50 p-8 rounded-xl border border-primary ring-2 ring-primary/20 shadow-xl">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+              <div class="flex-1 text-center md:text-left">
+                <h3 class="text-2xl font-bold text-text-light dark:text-text-dark">ビジネスメンタルマネジメント講座</h3>
+                <p class="mt-2 text-slate-600 dark:text-slate-400">全てのカリキュラムと個別サポートが含まれた総合プランです。</p>
+                <ul class="mt-6 space-y-3 text-left">
+                  <li class="flex items-center gap-3"><span class="material-symbols-outlined text-green-500">check_circle</span>全12回オンライン講座</li>
+                  <li class="flex items-center gap-3"><span class="material-symbols-outlined text-green-500">check_circle</span>個別コンサルティング（3回）</li>
+                  <li class="flex items-center gap-3"><span class="material-symbols-outlined text-green-500">check_circle</span>受講生限定コミュニティへの参加権</li>
+                  <li class="flex items-center gap-3"><span class="material-symbols-outlined text-green-500">check_circle</span>全額返金保証</li>
+                </ul>
+              </div>
+              <div class="flex-shrink-0 text-center">
+                <p class="text-4xl font-black text-text-light dark:text-text-dark">¥300,000</p>
+                <p class="text-slate-600 dark:text-slate-400">(税込)</p>
+                <a class="mt-6 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-primary text-slate-50 text-base font-bold shadow-sm hover:bg-primary/90 transition-colors" href="#application">
+                  <span class="truncate">今すぐ申込む</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Application Form -->
+        <section class="py-16" id="application">
+          <div class="text-center mb-10">
+            <h2 class="text-3xl font-black leading-tight tracking-tighter text-text-light dark:text-text-dark">無料相談に申込む</h2>
+            <p class="mt-2 text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">まずは無料相談から始めましょう。あなたのビジネスの課題や目標をお聞かせください。無理な勧誘は一切ありませんので、お気軽にお申込みください。</p>
+          </div>
+          <div class="max-w-xl mx-auto bg-white dark:bg-slate-800/50 p-8 rounded-xl border border-slate-200 dark:border-slate-800">
+            <form class="space-y-6">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="name">お名前<span class="text-red-500">*</span></label>
+                <input class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary" id="name" name="name" required="" type="text" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="email">メールアドレス<span class="text-red-500">*</span></label>
+                <input class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary" id="email" name="email" required="" type="email" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="message">ご相談内容</label>
+                <textarea class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-background-light dark:bg-background-dark shadow-sm focus:border-primary focus:ring-primary" id="message" name="message" rows="4"></textarea>
+              </div>
+              <div>
+                <button class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-bold text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors" type="submit">
+                  送信する
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+<nav id="bottom-nav" class="hidden fixed bottom-0 left-0 w-full z-40 bg-surface-light dark:bg-background-dark/80 border-t border-slate-200 dark:border-slate-800">
+      <div id="bottom-nav-container" class="flex justify-around max-w-lg mx-auto">
+        </div>
+    </nav>
+    <div id="global-footer-container"></div>
+  </div> <script>
+    // For mobile menu toggle
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleButton = document.getElementById('mobile-menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      if (toggleButton && mobileMenu) {
+        toggleButton.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+      }
+    });
+  </script>
+  
+  <script type="module" src="js/common.js"></script>
+</body>
+</html>

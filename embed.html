@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom HTML Part</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100vh;
+      }
+      #content {
+        width: 100%;
+        height: 100%;
+      }
+      /* ローディング表示 */
+      #loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100vh;
+        font-family: sans-serif;
+        color: #666;
+      }
+      .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #00bfff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin-right: 12px;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading">
+      <div class="loader"></div>
+      <span>読み込み中...</span>
+    </div>
+    <div id="content"></div>
+
+    <script type="module">
+      // Import Firebase SDKs
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+      } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBvp4RKofxlK6BL-A1HNc-wSIBjryuG0as",
+        authDomain: "portfolio-site-3f2b7.firebaseapp.com",
+        projectId: "portfolio-site-3f2b7",
+        storageBucket: "portfolio-site-3f2b7.firebasestorage.app",
+        messagingSenderId: "292430778997",
+        appId: "1:292430778997:web:6caf0fdb84c5d013821e3c",
+        measurementId: "G-CRCVKHEE7Z",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // URLクエリパラメータからIDを取得
+      const urlParams = new URLSearchParams(window.location.search);
+      const partId = urlParams.get('id');
+
+      const loadingEl = document.getElementById('loading');
+      const contentEl = document.getElementById('content');
+
+      if (!partId) {
+        loadingEl.innerHTML = '<p style="color: red;">エラー: IDが指定されていません。</p>';
+      } else {
+        try {
+          // Firestoreからカスタム部品を取得
+          const docRef = doc(db, 'customParts', partId);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            // HTMLコンテンツを表示
+            contentEl.innerHTML = data.htmlContent || '<p>コンテンツがありません。</p>';
+            loadingEl.style.display = 'none';
+          } else {
+            loadingEl.innerHTML = '<p style="color: red;">エラー: 指定されたIDの部品が見つかりません。</p>';
+          }
+        } catch (error) {
+          console.error('Error loading custom part:', error);
+          loadingEl.innerHTML = '<p style="color: red;">エラー: データの読み込みに失敗しました。</p>';
+        }
+      }
+    </script>
+  </body>
+</html>

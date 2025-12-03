@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <!-- 1. タイトルを日本語化 -->
+  <title>プロフィール - ポートフォリオ</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Noto+Sans+JP:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            // 2. ご指定の色 #13a4ec に変更
+            "primary": "#13a4ec",
+            "secondary": "#13a4ec", // アイコンやマーカーも指定色に統一
+            
+            // profile.html 固有のカラー
+            "background-light": "#F8F9FA",
+            "background-dark": "#101c22",
+            "text-light": "#333333",
+            "text-dark": "#EAEAEA",
+            "text-muted-light": "#555555",
+            "text-muted-dark": "#AAAAAA",
+            "border-light": "#e0e0e0",
+            "border-dark": "#333f44",
+            "surface-light": "#FFFFFF",
+            "surface-dark": "#192730"
+          },
+          fontFamily: {
+            "display": ["Manrope", "Noto Sans JP", "sans-serif"]
+          },
+          borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+
+  <!-- ★ 共通ヘッダー (レスポンシブ対応) ★ -->
+  <header class="sticky top-0 z-50 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-border-light dark:border-border-dark">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- 共通ロゴとタイトル -->
+        <a href="index.html" id="header-branding" class="flex items-center gap-4 text-text-light dark:text-text-dark flex-shrink-0"></a>
+        
+        <!-- PC用メニュー (md以上で表示) -->
+        <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+          <nav class="flex items-center gap-5 lg:gap-6" id="main-nav"></nav>
+          <!-- このページの primary カラー ( #13a4ec ) が適用されます -->
+          <a href="free-course.html" role="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0">
+            <span class="truncate">無料講座</span>
+          </a>
+        </div>
+        
+        <!-- スマホ用メニューボタン (md未満で表示) -->
+        <div class="md:hidden flex items-center gap-4">
+           <a href="free-course.html" role="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0">
+            <span class="truncate">無料講座</span>
+          </a>
+          <button id="mobile-menu-toggle" class="text-text-light dark:text-text-dark p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    
+    <!-- スマホ用ドロップダウンメニュー (JSで hidden をトグル) -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-16 left-0 w-full bg-background-light dark:bg-background-dark border-b border-border-light dark:border-border-dark shadow-lg z-40">
+      <nav class="flex flex-col gap-4 p-4" id="mobile-nav"></nav>
+    </div>
+  </header>
+  
+  <!-- ★ ここから下は profile.html 本来のコンテンツ (日本語化済み) ★ -->
+  <div class="relative flex min-h-screen w-full flex-col">
+    <!-- Main Content -->
+    <main class="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+      <div class="flex flex-col gap-16 md:gap-24">
+        <!-- HeroSection -->
+        <section class="scroll-mt-20" id="profile">
+          <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12 text-center md:text-left">
+            <img class="w-32 h-32 md:w-40 md:h-40 object-cover rounded-full shadow-lg" data-alt="A professional headshot of a smiling man with short dark hair and a beard, wearing a dark blue shirt." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAczSJQ2Vmjm6bZdOzOGtGktOxv9_7dwsD67Av0NsVATK2lAfDKzOlxVTOAcyqYja5Iu1tnZMEGFg91v743bfHjRtnwJehd7S7naQf66JwXBJQwcJKgre6VQQsiR5N7kerMQEii0mMbA80N8DPWcPgF30tazFtGY6cocUdvNXSuvUZxFpCmeNie4awPzOmUP9ciF4MRW0aslaII16iiAIsViPvvPPf__O_-GIz8G9N4vd6I-veMYSS35CJXnxeQoi8ODm0LT7BIjlCV" />
+            <div class="flex flex-col gap-3">
+              <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tighter text-gray-800 dark:text-gray-100">
+                理念と技術で、未来を創る。
+              </h1>
+              <p class="text-base text-text-muted-light dark:text-text-muted-dark">
+                テクノロジーの力を信じ、常に学び続けるウェブ開発者。ユーザーの課題を解決し、価値ある体験を届けることを信条としています。
+              </p>
+            </div>
+          </div>
+        </section>
+        
+        <!-- Sticky Sub-Navigation (日本語化) -->
+        <div class="sticky top-[65px] z-40 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm -mx-4 sm:-mx-6 lg:-mx-8">
+          <div class="flex border-b border-border-light dark:border-border-dark px-4 sm:px-6 lg:px-8 gap-6 sm:gap-8 overflow-x-auto">
+            <a class="flex flex-col items-center justify-center whitespace-nowrap border-b-2 border-b-primary pb-3 pt-3" href="#profile">
+              <p class="text-sm font-bold text-primary">プロフィール</p>
+            </a>
+            <a class="flex flex-col items-center justify-center whitespace-nowrap border-b-2 border-b-transparent text-text-muted-light dark:text-text-muted-dark hover:text-primary dark:hover:text-white pb-3 pt-3 transition-colors" href="#timeline">
+              <p class="text-sm font-bold">経歴</p>
+            </a>
+            <a class="flex flex-col items-center justify-center whitespace-nowrap border-b-2 border-b-transparent text-text-muted-light dark:text-text-muted-dark hover:text-primary dark:hover:text-white pb-3 pt-3 transition-colors" href="#skills">
+              <p class="text-sm font-bold">スキル・資格</p>
+            </a>
+            <a class="flex flex-col items-center justify-center whitespace-nowrap border-b-2 border-b-transparent text-text-muted-light dark:text-text-muted-dark hover:text-primary dark:hover:text-white pb-3 pt-3 transition-colors" href="#personal">
+              <p class="text-sm font-bold">パーソナル</p>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Timeline Section (日本語化) -->
+        <section class="scroll-mt-24" id="timeline">
+          <h2 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-100 mb-8">経歴 (Timeline)</h2>
+          <div id="timeline-container" class="relative border-l-2 border-border-light dark:border-border-dark pl-8 space-y-12">
+            <div id="timeline-loader" class="flex justify-start py-4">
+              <div class="loader h-6 w-6 border-t-primary border-primary/20"></div>
+              <p class="ml-3 text-sm text-text-muted-light">経歴情報を読み込み中...</p>
+            </div>
+          </div>
+        </section>
+        
+        <!-- Skills & Certifications Section (日本語化) -->
+        <section class="scroll-mt-24" id="skills">
+          <h2 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-100 mb-8">スキル・資格</h2>
+          <div id="skills-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <div id="skills-loader" class="flex justify-center py-4 col-span-full">
+              <div class="loader h-6 w-6 border-t-primary border-primary/20"></div>
+              <p class="ml-3 text-sm text-text-muted-light">スキル情報を読み込み中...</p>
+            </div>
+          </div>
+        </section>
+        
+        <!-- Personal Information Section (日本語化) -->
+        <section class="scroll-mt-24" id="personal">
+          <h2 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-100 mb-8">パーソナル</h2>
+          <div class="space-y-4">
+            <!-- Accordion 1 -->
+            <details class="group bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-lg p-4 cursor-pointer">
+              <summary class="flex items-center justify-between font-bold text-gray-800 dark:text-gray-100">
+                趣味・関心
+                <span class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180">expand_more</span>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-text-light dark:text-text-dark">週末はコーヒーを淹れながらジャズを聴くのが好きです。最近はフィルムカメラでの写真撮影に夢中で、都市の風景や自然の光を捉えることに喜びを感じています。年に数回は山に登り、リフレッシュしています。</p>
+            </details>
+            <!-- Accordion 2 -->
+            <details class="group bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-lg p-4 cursor-pointer">
+              <summary class="flex items-center justify-between font-bold text-gray-800 dark:text-gray-100">
+                好きな本・ポッドキャスト
+                <span class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180">expand_more</span>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-text-light dark:text-text-dark">愛読書は『Factfulness』で、データに基づいた思考の重要性を学びました。ポッドキャストは「Rebuild.fm」をよく聴き、技術トレンドや開発文化にアンテナを張っています。</p>
+            </details>
+            <!-- Accordion 3 -->
+            <details class="group bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-lg p-4 cursor-pointer">
+              <summary class="flex items-center justify-between font-bold text-gray-800 dark:text-gray-100">
+                私のモットー
+                <span class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180">expand_more</span>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-text-light dark:text-text-dark">"Done is better than perfect." 完璧を求めすぎるのではなく、まずは形にしてフィードバックを得ることを大切にしています。このアジャイルな考え方が、仕事でもプライベートでも私の行動指針です。</p>
+            </details>
+          </div>
+        </section>
+      </div>
+    </main>
+    <div id="contact-set-container" class="mt-16 mb-16"></div>
+    <nav id="bottom-nav" class="hidden fixed bottom-0 left-0 w-full z-40 bg-surface-light dark:bg-background-dark/80 border-t border-slate-200 dark:border-slate-800">
+      <div id="bottom-nav-container" class="flex justify-around max-w-lg mx-auto">
+        </div>
+    </nav>
+    <div id="global-footer-container"></div>
+  </div>
+  <script type="module" src="js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>お問い合わせ</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800;900&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            // contact.html 固有の primary カラー
+            "primary": "#13a4ec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101c22",
+
+            // 共通ヘッダーで必要な index.html 由来の色定義を追加
+            "secondary": "#F2B705",
+            "text-light": "#343A40",
+            "text-dark": "#F8F9FA",
+            "text-muted-light": "#6c757d",
+            "text-muted-dark": "#adb5bd"
+          },
+          fontFamily: {
+            "display": ["Manrope", "Noto Sans JP", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200">
+  
+  <!-- ★ 共通ヘッダー (レスポンシブ対応) ★ -->
+  <header class="sticky top-0 z-50 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- 共通ロゴとタイトル -->
+        <a href="index.html" id="header-branding" class="flex items-center gap-4 text-text-light dark:text-text-dark flex-shrink-0"></a>
+        
+        <!-- PC用メニュー (md以上で表示) -->
+        <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+          <nav class="flex items-center gap-5 lg:gap-6" id="main-nav"></nav>
+          <a href="free-course.html" role="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0">
+            <span class="truncate">無料講座</span>
+          </a>
+        </div>
+        
+        <!-- スマホ用メニューボタン (md未満で表示) -->
+        <div class="md:hidden flex items-center gap-4">
+           <a href="free-course.html" role="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0">
+            <span class="truncate">無料講座</span>
+          </a>
+          <button id="mobile-menu-toggle" class="text-text-light dark:text-text-dark p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    
+    <!-- スマホ用ドロップダウンメニュー (JSで hidden をトグル) -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-16 left-0 w-full bg-background-light dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 shadow-lg z-40">
+      <nav class="flex flex-col gap-4 p-4" id="mobile-nav"></nav>
+    </div>
+  </header>
+  
+  <!-- ★ ここから下は contact.html 本来のコンテンツ ★ -->
+  <div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+    <div class="layout-container flex h-full grow flex-col">
+      <main class="flex flex-1 justify-center py-10 sm:py-20 px-4 sm:px-6 md:px-8">
+        <div class="layout-content-container flex flex-col max-w-2xl flex-1">
+          <div class="text-center">
+            <h1 class="text-slate-900 dark:text-white text-4xl sm:text-5xl font-black leading-tight tracking-tighter">お問い合わせ</h1>
+          </div>
+          <div class="mt-12 sm:mt-16 space-y-12">
+            <!-- Primary CTA Block -->
+            <div class="bg-white dark:bg-slate-900/50 p-6 sm:p-8 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
+              <p class="text-slate-700 dark:text-slate-300 text-base font-normal leading-relaxed text-center">
+                講座に関するご質問や、お仕事のご相談は、公式LINEにて最優先で受け付けております。以下のボタンからご登録の上、お気軽にご連絡ください。
+              </p>
+              <div class="flex mt-6 justify-center">
+                <a class="flex min-w-[84px] w-full max-w-sm cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-6 gap-3 bg-[#06C755] text-white text-base sm:text-lg font-bold leading-normal tracking-wide shadow-lg hover:bg-[#05a546] transition-colors duration-200" href="#">
+                  <svg class="text-white" fill="currentColor" height="28" viewbox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.167 4.833h-14.334c-1.39 0-2.521 1.13-2.521 2.521v8.312c0 1.39 1.13 2.521 2.521 2.521h1.666v2.302l2.313-2.302h10.355c1.39 0 2.521-1.13 2.521-2.521v-8.312c0-1.39-1.13-2.521-2.521-2.521zm-10.417 8.542h-1.25v-3.333h1.25v3.333zm3.333 0h-1.25v-5h1.25v5zm3.334 0h-1.25v-5h1.25v5zm-5-6.25c-.413 0-.75.337-.75.75s.337.75.75.75.75-.337.75-.75-.337-.75-.75-.75zm3.333 0c-.413 0-.75.337-.75.75s.337.75.75.75.75-.337.75-.75-.337-.75-.75-.75z"></path>
+                  </svg>
+                  <span class="truncate">公式LINEに登録して問い合わせる</span>
+                </a>
+              </div>
+            </div>
+            <div id="contact-info-container" class="space-y-4"></div>
+            <!-- Divider -->
+            <div aria-hidden="true" class="flex items-center">
+              <div class="flex-grow border-t border-slate-300 dark:border-slate-700"></div>
+              <span class="flex-shrink mx-4 text-slate-500 dark:text-slate-400 text-sm">OR</span>
+              <div class="flex-grow border-t border-slate-300 dark:border-slate-700"></div>
+            </div>
+            <!-- Secondary CTA Block -->
+            <div class="text-center space-y-6">
+              <p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed">LINEをご利用でない方は、こちらの専用フォームをご利用ください。</p>
+              <div class="flex justify-center">
+                <a class="flex min-w-[84px] max-w-sm w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-base font-bold leading-normal tracking-[0.015em] hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors duration-200" href="#" rel="noopener noreferrer" target="_blank">
+                  <span class="truncate">専用フォームはこちら</span>
+                  <span class="material-symbols-outlined ml-2 text-lg">open_in_new</span>
+                </a>
+              </div>
+              <div class="flex justify-center items-start gap-2 pt-2">
+                <input checked="" class="h-5 w-5 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-slate-100 dark:bg-slate-800 mt-0.5 flex-shrink-0" id="newsletter-consent" type="checkbox" />
+                <label class="text-slate-500 dark:text-slate-400 text-sm text-left" for="newsletter-consent">
+                  フォームの利用をもって、メールマガジンへの登録に同意します。
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <nav id="bottom-nav" class="hidden fixed bottom-0 left-0 w-full z-40 bg-surface-light dark:bg-surface-dark border-t border-slate-200 dark:border-slate-800">
+        <div id="bottom-nav-container" class="flex justify-around max-w-lg mx-auto">
+        </div>
+      </nav>
+    </div>
+    <div id="global-footer-container"></div>
+  </div>
+  <script type="module" src="js/common.js"></script>
+</body>
+</html>

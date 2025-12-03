@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>ブログ一覧 | Portfolio Site</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Noto+Sans+JP:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            // ★ ご指定の色 #13a4ec に変更
+            "primary": "#13a4ec",
+            "secondary": "#13a4ec", // アイコンとボタンの色を統一
+            "background-light": "#F8F9FA",
+            "background-dark": "#101c22",
+            "text-light": "#343A40",
+            "text-dark": "#F8F9FA",
+            "text-muted-light": "#6c757d",
+            "text-muted-dark": "#adb5bd",
+            "surface-light": "#ffffff",
+            "surface-dark": "#1a2a33",
+          },
+          fontFamily: {
+            // display と同じ設定を全ての要素に適用し、Noto Sans JP を含む設定にします。
+            'sans': ["Manrope", "Noto Sans JP", "sans-serif"],
+            display: ["Manrope", "Noto Sans JP", "sans-serif"]
+          },
+          keyframes: {
+            // ... (アニメーションの定義は省略)
+          },
+          animation: {
+            // ... (アニメーションの適用は省略)
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark min-h-screen pt-16">
+
+  <header id="header" class="fixed top-0 left-0 right-0 z-40 h-16 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 transition-shadow duration-300">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+      <div class="flex items-center space-x-8">
+        <a class="flex items-center gap-4 text-text-light dark:text-text-dark flex-shrink-0" href="index.html" id="header-branding"></a>
+        <nav id="main-nav" class="hidden lg:flex space-x-6">
+          <div id="main-nav-loader" class="flex space-x-6 items-center">
+            <div class="w-16 h-4 bg-slate-300 dark:bg-slate-700 animate-pulse rounded"></div>
+            <div class="w-16 h-4 bg-slate-300 dark:bg-slate-700 animate-pulse rounded"></div>
+          </div>
+        </nav>
+      </div>
+
+      <div id="header-cta-container" class="hidden lg:flex flex-shrink-0 space-x-4 items-center">
+        </div>
+      
+      <div class="lg:hidden flex items-center">
+        <div id="mobile-cta-container" class="flex items-center mr-4">
+          </div>
+        <button id="mobile-menu-toggle" class="p-2 rounded-md text-text-light dark:text-text-dark hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+      </div>
+    </div>
+    
+    <div id="mobile-menu" class="lg:hidden absolute top-16 left-0 right-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm shadow-lg border-t border-slate-200 dark:border-slate-800 hidden">
+      <div id="mobile-nav" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="mobile-nav-loader" class="px-3 py-2 space-y-2">
+          <div class="w-full h-6 bg-slate-300 dark:bg-slate-700 animate-pulse rounded"></div>
+          <div class="w-full h-6 bg-slate-300 dark:bg-slate-700 animate-pulse rounded"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="min-h-screen pt-8 pb-32 lg:pb-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <h1 class="text-3xl font-extrabold tracking-tight mb-8">ブログ記事一覧</h1>
+      
+      <div class="mb-8 p-4 bg-surface-light dark:bg-surface-dark rounded-lg shadow">
+        <p class="text-sm text-text-muted-light dark:text-text-muted-dark">ソート・検索機能エリア (Phase 7で実装)</p>
+        <div class="flex flex-wrap gap-4 mt-2">
+          <button id="sort-date-button" data-sort-order="desc" class="px-3 py-1 bg-primary/20 text-primary rounded text-sm transition-colors">日付: 新しい順</button>
+          <select id="category-select" class="form-select rounded-md text-sm border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-text-light dark:text-text-dark" onchange="handleCategoryChange()">
+            <option value="">カテゴリー選択</option>
+            </select>
+          <input type="text" id="search-input" placeholder="キーワード検索" class="form-input rounded-md text-sm border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-text-light dark:text-text-dark" onkeyup="handleSearch()">
+        </div>
+      </div>
+      
+      <div id="blog-list-container" class="space-y-8">
+        </div>
+
+      <div id="pagination-container" class="mt-12 flex justify-center">
+        </div>
+    </div>
+  </main>
+
+  <div id="global-footer-container"></div>
+
+  <nav id="bottom-nav" class="lg:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-t border-slate-200 dark:border-slate-800 shadow-2xl hidden">
+      <div id="bottom-nav-container" class="flex justify-around items-center h-full max-w-lg mx-auto">
+          </div>
+  </nav>
+
+  <script type="module" src="js/common.js"></script>
+</body>
+</html>

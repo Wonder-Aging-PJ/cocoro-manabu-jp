@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <!-- 1. タイトルを日本語化 -->
+  <title>クリエイターズ・ストーリー - 論理から感情へ</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Noto+Sans+JP:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            // vision.html 固有のカラー
+            "primary": "#13a4ec",
+            "background-light": "#f8f9fa",
+            "background-dark": "#101c22",
+
+            // 共通ヘッダーで必要な index.html 由来の色定義を追加
+            "secondary": "#F2B705",
+            // body の text-[#343A40] に合わせる
+            "text-light": "#343A40", 
+            // body の dark:text-slate-300 に近い index.html の定義を採用
+            "text-dark": "#F8F9FA", 
+            "text-muted-light": "#6c757d",
+            "text-muted-dark": "#adb5bd"
+          },
+          fontFamily: {
+            "display": ["Manrope", "Noto Sans JP", "sans-serif"],
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px",
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<!-- ★ body の text-[#343A40] dark:text-slate-300 を text-text-light dark:text-text-dark に置き換え ★ -->
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+<div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+  
+  <!-- ★ 共通ヘッダー (レスポンシブ対応) ★ -->
+  <header class="sticky top-0 z-50 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- 共通ロゴとタイトル -->
+        <a href="index.html" id="header-branding" class="flex items-center gap-4 text-text-light dark:text-text-dark flex-shrink-0"></a>
+        
+        <!-- PC用メニュー (md以上で表示) -->
+        <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+          <nav class="flex items-center gap-5 lg:gap-6" id="main-nav"></nav>
+          <!-- このページの primary カラー ( #13a4ec ) が適用されます -->
+          <a href="free-course.html" role="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0">
+            <span class="truncate">無料講座</span>
+          </a>
+        </div>
+        
+        <!-- スマホ用メニューボタン (md未満で表示) -->
+        <div class="md:hidden flex items-center gap-4">
+           <a href="free-course.html" role="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0">
+            <span class="truncate">無料講座</span>
+          </a>
+          <button id="mobile-menu-toggle" class="text-text-light dark:text-text-dark p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    
+    <!-- スマホ用ドロップダウンメニュー (JSで hidden をトグル) -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-16 left-0 w-full bg-background-light dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 shadow-lg z-40">
+      <nav class="flex flex-col gap-4 p-4" id="mobile-nav"></nav>
+    </div>
+  </header>
+  
+  <!-- ★ ここから下は vision.html 本来のコンテンツ (日本語化済み) ★ -->
+  <main class="flex-1">
+    <div class="px-4 py-5 sm:px-6 lg:px-8">
+      <div class="mx-auto flex max-w-5xl flex-col">
+        <!-- HeroSection -->
+        <div class="@container">
+          <div class="py-12 @[480px]:p-4">
+            <div class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-center justify-center p-4 text-center" data-alt="A portrait of the creator looking thoughtfully towards the horizon, with a soft, natural background." style='background-image: linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAZ3t1sdccRi7efxRJP7pIsKZ1tcEX5Ti_R50CvW4wm7CzTZU6k-ITa4Xv3ceDGxoKt2tdbprFo_pETS0Kabyqb_vBFQX8R75Gy984v3JfaW5yla90bR7KXhH2k-SjkR9XXBcGKkh7JalVNBfkCRSt5LD39VDp68Ak2gQKgUzdYbdwzuxpv6jlb08UuKD1jihlwLiqjvbTQeVoTxULzY3oTuLW5jaOV2Olmk_1IC0hzFVtxrmJKyTzqlhUfMNxr8_rI2TZoxURYD08N");'>
+              <div class="flex flex-col gap-2 max-w-3xl">
+                <h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">論理から感情へ：成功を再定義する私の旅</h1>
+                <h2 class="text-slate-200 text-base font-normal leading-normal @[480px]:text-lg @[480px]:font-normal @[480px]:leading-normal">仕事の裏側にあるストーリー—挫折、発見、そしてテクノロジーと人間心理の融合の道。</h2>
+              </div>
+              <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-primary text-slate-50 text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em] hover:bg-opacity-90 transition-opacity">
+                <span class="truncate">私のストーリーを読む</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Introduction Section -->
+        <div class="py-16 sm:py-24">
+          <h1 class="text-text-light dark:text-text-dark tracking-tight text-3xl font-bold leading-tight px-4 text-center pb-4 sm:text-4xl">私の仕事の背後にある「なぜ」</h1>
+          <p class="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed pb-3 pt-1 px-4 text-center max-w-3xl mx-auto">これは単なる履歴書ではありません。変革の物語です。システムエンジニア、心理カウンセラー、そして起業家としての私の経験が、他者の成功を助けるための独自のビジョンをどのように形作ってきたかをお話しします。</p>
+        </div>
+        <!-- Timeline -->
+        <div class="py-16 sm:py-24">
+          <div class="grid grid-cols-[auto_1fr] md:grid-cols-[1fr_auto_1fr] gap-x-4 md:gap-x-8 gap-y-12">
+            <!-- SE Era -->
+            <div class="hidden md:flex items-center justify-center p-4">
+              <img alt="Close-up of code on a computer screen." class="rounded-lg shadow-lg object-cover w-full h-48" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPRdOpnsMdX1BUzMEBhldd8yHa4q9MvXiOX8tdnJQD9WfnqDsyfUzOe2zu3AyK3jBRHtJWM7nb8_JyeaMBaxH_hsdnmYz7naFErSGEGJYCXtDGb7u9kZnK4D0DnvIcvJ37U-esBnjGyOEsWVS5dB_h_3mEDVhWxjXNA7FD_bkOCFElRXT5EImJdLVBT5qwdC7U9yTAw_jFK_zRW-mfgmmBRJmE-aaYQJQK_wgpAOpoabUn6jLHB09lHwLxQdk5Q9laiEiTdekIUzmx" />
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="rounded-full bg-primary/20 p-3 text-primary"><span class="material-symbols-outlined">code</span></div>
+              <div class="w-px grow bg-slate-300 dark:bg-slate-700"></div>
+            </div>
+            <div class="flex flex-col pb-8">
+              <p class="text-xl font-bold text-text-light dark:text-text-dark">SE時代：基礎を築く</p>
+              <p class="text-slate-600 dark:text-slate-400 mt-2">論理と問題解決の上にキャリアを築き、システムとプロセスを習得しました。しかしすぐに、真の成功の方程式には重要な要素が欠けていることに気づきました。</p>
+            </div>
+            <!-- Turning Point -->
+            <div class="flex flex-col text-left md:text-right pb-8">
+              <p class="text-xl font-bold text-text-light dark:text-text-dark">転換点：葛藤を受け入れる</p>
+              <p class="text-slate-600 dark:text-slate-400 mt-2">個人的な挫折が、私自身の弱さと向き合うことを余儀なくさせました。この予期せぬ自己発見の道が、私を快適な領域（コンフォートゾーン）の外へと押し出す、大きな変化の触媒となりました。</p>
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="rounded-full bg-primary/20 p-3 text-primary"><span class="material-symbols-outlined">change_circle</span></div>
+              <div class="w-px grow bg-slate-300 dark:bg-slate-700"></div>
+            </div>
+            <div class="hidden md:flex items-center justify-center p-4">
+              <img alt="A person looking out a window reflectively." class="rounded-lg shadow-lg object-cover w-full h-48" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDuXaGltIEyE3C-TMUzR_lstYHjglY0HvLiuSkZpR-bGIguGk7kYPsATkYWswdgwY92wr7hUu6PODs2Mzp5XqlzWTdK5w5CCAEqGakpsulrCNfqPM-8yIDjavCzsjiIpPT8aNrUuVsTf-P_Yn-MiaOk9HqmFPXuW7UmjEJB0FJdywB3gF3M6lye2IptRFgBqEI-j0b_ZOG_GfvqS1_d9Af-wk5Tv4tomDw843S04-ET2KyrrfwAzXkyyEAS5JG-yMMbYUZO4Egf36u" />
+            </div>
+            <!-- Counselor -->
+            <div class="hidden md:flex items-center justify-center p-4">
+              <img alt="Two people having an empathetic conversation." class="rounded-lg shadow-lg object-cover w-full h-48" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCss3t5jry42mBg5bbbpWz9-YxPj0sSlqmX2MSt6j3wYcidfbHVtKD4OUOtEc4GDd8ArSgqZQzmI3_-syiGhczGlXEaKq6y7MjjhyaKPmVrTwYrxNfea9lPR0HVT9B4j_zsmxHmucHcOms2uGR9LEWAvEvVmJkwqdGaoF3h1OcD21puaBMp-N8gklhqKO2BB0dyQ-qxKxY_CHsSwa0BF0U5plT2K4DKCfZ40B_nQoDMZ2R0ccMzIfhC8M3hVAEoyXkIsmpUxnx-UWo2" />
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="rounded-full bg-primary/20 p-3 text-primary"><span class="material-symbols-outlined">psychology</span></div>
+              <div class="w-px grow bg-slate-300 dark:bg-slate-700"></div>
+            </div>
+            <div class="flex flex-col pb-8">
+              <p class="text-xl font-bold text-text-light dark:text-text-dark">カウンセラー：新たな情熱の発見</p>
+              <p class="text-slate-600 dark:text-slate-400 mt-2">心理学の世界に移り、共感、傾聴、そして人間の心を理解する力を学びました。他者が自身の課題を乗り越えるのを助けることに、新たな情熱を見出しました。</p>
+            </div>
+            <!-- Entrepreneur -->
+            <div class="flex flex-col text-left md:text-right pb-8">
+              <p class="text-xl font-bold text-text-light dark:text-text-dark">起業家：2つの世界の統合</p>
+              <p class="text-slate-600 dark:text-slate-400 mt-2">分析的なバックグラウンドと、新たに見出した人間中心のスキルを組み合わせ、技術システムと人間の可能性のギャップを埋める、独自の視点を持つビジネスを創造しました。</p>
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="rounded-full bg-primary/20 p-3 text-primary"><span class="material-symbols-outlined">rocket_launch</span></div>
+              <div class="w-px grow bg-slate-300 dark:bg-slate-700"></div>
+            </div>
+            <div class="hidden md:flex items-center justify-center p-4">
+              <img alt="A diverse team collaborating around a table." class="rounded-lg shadow-lg object-cover w-full h-48" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGYBW9cgGBtOdzRd38nTIzOqohc2wsBsBudnwamWlFN_rO-MR4KGoNTJIRtEJmIeFxvb1Cl0Ct2Vvh9ROoDNa62XlEsi88S-juklfNtBY976LjcZhetIMGoL_MdZcsmsJAOjSbBv8LW9OuZCqBwxTbyQh2eWy53ajPcZ4SEe1dDtZ4Qg1CvODe4bpB5551dqzIlGwGEGT05SviITlAF6AO46bTHdk5SAb6wT9Rgh9jeS-Bv4H7LsbglGNkMrITPMG2M_okWa2-69lT" />
+            </div>
+          </div>
+        </div>
+        <!-- Blockquote Section -->
+        <div class="py-16 sm:py-24 text-center">
+          <blockquote class="relative max-w-3xl mx-auto px-4">
+            <span class="absolute top-0 left-0 -translate-x-4 -translate-y-4 text-8xl text-primary/10 dark:text-primary/20 font-serif">“</span>
+            <p class="text-3xl font-medium italic text-text-light dark:text-text-dark leading-relaxed">真のイノベーションは、論理と共感が交差する場所、テクノロジーが人間に奉仕する場所で起こる。</p>
+            <footer class="mt-6 text-base text-slate-600 dark:text-slate-400">- 私の指針</footer>
+            <span class="absolute bottom-0 right-0 translate-x-4 translate-y-4 text-8xl text-primary/10 dark:text-primary/20 font-serif">”</span>
+          </blockquote>
+        </div>
+        <!-- Vision / CTA Section -->
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl my-16 sm:my-24 p-8 md:p-12">
+          <div class="text-center">
+            <h2 class="text-3xl font-bold text-text-light dark:text-text-dark tracking-tight">未来への私のビジョン</h2>
+            <p class="mt-4 text-lg max-w-2xl mx-auto text-slate-600 dark:text-slate-400 leading-relaxed">私の使命は、私の旅（経験）を活用して他者に力を与え、テクノロジーと人間性が調和して機能する未来を創造することです。効率的であるだけでなく、深く人間中心のシステムを構築する個人や組織を支援します。</p>
+            <div class="mt-8 flex justify-center items-center gap-4">
+              <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-opacity">
+                <span class="truncate">サービスを見る</span>
+              </button>
+              <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-transparent border-2 border-primary text-primary text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/10 transition-colors">
+                <span class="truncate">ブログを読む</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+    <nav id="bottom-nav" class="hidden fixed bottom-0 left-0 w-full z-40 bg-surface-light dark:bg-background-dark/80 border-t border-slate-200 dark:border-slate-800">
+      <div id="bottom-nav-container" class="flex justify-around max-w-lg mx-auto">
+        </div>
+    </nav>
+    <div id="global-footer-container"></div>
+    </div>
+    <script type="module" src="js/common.js"></script>
+</body>
+</html>
