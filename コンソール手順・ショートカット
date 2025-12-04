@@ -1,0 +1,32 @@
+現在　mentalfitness2009@gmail.comでログインしているので、この状態で、ローカルサーバー環境のURLを入れてみる
+
+-現在ログインしているアカウントのメールアドレス表示
+firebase login --reauth
+
+-現在ログインしているアカウントからログアウト
+firebase logout
+
+-正しいアカウントで接続
+firebase login
+--Enable Gemini in Firebase features? (Y/n)→n
+-- Allow Firebase to collect CLI and Emulator Suite usage and error reporting information? (Y/n)→n
+-ブラウザが開くので、正しいアカウントでログインする
+
+-プロジェクトの固定
+firebase use （プロジェクト名：wonder-aging-cocoro-manabu）
+
+-ディレクトリ移動
+cd　..
+-デプロイ
+firebase deploy --only hosting
+
+目的,コマンド,備考
+現在のアカウント確認,firebase login --reauth,現在CLIにログインしているメールアドレスが表示されます。
+現在のディレクトリ表示,pwd,（Windowsでは cd でも可）現在ターミナルがどのフォルダにいるかを表示します。
+目的のディレクトリに移動,cd [フォルダ名],例: cd public
+一つ上のディレクトリへ移動,cd ..,例: public からルートフォルダに戻る場合など。
+Hostingのデプロイ,firebase deploy --only hosting,ローカルのファイルを Firebase Hosting に公開します。
+
+
+【コマンドパレット】
+Command + Shift + P

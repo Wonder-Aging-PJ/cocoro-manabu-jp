@@ -412,6 +412,11 @@
             </span>
             カスタムHTML
           </button>
+
+          <button class="tab-btn text-sm font-bold" data-tab="saved-links">
+            <span class="material-symbols-outlined align-middle !text-lg mr-1">bookmarks</span>
+            登録リンク
+          </button>
         </nav>
       </div>
 
@@ -1811,6 +1816,45 @@
             <div id="custom-parts-loader" class="flex justify-center py-8">
               <div class="loader"></div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 登録リンク管理 -->
+    <div id="tab-content-saved-links" class="tab-content">
+      <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700">
+        <h2 class="text-2xl font-bold mb-6">よく使うリンクの管理</h2>
+        <form id="add-saved-link-form" class="space-y-6 mb-10">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="saved-link-title" class="block text-sm font-medium">タイトル <span class="text-red-500">*</span></label>
+              <input type="text" id="saved-link-title" required placeholder="例: Amazonアフィリエイト" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+            </div>
+            <div>
+              <label for="saved-link-url" class="block text-sm font-medium">URL <span class="text-red-500">*</span></label>
+              <input type="url" id="saved-link-url" required placeholder="https://..." class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+            </div>
+          </div>
+          <div>
+            <label for="saved-link-memo" class="block text-sm font-medium">メモ / 検索用キーワード</label>
+            <input type="text" id="saved-link-memo" placeholder="例: 商品紹介用、プロフィール用" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+          </div>
+          <button type="submit" id="submit-saved-link-btn" class="py-2 px-6 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+            <span class="material-symbols-outlined">add</span> <span>リンクを登録</span>
+          </button>
+        </form>
+
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold">登録済みリンク一覧 <span id="saved-links-count-display" class="text-sm font-normal text-text-muted-light"></span></h3>
+            <div class="relative w-64">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><span class="material-symbols-outlined">search</span></span>
+              <input type="text" id="search-saved-links" placeholder="キーワードで検索..." class="block w-full pl-10 pr-3 py-2 rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+            </div>
+          </div>
+          <div id="saved-links-list-container" class="space-y-3">
+            <div id="saved-links-loader" class="flex justify-center py-8"><div class="loader"></div></div>
           </div>
         </div>
       </div>
@@ -3246,6 +3290,24 @@
           <img id="edit-image-preview-skill" src="" alt="画像プレビュー" class="mt-4 w-16 h-16 object-contain hidden" />
         </div>
       </div>
+      </div>
+
+      <!-- 8. 登録リンク編集フォーム -->
+      <div id="edit-form-template-savedLinks" class="space-y-6">
+        <input type="hidden" id="edit-saved-link-id" />
+        <div>
+          <label for="edit-saved-link-title" class="block text-sm font-medium">タイトル <span class="text-red-500">*</span></label>
+          <input type="text" id="edit-saved-link-title" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+        </div>
+        <div>
+          <label for="edit-saved-link-url" class="block text-sm font-medium">URL <span class="text-red-500">*</span></label>
+          <input type="url" id="edit-saved-link-url" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+        </div>
+        <div>
+          <label for="edit-saved-link-memo" class="block text-sm font-medium">メモ / 検索用キーワード</label>
+          <input type="text" id="edit-saved-link-memo" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+        </div>
+      </div>
     </div>
 
     <!-- カスタムHTML部品 新規作成/編集モーダル -->
@@ -3360,25 +3422,16 @@
                 ></textarea>
               </div>
 
-              <!-- ライブプレビュー -->
+              <!-- プレビューボタン (別タブ) -->
               <div>
-                <div class="flex items-center justify-between mb-2">
-                  <label class="block text-sm font-medium">ライブプレビュー</label>
-                  <button
-                    type="button"
-                    id="refresh-preview-btn"
-                    class="py-1 px-3 bg-slate-600 text-white text-xs font-bold rounded-lg hover:bg-slate-700 transition-colors flex items-center gap-1"
-                  >
-                    <span class="material-symbols-outlined !text-sm">refresh</span>
-                    <span>更新</span>
-                  </button>
-                </div>
-                <div
-                  id="cp-preview"
-                  class="p-4 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 min-h-[100px]"
+                 <button
+                  type="button"
+                  id="preview-custom-part-btn"
+                  class="w-full py-2 px-4 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity mt-4 flex items-center justify-center gap-2"
                 >
-                  <p class="text-center text-slate-400">プレビューがここに表示されます</p>
-                </div>
+                  <span class="material-symbols-outlined">open_in_new</span>
+                  <span>新しいタブでプレビュー</span>
+                </button>
               </div>
             </form>
           </div>
@@ -9388,9 +9441,10 @@ window.addContactItemField = addContactItemField;
         const customPartModal = document.getElementById('cp-modal');
         const customPartForm = document.getElementById('cp-form');
         const customPartModalTitle = document.getElementById('cp-modal-title');
-        const refreshPreviewBtn = document.getElementById('refresh-preview-btn');
+        // const refreshPreviewBtn = document.getElementById('refresh-preview-btn'); // Removed
         const customPartHtmlInput = document.getElementById('cp-input-html');
-        const customPartPreview = document.getElementById('cp-preview');
+        // const customPartPreview = document.getElementById('cp-preview'); // Removed
+        const previewCustomPartBtn = document.getElementById('preview-custom-part-btn');
 
         // カスタムHTML部品を読み込む
         async function loadCustomParts() {
@@ -9614,13 +9668,8 @@ window.addContactItemField = addContactItemField;
           }
         }
 
-        // プレビュー更新
-        function updatePreview() {
-          const htmlContent = customPartHtmlInput?.value || '';
-          if (customPartPreview) {
-            customPartPreview.innerHTML = htmlContent || '<p class="text-center text-slate-400">プレビューがここに表示されます</p>';
-          }
-        }
+        // プレビュー更新 (削除済み)
+        // function updatePreview() { ... }
 
         // モーダルを開く（新規作成）
         if (addCustomPartBtn) {
@@ -9629,7 +9678,7 @@ window.addContactItemField = addContactItemField;
             document.getElementById('cp-input-id').value = '';
             customPartModalTitle.textContent = 'カスタムHTML部品を作成';
             customPartModal?.classList.remove('hidden');
-            updatePreview();
+            // updatePreview(); // Removed
           });
         }
 
@@ -9638,10 +9687,25 @@ window.addContactItemField = addContactItemField;
           customPartForm.addEventListener('submit', saveCustomPart);
         }
 
-        // プレビュー更新ボタン
+        // プレビュー更新ボタン (削除済み)
+        /*
         if (refreshPreviewBtn) {
           refreshPreviewBtn.addEventListener('click', updatePreview);
           }
+        */
+
+        // 新しいタブでプレビュー
+        if (previewCustomPartBtn) {
+          previewCustomPartBtn.addEventListener('click', () => {
+            const htmlValue = customPartHtmlInput?.value;
+            if (!htmlValue) {
+              alert('HTMLコードを入力してください。');
+              return;
+            }
+            localStorage.setItem('snippetPreviewCode', htmlValue);
+            window.open('preview.html', '_blank');
+          });
+        }
 
       // ★ Nested Tabs Initialization (Grandchildren Tabs)
       function setupNestedTabs() {
@@ -9709,10 +9773,12 @@ window.addContactItemField = addContactItemField;
         });
       }
 
-        // HTMLエディタの入力時に自動プレビュー更新
+        // HTMLエディタの入力時に自動プレビュー更新 (削除済み)
+        /*
         if (customPartHtmlInput) {
           customPartHtmlInput.addEventListener('input', updatePreview);
         }
+        */
 
         // 検索・フィルタ
         if (searchCustomPartsInput) {
@@ -9748,7 +9814,7 @@ window.addContactItemField = addContactItemField;
                   document.getElementById('cp-input-html').value = data.htmlContent || '';
                   customPartModalTitle.textContent = 'カスタムHTML部品を編集';
                   customPartModal?.classList.remove('hidden');
-                  updatePreview();
+                  // updatePreview(); // Removed
                 }
               } catch (error) {
                 showMessage('部品の読み込みに失敗しました。', 'error');
