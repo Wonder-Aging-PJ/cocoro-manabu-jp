@@ -3785,6 +3785,10 @@
         const templateBottomNavigation = document.getElementById(
           "edit-form-template-bottomNavigation"
         );
+        // ★ NEW: 登録リンク
+        const templateSavedLink = document.getElementById(
+          "edit-form-template-savedLinks"
+        );
         // --- ★ DOM Elements (お問い合わせ情報) (NEW) ★ ---
         const addContactInfoForm = document.getElementById("add-contact-info-form");
         const contactListContainer = document.getElementById(
@@ -7050,6 +7054,19 @@ function setupStaticPageSubTabs() {
                 editFormContent.appendChild(template);
                 break;
 
+              // --- 9. 登録リンク (NEW) ---
+              case "savedLinks":
+                editModalTitle.textContent = "登録リンクを修正";
+                template = templateSavedLink.cloneNode(true);
+
+                template.querySelector("#edit-saved-link-id").value = data.docId;
+                template.querySelector("#edit-saved-link-title").value = data.title;
+                template.querySelector("#edit-saved-link-url").value = data.url;
+                template.querySelector("#edit-saved-link-memo").value = data.memo || "";
+
+                editFormContent.appendChild(template);
+                break;
+
 
 
               default:
@@ -7190,6 +7207,16 @@ function setupStaticPageSubTabs() {
                   };
                   selectedEditFile = editFileMediaBanner;
                   newImagePathPrefix = "images/system/media_banners";
+                  break;
+
+                case "savedLinks":
+                  updatedData = {
+                    title: document.getElementById("edit-saved-link-title").value,
+                    url: document.getElementById("edit-saved-link-url").value,
+                    memo: document.getElementById("edit-saved-link-memo").value,
+                  };
+                  selectedEditFile = null;
+                  newImagePathPrefix = "";
                   break;
 
                 case "sites":
@@ -7448,6 +7475,9 @@ function setupStaticPageSubTabs() {
                   break;
                 case "bottomNavigation":
                   loadBottomNavigation();
+                  break;
+                case "savedLinks":
+                  loadSavedLinks();
                   break;
               }
             } catch (error) {
@@ -9838,6 +9868,211 @@ window.addContactItemField = addContactItemField;
         if (customHtmlTabBtn) {
           customHtmlTabBtn.addEventListener('click', () => {
             loadCustomParts();
+          });
+        }
+
+        // ========================================
+        // 登録リンク管理 (Saved Links)
+        // ========================================
+        const savedLinksListContainer = document.getElementById('saved-links-list-container');
+        const savedLinksLoader = document.getElementById('saved-links-loader');
+        const savedLinksCountDisplay = document.getElementById('saved-links-count-display');
+        const searchSavedLinksInput = document.getElementById('search-saved-links');
+        const addSavedLinkForm = document.getElementById('add-saved-link-form');
+
+        async function loadSavedLinks() {
+          if (!savedLinksLoader || !savedLinksListContainer) return;
+          
+          savedLinksLoader.classList.remove('hidden');
+          savedLinksListContainer.innerHTML = '';
+          
+          try {
+            const searchKeyword = searchSavedLinksInput?.value.toLowerCase() || '';
+            
+            let q = query(collection(db, 'savedLinks'), orderBy('createdAt', 'desc'));
+            const querySnapshot = await getDocs(q);
+            
+            savedLinksLoader.classList.add('hidden');
+            
+            if (savedLinksCountDisplay) {
+              savedLinksCountDisplay.textContent = `(全 ${querySnapshot.size} 件)`;
+            }
+            
+            if (querySnapshot.empty) {
+              savedLinksListContainer.innerHTML = '<p class="text-center text-text-muted-light dark:text-text-muted-dark">まだ登録されたリンクがありません。</p>';
+              return;
+            }
+            
+            let filteredCount = 0;
+            querySnapshot.forEach((docSnap) => {
+              const data = docSnap.data();
+              const docId = docSnap.id;
+              
+              // 検索フィルタ
+              if (searchKeyword) {
+                const titleMatch = (data.title || '').toLowerCase().includes(searchKeyword);
+                const urlMatch = (data.url || '').toLowerCase().includes(searchKeyword);
+                const memoMatch = (data.memo || '').toLowerCase().includes(searchKeyword);
+                if (!titleMatch && !urlMatch && !memoMatch) return;
+              }
+              
+              filteredCount++;
+              
+              const itemEl = document.createElement('div');
+              itemEl.className = 'flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-background-light dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow';
+              
+              itemEl.innerHTML = `
+                <div class="flex-grow min-w-0">
+                  <div class="flex items-center gap-2 mb-1">
+                    <h4 class="text-lg font-bold truncate">${data.title || 'タイトルなし'}</h4>
+                    ${data.memo ? `<span class="text-xs text-text-muted-light dark:text-text-muted-dark bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded">${data.memo}</span>` : ''}
+                  </div>
+                  <div class="flex items-center gap-2 text-sm text-primary truncate">
+                    <span class="material-symbols-outlined !text-base">link</span>
+                    <a href="${data.url}" target="_blank" class="hover:underline truncate">${data.url}</a>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 flex-shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
+                  <button
+                    data-url="${data.url}"
+                    class="copy-link-btn py-2 px-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors text-sm flex items-center justify-center gap-1 flex-grow sm:flex-grow-0"
+                    title="URLをコピー"
+                  >
+                    <span class="material-symbols-outlined !text-base">content_copy</span>
+                    <span class="sm:hidden">コピー</span>
+                  </button>
+                  <button
+                    data-doc-id="${docId}"
+                    data-collection="savedLinks"
+                    data-title="${data.title || ''}"
+                    data-url="${data.url || ''}"
+                    data-memo="${data.memo || ''}"
+                    class="edit-btn py-2 px-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center justify-center gap-1 flex-grow sm:flex-grow-0"
+                  >
+                    <span class="material-symbols-outlined !text-base">edit</span>
+                    <span class="sm:hidden">編集</span>
+                  </button>
+                  <button
+                    data-doc-id="${docId}"
+                    data-collection="savedLinks"
+                    class="delete-btn py-2 px-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors text-sm flex items-center justify-center gap-1 flex-grow sm:flex-grow-0"
+                  >
+                    <span class="material-symbols-outlined !text-base">delete</span>
+                    <span class="sm:hidden">削除</span>
+                  </button>
+                </div>
+              `;
+              savedLinksListContainer.appendChild(itemEl);
+            });
+            
+            if (filteredCount === 0) {
+              savedLinksListContainer.innerHTML = '<p class="text-center text-text-muted-light dark:text-text-muted-dark">条件に一致するリンクがありません。</p>';
+            }
+            
+          } catch (error) {
+            savedLinksLoader.classList.add('hidden');
+            savedLinksListContainer.innerHTML = '<p class="text-center text-red-500">リンクの読み込み中にエラーが発生しました。</p>';
+            console.error('Error loading saved links:', error);
+          }
+        }
+
+        // リンク登録フォーム送信
+        if (addSavedLinkForm) {
+          addSavedLinkForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('saved-link-title').value;
+            const url = document.getElementById('saved-link-url').value;
+            const memo = document.getElementById('saved-link-memo').value;
+            
+            if (!title || !url) return;
+            
+            try {
+              await addDoc(collection(db, 'savedLinks'), {
+                title,
+                url,
+                memo,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
+              });
+              
+              addSavedLinkForm.reset();
+              showMessage('リンクを登録しました。', 'success');
+              loadSavedLinks();
+            } catch (error) {
+              console.error('Error adding saved link:', error);
+              showMessage('リンクの登録に失敗しました。', 'error');
+            }
+          });
+        }
+
+        // 検索ボックス
+        if (searchSavedLinksInput) {
+          searchSavedLinksInput.addEventListener('input', loadSavedLinks);
+        }
+
+        // --- ★ 登録リンク管理のイベントリスナー (NEW) ★ ---
+        const savedLinksContainer = document.getElementById("saved-links-list-container");
+        if (savedLinksContainer) {
+          savedLinksContainer.addEventListener("click", async (e) => {
+            // 1. コピーボタン
+            const copyBtn = e.target.closest(".copy-link-btn");
+            if (copyBtn) {
+              e.stopPropagation();
+              e.preventDefault();
+              const url = decodeURIComponent(copyBtn.dataset.url || '');
+              try {
+                await navigator.clipboard.writeText(url);
+                showMessage("リンクをコピーしました！");
+              } catch (err) {
+                console.error("Copy failed:", err);
+                showMessage("コピーに失敗しました", "error");
+              }
+              return;
+            }
+
+            // 2. 修正ボタン (共通の edit-btn クラスを使用)
+            const editBtn = e.target.closest(".edit-btn");
+            if (editBtn) {
+              e.stopPropagation();
+              e.preventDefault();
+              const data = { ...editBtn.dataset };
+              // データのデコード
+              Object.keys(data).forEach(key => {
+                  if (['title', 'url', 'memo'].includes(key)) {
+                      try { data[key] = decodeURIComponent(data[key]); } catch (e) {}
+                  }
+              });
+              openEditModal(data);
+              return;
+            }
+
+            // 3. 削除ボタン (共通の delete-btn クラスを使用)
+            const deleteBtn = e.target.closest(".delete-btn");
+            if (deleteBtn) {
+              e.stopPropagation();
+              e.preventDefault();
+              const docId = deleteBtn.dataset.docId;
+              if (!docId) return;
+
+              if (!confirm("このリンクを削除してもよろしいですか？")) return;
+
+              try {
+                await deleteDoc(doc(db, "savedLinks", docId));
+                showMessage("リンクを削除しました。");
+                loadSavedLinks(); // リストを再読み込み
+              } catch (error) {
+                console.error("Error deleting link:", error);
+                showMessage(`削除エラー: ${error.message}`, "error");
+              }
+            }
+          });
+        }
+
+        // タブ切り替え時に読み込み
+        const savedLinksTabBtn = document.querySelector('[data-tab="saved-links"]');
+        if (savedLinksTabBtn) {
+          savedLinksTabBtn.addEventListener('click', () => {
+            loadSavedLinks();
           });
         }
       });
