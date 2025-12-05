@@ -670,6 +670,9 @@ async function loadArticleDetail() {
         bodyEl.innerHTML = '<p>指定された記事IDは、動的記事または静的記事のどちらにも見つかりませんでした。</p>';
       }
     }
+
+    // ★ 追加: 記事内のカスタムHTML部品を展開する
+    await loadCustomHtmlParts();
   } catch (error) {
     console.error("記事詳細の読み込みエラー:", error);
     if (bodyEl) bodyEl.innerHTML = '<p class="text-red-500">記事の読み込み中にエラーが発生しました。</p>';
@@ -1766,7 +1769,7 @@ async function loadActiveContactSet() {
 /**
  * ページ内のカスタムHTML部品用コンテナを検出し、コンテンツをロードする
  */
-async function loadCustomHtmlParts() {
+export async function loadCustomHtmlParts() {
   // idが "custom-part-" で始まるすべての要素を取得
   const containers = document.querySelectorAll('[id^="custom-part-"]');
 
@@ -1794,6 +1797,8 @@ async function loadCustomHtmlParts() {
     console.error("カスタムHTML部品の読み込みエラー:", error);
   }
 }
+// preview.html 用に window にも紐付け
+window.loadCustomHtmlParts = loadCustomHtmlParts;
 
 /**
  * 共通フッターを生成して表示する

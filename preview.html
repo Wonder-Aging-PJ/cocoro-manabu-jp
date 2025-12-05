@@ -35,14 +35,26 @@
 <body class="bg-gray-100 p-10 flex justify-center items-start min-h-screen">
   <div id="preview-container" class="w-full max-w-5xl">
     </div>
-  <script>
-    // localStorageからコードを読み込んで表示
+  <script type="module">
+    import * as common from './js/common.js';
+
+    // 1. プレビュー内容を表示
     const code = localStorage.getItem('snippetPreviewCode');
+    const container = document.getElementById('preview-container');
+
     if (code) {
-      document.getElementById('preview-container').innerHTML = code;
+      container.innerHTML = code;
     } else {
-      document.getElementById('preview-container').innerHTML = '<p class="text-red-500">プレビューデータがありません。</p>';
+      container.innerHTML = '<p class="text-red-500 text-center">プレビューデータが見つかりません。</p>';
     }
+
+    // 2. コンテンツ展開後の処理 (カスタムパーツ読み込み)
+    // common.jsの読み込みとDOMレンダリングを待ってから実行
+    setTimeout(async () => {
+         if (typeof common.loadCustomHtmlParts === 'function') {
+             await common.loadCustomHtmlParts();
+         }
+    }, 500);
   </script>
 </body>
 </html>

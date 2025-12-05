@@ -3286,10 +3286,10 @@
           <input type="file" id="edit-dynamic-image" accept="image/*" class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 dark:file:bg-primary/20 dark:file:text-primary dark:hover:file:bg-primary/30" />
           <img id="edit-image-preview-dynamic" src="" alt="画像プレビュー" class="mt-4 w-48 h-auto rounded-lg hidden" />
         </div>
-        <div class="flex justify-end pt-4 border-t border-slate-200 dark:border-slate-700">
-           <button type="button" id="edit-preview-dynamic-blog-btn" class="py-2 px-6 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 text-sm">
-            <span class="material-symbols-outlined !text-base">open_in_new</span>
-            <span>新しいタブでプレビュー</span>
+        <div class="mt-6 border-t border-slate-200 dark:border-slate-700 pt-4">
+          <button type="button" id="edit-preview-dynamic-blog-btn" class="w-full py-2 px-4 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">open_in_new</span>
+            <span>変更内容をプレビュー</span>
           </button>
         </div>
       </div>
@@ -6989,19 +6989,50 @@ function setupStaticPageSubTabs() {
                 editModalTitle.textContent = "動的ブログ記事を修正";
                 template = document.getElementById("edit-form-template-blogContents").cloneNode(true);
 
-                // ★ プレビューボタンのイベントリスナー (NEW)
-                const editPreviewBtn = template.querySelector("#edit-preview-dynamic-blog-btn");
-                if (editPreviewBtn) {
-                  editPreviewBtn.addEventListener("click", () => {
-                    const title = template.querySelector("#edit-dynamic-title").value;
-                    let contentHtml = "";
-                    template.querySelectorAll("#edit-html-blocks-container .dynamic-html-block").forEach((textarea) => {
-                      contentHtml += textarea.value;
+                // ★ プレビューボタンのイベント設定 (修正モーダル用)
+                const previewBtn = template.querySelector("#edit-preview-dynamic-blog-btn");
+                if (previewBtn) {
+                    previewBtn.addEventListener("click", async () => {
+                        const title = template.querySelector("#edit-dynamic-title").value;
+                        const fileInput = template.querySelector("#edit-dynamic-image");
+                        const imgPreview = template.querySelector("#edit-image-preview-dynamic");
+                        
+                        let imageHtml = '';
+                        
+                        // 画像処理: 新規ファイル優先、なければ既存画像
+                        if (fileInput && fileInput.files && fileInput.files[0]) {
+                           const file = fileInput.files[0];
+                           const reader = new FileReader();
+                           const base64 = await new Promise(resolve => {
+                               reader.onload = (e) => resolve(e.target.result);
+                               reader.readAsDataURL(file);
+                           });
+                           imageHtml = `<img src="${base64}" class="w-full h-auto max-h-96 object-cover rounded-lg mb-8">`;
+                        } else if (imgPreview && !imgPreview.classList.contains('hidden') && imgPreview.src) {
+                           imageHtml = `<img src="${imgPreview.src}" class="w-full h-auto max-h-96 object-cover rounded-lg mb-8">`;
+                        }
+
+                        // HTMLブロック収集
+                        const contentBlocks = [];
+                        const textareas = template.querySelectorAll('.dynamic-html-block');
+                        textareas.forEach(textarea => {
+                            contentBlocks.push(textarea.value);
+                        });
+
+                        // HTML構築
+                        const fullHtml = `
+                          <div class="container mx-auto max-w-3xl p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+                            <h1 class="text-3xl font-bold mb-4">${title}</h1>
+                            ${imageHtml}
+                            <div class="prose prose-lg dark:prose-invert max-w-none">
+                              ${contentBlocks.join('')}
+                            </div>
+                          </div>
+                        `;
+                        
+                        localStorage.setItem('snippetPreviewCode', fullHtml);
+                        window.open('preview.html', '_blank');
                     });
-                    const fullHtml = `<h1 style="margin-bottom:20px;">${title}</h1>` + contentHtml;
-                    localStorage.setItem("snippetPreviewCode", fullHtml);
-                    window.open("preview.html", "_blank");
-                  });
                 }
 
                 // 基本データの設定
@@ -9372,15 +9403,44 @@ window.addContactItemField = addContactItemField;
         // ★ 動的ブログ プレビューボタンのイベントリスナー (NEW)
         const previewDynamicBlogBtn = document.getElementById("preview-dynamic-blog-btn");
         if (previewDynamicBlogBtn) {
-          previewDynamicBlogBtn.addEventListener("click", () => {
+          previewDynamicBlogBtn.addEventListener("click", async (e) => { // asyncを追加
+             e.preventDefault(); // 念のため
+
              const title = document.getElementById("dynamic-post-title").value;
-             let contentHtml = "";
-             document.querySelectorAll("#html-blocks-container .dynamic-html-block").forEach((textarea) => {
-               contentHtml += textarea.value;
+             const fileInput = document.getElementById("dynamic-post-image");
+             let imageHtml = '';
+   
+             // 画像の処理 (ローカルファイルを読み込む)
+             if (fileInput && fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                // Promiseで読み込みを待機
+                const base64 = await new Promise(resolve => {
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(file);
+                });
+                imageHtml = `<img src="${base64}" class="w-full h-auto max-h-96 object-cover rounded-lg mb-8">`;
+             }
+   
+             // HTMLブロックの収集
+             const contentBlocks = [];
+             document.querySelectorAll('#html-blocks-container .dynamic-html-block').forEach(textarea => {
+               contentBlocks.push(textarea.value);
              });
-             const fullHtml = `<h1 style="margin-bottom:20px;">${title}</h1>` + contentHtml;
-             localStorage.setItem("snippetPreviewCode", fullHtml);
-             window.open("preview.html", "_blank");
+   
+             // プレビュー用HTML構築
+             const fullHtml = `
+               <div class="container mx-auto max-w-3xl p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+                 <h1 class="text-3xl font-bold mb-4">${title}</h1>
+                 ${imageHtml}
+                 <div class="prose prose-lg dark:prose-invert max-w-none">
+                   ${contentBlocks.join('')}
+                 </div>
+               </div>
+             `;
+             
+             localStorage.setItem('snippetPreviewCode', fullHtml);
+             window.open('preview.html', '_blank');
           });
         }
 
