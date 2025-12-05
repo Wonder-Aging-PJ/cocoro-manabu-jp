@@ -2016,7 +2016,7 @@
                   ></span>
                 </h2>
                 <div id="navigation-list-container" class="space-y-4">
-                  <div id="main-nav-loader" class="flex justify-center py-8">
+                  <div id="navigation-loader" class="flex justify-center py-8">
                     <div class="loader"></div>
                   </div>
                 </div>
@@ -10057,12 +10057,59 @@ window.addContactItemField = addContactItemField;
               if (!confirm("このリンクを削除してもよろしいですか？")) return;
 
               try {
-                await deleteDoc(doc(db, "savedLinks", docId));
-                showMessage("リンクを削除しました。");
-                loadSavedLinks(); // リストを再読み込み
               } catch (error) {
                 console.error("Error deleting link:", error);
                 showMessage(`削除エラー: ${error.message}`, "error");
+              }
+            }
+          });
+        }
+
+        // --- ★ ナビゲーション管理のイベントリスナー (ボタン反応なし修正) ★ ---
+        const navListContainer = document.getElementById("navigation-list-container");
+        if (navListContainer) {
+          navListContainer.addEventListener("click", async (e) => {
+            // 1. 修正ボタン
+            const editBtn = e.target.closest(".edit-btn");
+            if (editBtn) {
+              e.stopPropagation();
+              e.preventDefault();
+              
+              const data = { ...editBtn.dataset };
+              // データのデコード (タイトルやURLなど)
+              Object.keys(data).forEach(key => {
+                if (['title', 'url'].includes(key)) {
+                   try { data[key] = decodeURIComponent(data[key]); } catch (err) {}
+                }
+              });
+              
+              // 編集モーダルを開く (既存の openEditModal 関数を利用)
+              openEditModal(data);
+              return;
+            }
+
+            // 2. 削除ボタン
+            const deleteBtn = e.target.closest(".delete-btn");
+            if (deleteBtn) {
+              e.stopPropagation();
+              e.preventDefault();
+              
+              const docId = deleteBtn.dataset.docId;
+              if (!docId) return;
+
+              if (!confirm("このメニュー項目を削除してもよろしいですか？")) return;
+
+              // ボタンを無効化して連打防止
+              deleteBtn.disabled = true;
+
+              try {
+                await deleteDoc(doc(db, "navigation", docId));
+                showMessage("メニュー項目を削除しました。");
+                loadNavigation(); // リストを再読み込み
+              } catch (error) {
+                console.error("Navigation delete error:", error);
+                showMessage(`削除エラー: ${error.message}`, "error");
+                deleteBtn.disabled = false;
               }
             }
           });
