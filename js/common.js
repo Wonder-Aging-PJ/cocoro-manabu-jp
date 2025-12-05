@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadCustomHtmlParts(); // カスタムHTML部品の読み込み
   loadGlobalFooter(); // 共通フッターの読み込み
   loadSiteBranding();
+  loadNavAlignSettings(); // ヘッダーナビゲーション配置の読み込み
 
   // ★ スニペットプレビューボタンのイベント設定
   // ★ スニペットプレビューボタンのイベント設定（修正版）
@@ -248,6 +249,30 @@ async function loadBottomNavigation() {
 
   try {
     // Firestore の collection, query, orderBy が import 済みであることを利用
+
+    // 1. 設定の読み込み (既存のクエリの前に追加)
+    const settingsSnap = await getDoc(doc(db, "staticPages", "commonSettings"));
+    let alignClass = "justify-around"; // デフォルト
+    if (settingsSnap.exists() && settingsSnap.data().bottomNavAlign) {
+      alignClass = settingsSnap.data().bottomNavAlign;
+    }
+
+    // 2. コンテナへのクラス適用
+    if (navContainer) {
+      // 既存の配置クラスを削除して、新しいクラスを追加
+      navContainer.classList.remove("justify-start", "justify-center", "justify-end", "justify-around", "justify-between");
+      navContainer.classList.add(alignClass);
+
+      // ※重要: 左寄せ/右寄せの場合は max-w-lg (幅制限) が邪魔になることがあるため調整
+      if (alignClass === "justify-start" || alignClass === "justify-end") {
+        navContainer.classList.remove("max-w-lg", "mx-auto");
+        navContainer.classList.add("w-full", "px-4"); // 全幅にしてパディング追加
+      } else {
+        // 中央・等間隔の場合は元のスタイル(max-w-lg mx-auto)に戻す
+        navContainer.classList.add("max-w-lg", "mx-auto");
+        navContainer.classList.remove("w-full", "px-4"); // 必要に応じて調整
+      }
+    }
     const bottomNavCol = collection(db, 'bottomNavigation');
     const q = query(bottomNavCol, orderBy('order', 'asc'));
     const querySnapshot = await getDocs(q);
@@ -272,7 +297,7 @@ async function loadBottomNavigation() {
       }
 
       html += `
-        <a href="${item.url}" class="flex flex-col items-center justify-center p-2 text-primary dark:text-secondary hover:text-text-muted-light dark:hover:text-text-muted-dark transition-colors w-full">
+        <a href="${item.url}" class="flex flex-col items-center justify-center p-2 text-primary dark:text-secondary hover:text-text-muted-light dark:hover:text-text-muted-dark transition-colors w-auto min-w-[64px]">
           ${iconDisplayHtml}
           <span class="text-xs mt-1 truncate max-w-full">${item.title}</span>
         </a>
@@ -289,6 +314,8 @@ async function loadBottomNavigation() {
       // 追尾型フッターに必要なクラスを再確認（fixed bottom-0 z-40）
       bottomNavEl.classList.add('fixed', 'bottom-0', 'z-50'); // z-indexは既存の50を維持
     }
+
+
 
   } catch (error) {
     console.error("ボトムナビの読み込みエラー:", error);
@@ -852,7 +879,7 @@ async function loadPublicMediaIcons() {
         iconHtml = `<img src="${iconData.customIconUrl}" alt="${iconData.title}" class="w-8 h-8 object-contain">`;
       } else {
         // リストからアイコン名が選ばれている場合
-        iconHtml = `<span class="material-symbols-outlined text-3xl text-primary dark:text-accent">${iconData.iconName || "link"
+        iconHtml = `<span class="material-symbols-outlined text-3xl text-primary dark:text-secondary">${iconData.iconName || "link"
           }</span>`;
       }
 
@@ -968,7 +995,7 @@ async function loadPublicSites() {
       } else {
         // リストから選択
         iconHtml = `<div class="w-12 h-12 bg-primary/20 dark:bg-primary/20 rounded-lg flex items-center justify-center">
-                      <span class="material-symbols-outlined text-primary dark:text-accent text-3xl">${siteData.iconName || "hub"
+                      <span class="material-symbols-outlined text-primary dark:text-secondary text-3xl">${siteData.iconName || "hub"
           }</span>
                     </div>`;
       }
@@ -983,7 +1010,7 @@ async function loadPublicSites() {
           <p class="text-text-muted-light dark:text-text-muted-dark text-sm font-normal leading-normal">${siteData.description
         }</p>
         </div>
-        <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-accent-secondary text-white text-sm font-bold leading-normal tracking-[0.015em] transition-transform hover:scale-105 w-fit self-start" 
+        <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] transition-transform hover:scale-105 w-fit self-start" 
            href="${siteData.url || "#"}" 
            ${siteData.url ? 'target="_blank" rel="noopener noreferrer"' : ""}>
           <span class="truncate">公式サイトへ</span>
@@ -1846,5 +1873,70 @@ async function loadSiteBranding() {
   } catch (error) {
     console.error("サイトブランディングの読み込みエラー:", error);
     // エラー時はデフォルト表示（変更なし）
+  }
+}
+
+/**
+ * ヘッダーナビゲーションの配置設定を読み込み・反映・保存する
+ */
+async function loadNavAlignSettings() {
+  const container = document.getElementById('header-nav-container');
+  const select = document.getElementById('nav-align-select');
+  const form = document.getElementById('update-nav-align-form');
+
+  try {
+    const docRef = doc(db, "staticPages", "commonSettings");
+    const docSnap = await getDoc(docRef);
+    let alignClass = 'justify-center'; // デフォルト
+
+    if (docSnap.exists() && docSnap.data().navAlign) {
+      alignClass = docSnap.data().navAlign;
+    }
+
+    // 1. 画面への反映 (全ページ共通)
+    if (container) {
+      container.classList.remove('justify-start', 'justify-center', 'justify-end');
+      container.classList.add(alignClass);
+    }
+
+    // 2. 管理画面のセレクトボックスへの反映
+    if (select) {
+      select.value = alignClass;
+    }
+
+    // 3. 保存処理のイベントリスナー設定 (管理画面のみ)
+    if (form && !form.hasAttribute('data-listener-set')) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const saveBtn = document.getElementById('save-nav-align-btn');
+        const originalBtnContent = saveBtn.innerHTML;
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<div class="loader w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> 保存中...';
+
+        try {
+          const newAlign = select.value;
+
+          // 動的インポートで対応
+          const { setDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+
+          await setDoc(docRef, { navAlign: newAlign }, { merge: true });
+
+          // 即時反映
+          loadNavAlignSettings();
+
+          alert('配置設定を保存しました。');
+        } catch (error) {
+          console.error("配置設定の保存エラー:", error);
+          alert('保存に失敗しました。');
+        } finally {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = originalBtnContent;
+        }
+      });
+      form.setAttribute('data-listener-set', 'true');
+    }
+
+  } catch (error) {
+    console.error("ナビゲーション配置設定の読み込みエラー:", error);
   }
 }

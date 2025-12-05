@@ -1289,10 +1289,16 @@
               </div>
 
               <div>
-                <button type="submit" id="submit-dynamic-post-btn" class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined">save</span>
-                  <span>記事を保存する</span>
-                </button>
+                <div class="flex gap-4">
+                  <button type="button" id="preview-dynamic-blog-btn" class="flex-1 sm:flex-none py-3 px-8 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">open_in_new</span>
+                    <span>新しいタブでプレビュー</span>
+                  </button>
+                  <button type="submit" id="submit-dynamic-post-btn" class="flex-1 sm:flex-none py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">save</span>
+                    <span>記事を保存する</span>
+                  </button>
+                </div>
               </div>
             </form>
           </div>
@@ -1313,25 +1319,24 @@
         <!-- Sub-tab Content: Category Management -->
         <div id="sub-tab-content-blog-categories" class="sub-tab-content-blog-posts hidden">
           <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700">
-            <h2 class="text-2xl font-bold mb-6">ブログカテゴリー管理</h2>
-            <form id="add-blog-category-form" class="space-y-6">
-              <div>
-                <label for="blog-category-name" class="block text-sm font-medium">新規カテゴリー名<span class="text-red-500">*</span></label>
+            <h3 class="text-xl font-bold mb-6">ブログカテゴリー管理</h3>
+            <form id="add-blog-category-form" class="flex gap-4 mb-6">
+              <div class="flex-grow">
+                <label for="blog-category-name" class="block text-sm font-medium">新規カテゴリー名</label>
                 <input type="text" id="blog-category-name" required placeholder="例: マインドセット" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" />
               </div>
-              <div>
-                <button type="submit" id="submit-blog-category-btn" class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined">add</span>
-                  <span>カテゴリーを追加</span>
+              <div class="flex-shrink-0 self-end">
+                <button type="submit" id="submit-blog-category-btn" class="py-3 px-6 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined">add</span> <span>追加</span>
                 </button>
               </div>
             </form>
-          </div>
-
-          <div class="mt-12">
-            <h3 class="text-xl font-bold mb-6">登録済みカテゴリー一覧</h3>
-            <div id="blog-categories-list-container" class="space-y-4">
-              <div id="blog-categories-loader" class="flex justify-center py-8"><div class="loader"></div></div>
+            
+            <div class="mt-12">
+                <h4 class="text-lg font-bold mb-4">登録済みカテゴリー一覧</h4>
+                <div id="blog-categories-list-container" class="space-y-2">
+                  <div id="blog-categories-loader" class="flex justify-center py-4"><div class="loader"></div></div>
+                </div>
             </div>
           </div>
         </div>
@@ -1948,6 +1953,27 @@
             <!-- Nested Content: Global Nav -->
             <div id="nested-content-global-nav" class="nested-tab-content">
               <div class="mb-12">
+            <div class="mb-8 p-5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+              <h4 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">dock_to_left</span>
+                メニューの配置設定
+              </h4>
+              <form id="update-nav-align-form" class="flex flex-col sm:flex-row items-end gap-4">
+                <div class="flex-grow w-full">
+                  <label for="nav-align-select" class="block text-sm font-medium mb-1">PC表示時の配置位置</label>
+                  <select id="nav-align-select" class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+                    <option value="justify-start">左寄せ</option>
+                    <option value="justify-center">中央寄せ</option>
+                    <option value="justify-end">右寄せ</option>
+                  </select>
+                </div>
+                <button type="submit" id="save-nav-align-btn" class="w-full sm:w-auto py-2.5 px-6 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined">save</span>
+                  <span>配置を保存</span>
+                </button>
+              </form>
+            </div>
+
                 <h3 class="text-xl font-bold mb-6">
                   ナビゲーション項目を追加
                 </h3>
@@ -2032,6 +2058,29 @@
                 <p class="text-text-muted-light dark:text-text-muted-dark mb-6">
                   スマホ・タブレット表示時に画面下部に固定表示されるメニュー（最大5個推奨）を管理します。
                 </p>
+            <div class="mb-8 p-5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+              <h4 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">align_horizontal_center</span>
+                ボトムナビの配置設定
+              </h4>
+              <form id="update-bottom-nav-align-form" class="flex flex-col sm:flex-row items-end gap-4">
+                <div class="flex-grow w-full">
+                  <label for="bottom-nav-align-select" class="block text-sm font-medium mb-1">配置位置</label>
+                  <select id="bottom-nav-align-select" class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+                    <option value="justify-around">等間隔 (デフォルト)</option>
+                    <option value="justify-start">左寄せ</option>
+                    <option value="justify-center">中央寄せ</option>
+                    <option value="justify-end">右寄せ</option>
+                    <option value="justify-between">両端揃え</option>
+                  </select>
+                </div>
+                <button type="submit" id="save-bottom-nav-align-btn" class="w-full sm:w-auto py-2.5 px-6 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined">save</span>
+                  <span>配置を保存</span>
+                </button>
+              </form>
+            </div>
+
                 <form id="add-bottom-nav-form" class="space-y-6">
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
@@ -2468,7 +2517,7 @@
 
     <!-- ★★★ 編集モーダル用のHTMLテンプレート (非表示) ★★★ -->
     <!-- これらのテンプレートをJSがコピーしてモーダル内に挿入します -->
-    <div id="edit-form-templates" class="hidden">
+    <div id="edit-form-templates" class="hidden" style="display: none !important;">
       <!-- 1. お知らせ編集フォーム -->
       <div id="edit-form-template-articles" class="space-y-6">
         <div>
@@ -3237,6 +3286,12 @@
           <input type="file" id="edit-dynamic-image" accept="image/*" class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 dark:file:bg-primary/20 dark:file:text-primary dark:hover:file:bg-primary/30" />
           <img id="edit-image-preview-dynamic" src="" alt="画像プレビュー" class="mt-4 w-48 h-auto rounded-lg hidden" />
         </div>
+        <div class="flex justify-end pt-4 border-t border-slate-200 dark:border-slate-700">
+           <button type="button" id="edit-preview-dynamic-blog-btn" class="py-2 px-6 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 text-sm">
+            <span class="material-symbols-outlined !text-base">open_in_new</span>
+            <span>新しいタブでプレビュー</span>
+          </button>
+        </div>
       </div>
       <div id="edit-form-template-bottomNavigation" class="space-y-6">
         <input type="hidden" id="edit-bottom-nav-id" />
@@ -3290,7 +3345,7 @@
           <img id="edit-image-preview-skill" src="" alt="画像プレビュー" class="mt-4 w-16 h-16 object-contain hidden" />
         </div>
       </div>
-      </div>
+
 
       <!-- 8. 登録リンク編集フォーム -->
       <div id="edit-form-template-savedLinks" class="space-y-6">
@@ -4096,58 +4151,80 @@
 
         // --- 2. タブ切り替えロジック ---
         if (tabsContainer) {
-          tabsContainer.addEventListener("click", (e) => {
-            const targetButton = e.target.closest(".tab-btn");
-            if (!targetButton) return;
+        tabsContainer.addEventListener("click", (e) => {
+          const targetButton = e.target.closest(".tab-btn");
+          if (!targetButton) return;
 
-            const tabName = targetButton.dataset.tab;
+          const tabName = targetButton.dataset.tab;
 
-            // ボタンのアクティブ状態を切り替え
-            if (tabsContainer) {
-              tabsContainer.querySelectorAll(".tab-btn").forEach((btn) => {
-                btn.classList.remove("active");
-              });
-            }
-            targetButton.classList.add("active");
-
-            // コンテンツの表示を切り替え
-            if (tabContents) {
-              tabContents.forEach((content) => {
-                content.classList.remove("active");
-              });
-            }
-            const activeContent = document.getElementById(
-              `tab-content-${tabName}`
-            );
-
-            // ★★★ 修正 (3/3) : 欠落していた if ブロックを正しい場所に追加 ★★★
-            if (activeContent) {
-              activeContent.classList.add("active");
-              
-              // ★ NEW: 固定ページ管理タブが選択された場合の初期化ロジック ★
-              if (tabName === 'static-pages') {
-                // サブタブのイベントリスナーを起動
-                setupStaticPageSubTabs();
-
-                // サブタブの初期表示を強制的に 'common' に設定
-                const defaultSubTabButton = activeContent.querySelector('.sub-tab-btn[data-sub-tab="common"]');
-                if (defaultSubTabButton) {
-                  defaultSubTabButton.click(); // サブタブのクリックイベントをシミュレート
-                }
-              } else if (tabName === 'common-management') {
-                  // ★ Page Common Management Initialization
-                  setupCommonManagementSubTabs();
-                  const commonSubTabsContainer = document.getElementById('sub-tabs-container-common-management');
-                  if (commonSubTabsContainer) {
-                      const activeSubTab = commonSubTabsContainer.querySelector('.sub-tab-btn.active') || commonSubTabsContainer.querySelector('.sub-tab-btn');
-                      if (activeSubTab) {
-                          activeSubTab.click();
-                      }
-                  }
-              }
-              
-            }
+          // 1. タブボタンのアクティブ切り替え
+          tabsContainer.querySelectorAll(".tab-btn").forEach((btn) => {
+            btn.classList.remove("active");
           });
+          targetButton.classList.add("active");
+
+          // 2. タブコンテンツの表示切り替え
+          tabContents.forEach((content) => {
+            content.classList.remove("active");
+            // クラスだけでなく style も操作して確実に隠す
+            content.style.display = "none"; 
+          });
+          
+          const activeContent = document.getElementById(`tab-content-${tabName}`);
+          if (activeContent) {
+            activeContent.classList.add("active");
+            activeContent.style.display = "block"; // 確実に表示
+
+            // --- ★ タブごとの初期化処理 ★ ---
+            
+            if (tabName === 'articles') {
+                if (typeof setupArticleSubTabs === 'function') setupArticleSubTabs();
+                if (typeof loadArticles === 'function') loadArticles();
+                if (typeof loadArticleCategories === 'function') loadArticleCategories();
+            } 
+            else if (tabName === 'books') {
+                if (typeof loadBooks === 'function') loadBooks();
+            }
+            else if (tabName === 'media-icons') {
+                if (typeof loadMediaIcons === 'function') loadMediaIcons();
+            }
+            else if (tabName === 'media-banners') {
+                if (typeof loadMediaBanners === 'function') loadMediaBanners();
+            }
+            else if (tabName === 'sites') {
+                if (typeof loadSites === 'function') loadSites();
+            }
+            else if (tabName === 'common-management') {
+                if (typeof setupCommonManagementSubTabs === 'function') setupCommonManagementSubTabs();
+            }
+            else if (tabName === 'static-pages') {
+                if (typeof setupStaticPageSubTabs === 'function') setupStaticPageSubTabs();
+                // 初期サブタブをクリック
+                const defaultSubTab = activeContent.querySelector('.sub-tab-btn[data-sub-tab="common"]');
+                if (defaultSubTab) defaultSubTab.click();
+            }
+            // ★ 今回の修正箇所: ブログ記事管理 ★
+            else if (tabName === 'blog-posts') {
+              // 1. サブタブ切り替え機能の初期化 (関数が存在すれば実行)
+              if (typeof setupBlogPostSubTabs === 'function') setupBlogPostSubTabs();
+
+              // 2. データの読み込み (関数が存在すれば実行)
+              if (typeof loadBlogPosts === 'function') loadBlogPosts();
+              if (typeof loadDynamicBlogs === 'function') loadDynamicBlogs();
+              if (typeof loadBlogCategories === 'function') loadBlogCategories();
+              
+              // 3. 初期表示のサブタブをクリック状態にする
+              const defaultSubTab = activeContent.querySelector('.sub-tab-btn[data-subtab="blog-meta"]');
+              if (defaultSubTab) defaultSubTab.click();
+            }
+            else if (tabName === 'saved-links') {
+                if (typeof loadSavedLinks === 'function') loadSavedLinks();
+            }
+            else if (tabName === 'custom-html') {
+                if (typeof loadCustomParts === 'function') loadCustomParts();
+            }
+          }
+        });
         }
 
 // --- 18. 固定ページ管理 サブタブ切り替えロジックを関数化 (再修正) ---
@@ -4246,7 +4323,12 @@ function setupStaticPageSubTabs() {
             addPersonalFormListener();
             loadPersonalInfo();
             // ★ NEW: Contact Set Management
+            // ★ NEW: Contact Set Management
             loadContactSets();
+            // ★ ブログ記事管理の初期化 (追記)
+            if (typeof setupBlogPostSubTabs === 'function') setupBlogPostSubTabs();
+            if (typeof loadDynamicBlogs === 'function') loadDynamicBlogs();
+
             // ★ P-New: ブログカテゴリーのロード関数を呼び出す
             loadBlogCategories();
             // ★ P2: ブログ記事のロード関数を呼び出す
@@ -6907,6 +6989,21 @@ function setupStaticPageSubTabs() {
                 editModalTitle.textContent = "動的ブログ記事を修正";
                 template = document.getElementById("edit-form-template-blogContents").cloneNode(true);
 
+                // ★ プレビューボタンのイベントリスナー (NEW)
+                const editPreviewBtn = template.querySelector("#edit-preview-dynamic-blog-btn");
+                if (editPreviewBtn) {
+                  editPreviewBtn.addEventListener("click", () => {
+                    const title = template.querySelector("#edit-dynamic-title").value;
+                    let contentHtml = "";
+                    template.querySelectorAll("#edit-html-blocks-container .dynamic-html-block").forEach((textarea) => {
+                      contentHtml += textarea.value;
+                    });
+                    const fullHtml = `<h1 style="margin-bottom:20px;">${title}</h1>` + contentHtml;
+                    localStorage.setItem("snippetPreviewCode", fullHtml);
+                    window.open("preview.html", "_blank");
+                  });
+                }
+
                 // 基本データの設定
                 template.querySelector("#edit-dynamic-id").value = data.docId;
                 template.querySelector("#edit-dynamic-title").value = data.title;
@@ -8301,42 +8398,7 @@ window.addContactItemField = addContactItemField;
           }
         }
 
-        // 2. 追加
-        if (addBlogCategoryForm) {
-          addBlogCategoryForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const categoryNameInput =
-              document.getElementById("blog-category-name");
-            const categoryName = categoryNameInput.value.trim(); // 前後の空白を除去
 
-            if (!categoryName) {
-              showMessage("カテゴリー名を入力してください。", "error");
-              return;
-            }
-
-            if (submitBlogCategoryBtn) {
-              submitBlogCategoryBtn.disabled = true;
-              submitBlogCategoryBtn.innerHTML =
-                '<div class="loader !w-6 !h-6 !border-t-white !border-slate-200/50"></div> <span>追加中...</span>';
-            }
-
-            try {
-              // ★ カテゴリー名 (name) を保存
-              await addDoc(collection(db, "blogCategories"), {
-                name: categoryName,
-                createdAt: serverTimestamp(),
-              });
-
-              showMessage(`カテゴリー「${categoryName}」を追加しました。`);
-              resetBlogCategoryForm(); // (Step 6で実装します)
-              loadBlogCategories(); // 一覧を再読み込み
-            } catch (error) {
-              console.error("Error adding blog category: ", error);
-              showMessage(`カテゴリーの追加エラー: ${error.message}`, "error");
-              resetBlogCategoryForm(); // (Step 6で実装します)
-            }
-          });
-        }
 
         // 3. フォームリセット
         function resetBlogCategoryForm() {
@@ -9123,6 +9185,50 @@ window.addContactItemField = addContactItemField;
           });
         }
 
+        // --- ★ ボトムナビ配置設定の保存 (NEW) ★ ---
+        const bottomNavAlignForm = document.getElementById("update-bottom-nav-align-form");
+        if (bottomNavAlignForm) {
+          bottomNavAlignForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById("save-bottom-nav-align-btn");
+            if(submitBtn) submitBtn.disabled = true;
+
+            const alignValue = document.getElementById("bottom-nav-align-select").value;
+
+            try {
+              // staticPages/commonSettings に保存
+              const docRef = doc(db, "staticPages", "commonSettings");
+              await setDoc(docRef, { bottomNavAlign: alignValue }, { merge: true });
+              
+              showMessage("ボトムナビの配置を保存しました。");
+              
+              // 即時反映
+              if (typeof window.loadBottomNavigation === 'function') {
+                  window.loadBottomNavigation(); 
+              } else {
+                  // common.jsの関数がwindowにない場合はリロード推奨でも可
+                  console.log("Reload to see changes");
+              }
+
+            } catch (error) {
+              console.error("Error saving bottom nav align:", error);
+              showMessage(`保存エラー: ${error.message}`, "error");
+            } finally {
+              if(submitBtn) submitBtn.disabled = false;
+            }
+          });
+        }
+        
+        // 初期表示時に現在の設定をセレクトボックスに反映
+        const alignSelect = document.getElementById("bottom-nav-align-select");
+        if (alignSelect) {
+            getDoc(doc(db, "staticPages", "commonSettings")).then(snap => {
+                if (snap.exists() && snap.data().bottomNavAlign) {
+                    alignSelect.value = snap.data().bottomNavAlign;
+                }
+            });
+        }
+
         // --- ★ 【追加】書籍スニペットモーダル制御ロジック ★ ---
         if (openSnippetModalBtn && snippetModal) {
           // 1. モーダルを開く
@@ -9261,6 +9367,21 @@ window.addContactItemField = addContactItemField;
                     imagePreviewDynamicPost.src = "";
                 }
             });
+        }
+
+        // ★ 動的ブログ プレビューボタンのイベントリスナー (NEW)
+        const previewDynamicBlogBtn = document.getElementById("preview-dynamic-blog-btn");
+        if (previewDynamicBlogBtn) {
+          previewDynamicBlogBtn.addEventListener("click", () => {
+             const title = document.getElementById("dynamic-post-title").value;
+             let contentHtml = "";
+             document.querySelectorAll("#html-blocks-container .dynamic-html-block").forEach((textarea) => {
+               contentHtml += textarea.value;
+             });
+             const fullHtml = `<h1 style="margin-bottom:20px;">${title}</h1>` + contentHtml;
+             localStorage.setItem("snippetPreviewCode", fullHtml);
+             window.open("preview.html", "_blank");
+          });
         }
 
         if (addDynamicBlogForm) {
@@ -10122,7 +10243,6 @@ window.addContactItemField = addContactItemField;
             loadSavedLinks();
           });
         }
-      });
 
       // ★ Nested Tabs Initialization (Grandchildren Tabs)
       function setupNestedTabs() {
@@ -10304,6 +10424,101 @@ window.addContactItemField = addContactItemField;
         }
     }
 
+      // --- ★ ブログカテゴリー管理ロジック (復旧・追加) ★ ---
+      async function loadBlogCategories() {
+        const listContainer = document.getElementById("blog-categories-list-container");
+        // ローダーがあれば表示
+        const loader = document.getElementById("blog-categories-loader");
+        if (loader && listContainer) loader.classList.remove("hidden");
+
+        try {
+            const q = query(collection(db, "blogCategories"), orderBy("name", "asc"));
+            const snapshot = await getDocs(q);
+
+            // 1. カテゴリー管理タブのリスト更新
+            if (listContainer) {
+                listContainer.innerHTML = "";
+                if (loader) loader.classList.add("hidden");
+
+                if (snapshot.empty) {
+                    listContainer.innerHTML = "<p class='text-center text-sm text-slate-500'>カテゴリーなし</p>";
+                } else {
+                    snapshot.forEach(docSnap => {
+                        const div = document.createElement("div");
+                        div.className = "flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700";
+                        div.innerHTML = `<span>${docSnap.data().name}</span>`;
+                        
+                        const delBtn = document.createElement("button");
+                        delBtn.className = "text-red-600 text-sm font-bold";
+                        delBtn.textContent = "削除";
+                        delBtn.onclick = async () => {
+                            if(confirm("削除しますか？")) {
+                                await deleteDoc(doc(db, "blogCategories", docSnap.id));
+                                loadBlogCategories();
+                            }
+                        };
+                        div.appendChild(delBtn);
+                        listContainer.appendChild(div);
+                    });
+                }
+            }
+            
+            // 2. セレクトボックス更新 (追加フォーム & 編集フォーム)
+            const selects = [
+                document.getElementById("blog-post-category-select"), 
+                document.getElementById("edit-blog-post-category-select")
+            ];
+            
+            selects.forEach(sel => {
+                if(sel) {
+                    const current = sel.value;
+                    sel.innerHTML = '<option value="" disabled selected>カテゴリーを選択</option>';
+                    if (snapshot.empty) {
+                         sel.innerHTML = '<option value="" disabled>カテゴリーが登録されていません</option>';
+                    } else {
+                        snapshot.forEach(doc => {
+                            const opt = document.createElement("option");
+                            opt.value = doc.data().name;
+                            opt.textContent = doc.data().name;
+                            sel.appendChild(opt);
+                        });
+                    }
+                    // 編集時などで値があれば再選択
+                    if(current) sel.value = current;
+                }
+            });
+
+        } catch (e) {
+            console.error("ブログカテゴリー読み込みエラー:", e);
+            if (listContainer) listContainer.innerHTML = "<p class='text-red-500'>読み込みエラー</p>";
+        }
+      }
+
+      // ブログカテゴリー追加フォームのイベント
+      const addBlogCatForm = document.getElementById("add-blog-category-form");
+      if(addBlogCatForm) {
+        addBlogCatForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const input = document.getElementById("blog-category-name");
+            if(!input.value.trim()) return;
+            
+            const submitBtn = document.getElementById("submit-blog-category-btn");
+            if(submitBtn) submitBtn.disabled = true;
+
+            try {
+                await addDoc(collection(db, "blogCategories"), { name: input.value.trim(), createdAt: serverTimestamp() });
+                input.value = "";
+                showMessage("ブログカテゴリーを追加しました");
+                loadBlogCategories();
+            } catch(err) {
+                console.error(err);
+                showMessage("追加エラー", "error");
+            } finally {
+                if(submitBtn) submitBtn.disabled = false;
+            }
+        });
+      }
+
     const addArtCatForm = document.getElementById("add-article-category-form");
     if(addArtCatForm) {
         addArtCatForm.addEventListener("submit", async (e) => {
@@ -10358,7 +10573,14 @@ window.addContactItemField = addContactItemField;
                   if (typeof loadSiteBranding === 'function') loadSiteBranding();
               } else if (subtab === 'nav-settings') {
                   if (typeof loadNavigation === 'function') loadNavigation();
-                  if (typeof loadBottomNavigation === 'function') loadBottomNavigation();
+                  if (typeof loadNavigation === 'function') loadNavigation();
+                  if (typeof loadBottomNavigation === 'function') {
+                      loadBottomNavigation();
+                      // ボトムナビ配置設定の読み込みとイベントリスナー設定
+                      if (typeof loadBottomNavAlignSettings === 'function') {
+                          loadBottomNavAlignSettings();
+                      }
+                  }
               } else if (subtab === 'site-common') {
                   if (typeof loadHeaderCtaData === 'function') loadHeaderCtaData();
               } else if (subtab === 'system-settings') {
@@ -10407,6 +10629,7 @@ function addContentBlock(data) {
   blockDiv.innerHTML = contentHtml;
   blocksContainer.appendChild(blockDiv);
 }
+      });
     </script>
   </body>
 </html>
