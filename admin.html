@@ -431,6 +431,7 @@
             <nav class="flex gap-4" id="sub-tabs-container-articles">
               <button class="sub-tab-btn active px-4 py-2 text-sm font-bold border-b-2 border-primary text-primary" data-subtab="article-list">記事一覧・追加</button>
               <button class="sub-tab-btn px-4 py-2 text-sm font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200" data-subtab="article-categories">カテゴリー管理</button>
+              <button class="sub-tab-btn px-4 py-2 text-sm font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200" data-subtab="article-settings">お知らせ設定</button>
             </nav>
           </div>
 
@@ -469,13 +470,24 @@
               </div>
               <div>
                 <label class="block text-sm font-medium">表示ステータス</label>
-                <div class="mt-2 flex items-center justify-between p-4 bg-background-light dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-600">
-                  <label for="article-visible" class="block text-sm font-medium">この記事を公開する</label>
-                  <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                    <input type="checkbox" id="article-visible" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
-                    <label for="article-visible" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 dark:bg-slate-700 cursor-pointer"></label>
+                <div class="mt-2 p-4 bg-background-light dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-600">
+                  <div class="flex items-center justify-between pb-3">
+                    <label for="article-visible" class="flex-grow text-sm font-medium cursor-pointer">この記事を公開する</label>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in flex-shrink-0">
+                      <input type="checkbox" id="article-visible" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                      <label for="article-visible" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 dark:bg-slate-700 cursor-pointer"></label>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center justify-between pt-3">
+                    <label for="article-is-featured" class="flex-grow text-sm font-medium cursor-pointer">この記事をトップページに表示する</label>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in flex-shrink-0">
+                      <input type="checkbox" id="article-is-featured" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                      <label for="article-is-featured" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 dark:bg-slate-700 cursor-pointer"></label>
+                    </div>
                   </div>
                 </div>
+
               </div>
               <div>
                 <button type="submit" id="submit-article-btn" class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
@@ -513,6 +525,69 @@
             <div id="article-categories-list-container" class="space-y-2">
               <div id="article-categories-loader" class="flex justify-center py-4"><div class="loader"></div></div>
             </div>
+          </div>
+
+          <div id="sub-tab-content-article-settings" class="sub-tab-content-articles hidden">
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700">
+  <h3 class="text-xl font-bold mb-6">お知らせスライダー設定</h3>
+  <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-6">トップページに表示するお知らせスライダーの動作を設定します。</p>
+  
+  <form id="update-article-slider-settings-form" class="space-y-8">
+    <div>
+      <h4 class="font-bold text-md mb-4 flex items-center gap-2"><span class="material-symbols-outlined">devices</span> 表示枚数 (レスポンシブ)</h4>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label for="slider-view-pc" class="block text-sm font-medium mb-1">PC (1024px~)</label>
+          <select id="slider-view-pc" class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+            <option value="2">2枚</option><option value="3" selected>3枚</option><option value="4">4枚</option><option value="5">5枚</option>
+          </select>
+        </div>
+        <div>
+          <label for="slider-view-tab" class="block text-sm font-medium mb-1">タブレット (768px~)</label>
+          <select id="slider-view-tab" class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+            <option value="1">1枚</option><option value="2" selected>2枚</option><option value="3">3枚</option>
+          </select>
+        </div>
+        <div>
+          <label for="slider-view-mob" class="block text-sm font-medium mb-1">スマホ (~767px)</label>
+          <select id="slider-view-mob" class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+            <option value="1" selected>1枚</option><option value="2">2枚</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+      <div>
+        <h4 class="font-bold text-md mb-4 flex items-center gap-2"><span class="material-symbols-outlined">speed</span> スピード設定</h4>
+        <label for="slider-speed" class="block text-sm font-medium mb-1">切り替え間隔 (ミリ秒)</label>
+        <input type="number" id="slider-speed" value="3000" min="0" step="500" class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" placeholder="例: 3000">
+        <p class="text-xs text-text-muted-light mt-1">※ 3000 = 3秒。「0」にすると自動再生しません。</p>
+      </div>
+      <div>
+        <h4 class="font-bold text-md mb-4 flex items-center gap-2"><span class="material-symbols-outlined">sync_alt</span> 移動方向</h4>
+        <label class="block text-sm font-medium mb-2">スライドの流れる方向</label>
+        <div class="flex gap-4">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="slider-direction" value="left" checked class="text-primary focus:ring-primary w-5 h-5">
+            <span>左へ (通常)</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="slider-direction" value="right" class="text-primary focus:ring-primary w-5 h-5">
+            <span>右へ (逆再生)</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-6">
+      <button type="submit" id="save-article-slider-btn" class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined">save</span>
+        <span>設定を保存する</span>
+      </button>
+    </div>
+  </form>
+</div>
           </div>
         </div>
       </div>
@@ -2593,6 +2668,27 @@
             class="mt-4 w-48 h-auto rounded-lg"
           />
         </div>
+
+        <div class="mt-2">
+          <label class="block text-sm font-medium">表示ステータス</label>
+          <div class="mt-2 text-sm p-4 bg-background-light dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-600">
+            <div class="flex items-center justify-between pb-3">
+              <label for="edit-article-visible" class="block text-sm font-medium cursor-pointer flex-grow">公開する</label>
+              <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in flex-shrink-0">
+                <input type="checkbox" id="edit-article-visible" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                <label for="edit-article-visible" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 dark:bg-slate-700 cursor-pointer"></label>
+              </div>
+            </div>
+            
+            <div class="flex items-center justify-between pt-3">
+              <label for="edit-article-is-featured" class="block text-sm font-medium cursor-pointer flex-grow">トップページに表示</label>
+              <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in flex-shrink-0">
+                <input type="checkbox" id="edit-article-is-featured" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                <label for="edit-article-is-featured" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 dark:bg-slate-700 cursor-pointer"></label>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- 2. 書籍編集フォーム -->
@@ -4181,6 +4277,12 @@
                 if (typeof setupArticleSubTabs === 'function') setupArticleSubTabs();
                 if (typeof loadArticles === 'function') loadArticles();
                 if (typeof loadArticleCategories === 'function') loadArticleCategories();
+    // ★追加: 設定タブを開いたときに読み込むイベント
+    document.querySelectorAll('#sub-tabs-container-articles .sub-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (btn.dataset.subtab === 'article-settings') loadArticleSliderSettings();
+        });
+    });
             } 
             else if (tabName === 'books') {
                 if (typeof loadBooks === 'function') loadBooks();
@@ -4692,6 +4794,7 @@ function setupStaticPageSubTabs() {
                   data-content="${encodeURIComponent(article.content || "")}"
                   data-image-url="${article.imageUrl || ""}"
                   data-image-path="${article.imagePath || ""}"
+                  data-is-featured="${article.isFeatured === true || article.isFeatured === 'true' ? 'true' : 'false'}"
                   class="edit-btn py-2 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center gap-1">
                   <span class="material-symbols-outlined !text-base">edit</span>
                   <span>修正</span>
@@ -4733,6 +4836,8 @@ function setupStaticPageSubTabs() {
             const date = document.getElementById("article-date").value;
             const category = document.getElementById("article-category").value;
             const content = document.getElementById("article-content").value;
+            const isVisible = document.getElementById("article-visible").checked; // 公開・非公開
+            const isFeatured = document.getElementById("article-is-featured").checked; // トップページ表示
 
             if (submitArticleBtn) {
               submitArticleBtn.disabled = true;
@@ -4765,7 +4870,10 @@ function setupStaticPageSubTabs() {
                 content: content,
                 imageUrl: imageUrl,
                 imagePath: imagePath,
+                isVisible: isVisible,
+                isFeatured: isFeatured,
                 createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp(),
               });
               showMessage("記事が正常に追加されました。");
               resetArticleForm();
@@ -6787,6 +6895,19 @@ function setupStaticPageSubTabs() {
                   .querySelector("#edit-image-preview-article")
                   .classList.toggle("hidden", !data.imageUrl);
                 template.querySelector("#edit-article-image").value = ""; // ファイル入力をリセット
+                // --- 公開設定 (visible) の反映 ---
+                // data.visible が true または "true" ならチェック
+                const isVisible = data.isVisible !== "false"; // 既存ロジックを踏襲しつつ、文字列 "false" 以外は true 扱い
+                const visibleCheckbox = template.querySelector("#edit-article-visible");
+                if (visibleCheckbox) {
+                    visibleCheckbox.checked = isVisible;
+                } else {
+                    // 旧IDで見つかる場合のフォールバック（念のため）
+                    const oldVisible = template.querySelector("#article-visible");
+                    if(oldVisible) oldVisible.checked = isVisible;
+                }
+                const isFeatured = data.isFeatured === true || data.isFeatured === "true";
+                template.querySelector("#edit-article-is-featured").checked = isFeatured; // トップページ表示
 
                 // ★ 修正点: 最後に appendChild する
                 editFormContent.appendChild(template);
@@ -7152,6 +7273,18 @@ function setupStaticPageSubTabs() {
                   // data-open-new-tab が true ('true'という文字列) の場合にチェックを入れる
                   editOpenNewTab.checked = data.openNewTab === "true";
                 }
+                // isFeatured (トップページ表示) の反映
+                const editIsFeatured = template.querySelector("#edit-article-is-featured");
+                if (editIsFeatured) {
+                  editIsFeatured.checked = data.isFeatured === "true";
+                }
+                // isVisible (公開ステータス) の反映
+                const editIsVisible = template.querySelector("#edit-article-visible");
+                if (editIsVisible) {
+                  // data-is-visible が 'false' の場合のみチェックを外す（デフォルトtrue想定なら）
+                  // Firestoreのbooleanが文字列で来ているか確認要。data属性は文字列。
+                  editIsVisible.checked = data.isVisible !== "false"; 
+                }
 
                 template.querySelector("#edit-image-preview-blog-post").src =
                   data.imageUrl || "";
@@ -7272,6 +7405,8 @@ function setupStaticPageSubTabs() {
                       .value,
                     content: document.getElementById("edit-article-content")
                       .value,
+                    visible: document.getElementById("edit-article-visible") ? document.getElementById("edit-article-visible").checked : true, 
+                    isFeatured: document.getElementById("edit-article-is-featured").checked,
                   };
                   selectedEditFile = editFileArticle;
                   newImagePathPrefix = "images/photo/articles";
@@ -8746,7 +8881,8 @@ window.addContactItemField = addContactItemField;
 
             if (buttonContainer) {
               // data-title (エンコード済み) を取得
-              const encodedTitle = button.dataset.title || "";
+              const encodedTitle = encodeURIComponent(title || "");
+              const encodedPath = encodeURIComponent(path || ""); // pathも念のため
 
               // 「修正」「削除」ボタンのHTMLを生成
               const editDeleteButtonHtml = `
@@ -8754,7 +8890,7 @@ window.addContactItemField = addContactItemField;
               data-doc-id="${path}"
               data-collection="sitemapEntries"
               data-title="${encodedTitle}"
-              data-path="${path}"
+              data-path="${encodedPath}"
               class="edit-btn py-2 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center gap-1">
               <span class="material-symbols-outlined !text-base">edit</span>
               <span>修正</span>
@@ -8762,9 +8898,10 @@ window.addContactItemField = addContactItemField;
             <button 
               data-doc-id="${path}" 
               data-collection="sitemapEntries" 
-              data-image-path="" 
-              data-title="${encodedTitle}"
+              data-image-path=""
+              data-title="${encodedTitle}" 
               class="delete-btn flex-shrink-0 py-2 px-4 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors text-sm flex items-center gap-1">
+
               <span class="material-symbols-outlined !text-base">delete</span>
               <span>削除</span>
             </button>
@@ -10447,7 +10584,13 @@ window.addContactItemField = addContactItemField;
         });
     }
 
-    function setupArticleSubTabs() { setupSubTabs("sub-tabs-container-articles", "sub-tab-content-articles"); }
+
+
+
+
+    function setupArticleSubTabs() { 
+        setupSubTabs("sub-tabs-container-articles", "sub-tab-content-articles");
+    }
     function setupBlogPostSubTabs() { setupSubTabs("sub-tabs-container-blog-posts", "sub-tab-content-blog-posts"); }
 
     // --- お知らせカテゴリー管理ロジック ---
@@ -10710,6 +10853,74 @@ function addContentBlock(data) {
   
   blockDiv.innerHTML = contentHtml;
   blocksContainer.appendChild(blockDiv);
+}
+
+// --- ★ お知らせスライダー設定 (Announcement Slider Settings) ★ ---
+
+// 1. 設定の読み込み関数
+async function loadArticleSliderSettings() {
+  const form = document.getElementById("update-article-slider-settings-form");
+  if (!form) return;
+
+  try {
+    const docRef = doc(db, "staticPages", "commonSettings");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data().announcementSlider || {};
+      
+      // 値をセット（なければデフォルト値）
+      const viewPc = document.getElementById("slider-view-pc");
+      const viewTab = document.getElementById("slider-view-tab");
+      const viewMob = document.getElementById("slider-view-mob");
+      const speedInput = document.getElementById("slider-speed");
+      
+      if(viewPc) viewPc.value = data.viewPc || "3";
+      if(viewTab) viewTab.value = data.viewTab || "2";
+      if(viewMob) viewMob.value = data.viewMob || "1";
+      if(speedInput) speedInput.value = data.speed || "3000";
+      
+      const direction = data.direction || "left";
+      const dirRadio = form.querySelector(`input[name="slider-direction"][value="${direction}"]`);
+      if (dirRadio) dirRadio.checked = true;
+    }
+  } catch (error) {
+    console.error("Error loading slider settings:", error);
+    showMessage(`設定読み込みエラー: ${error.message}`, "error");
+  }
+}
+
+// 2. 設定の保存イベント
+const sliderSettingsForm = document.getElementById("update-article-slider-settings-form");
+if (sliderSettingsForm) {
+  sliderSettingsForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById("save-article-slider-btn");
+    btn.disabled = true;
+    btn.innerHTML = '<div class="loader !w-4 !h-4 !border-t-white !border-slate-200/50"></div> <span>保存中...</span>';
+
+    try {
+      const dataToSave = {
+        announcementSlider: {
+          viewPc: document.getElementById("slider-view-pc").value,
+          viewTab: document.getElementById("slider-view-tab").value,
+          viewMob: document.getElementById("slider-view-mob").value,
+          speed: document.getElementById("slider-speed").value,
+          direction: document.querySelector('input[name="slider-direction"]:checked').value
+        }
+      };
+
+      const docRef = doc(db, "staticPages", "commonSettings");
+      await setDoc(docRef, dataToSave, { merge: true });
+      showMessage("スライダー設定を保存しました。");
+    } catch (error) {
+      console.error("Error saving settings:", error);
+      showMessage(`保存エラー: ${error.message}`, "error");
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<span class="material-symbols-outlined">save</span> <span>設定を保存する</span>';
+    }
+  });
 }
       });
     </script>

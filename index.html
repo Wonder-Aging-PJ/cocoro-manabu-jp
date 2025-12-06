@@ -175,38 +175,23 @@
         <h2 class="text-3xl font-bold leading-tight tracking-[-0.015em] text-center">最新のお知らせ</h2>
       </section>
       <section class="pb-16 sm:pb-24">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="flex flex-col gap-3 group">
-            <div class="overflow-hidden rounded-lg">
-              <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg group-hover:scale-105 transition-transform duration-300" data-alt="A person typing on a laptop with a cup of coffee nearby." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA04GI2a5qpcMnfBHOpoqNmcxX3RnnYhk0RkZt7SfqZzCbZXh5yeljgtiXqWdXzrYkYZ21jNP2w09EPLGjZAOtG49Je0MKSQlBxQqIZxoLEeLMDbyZwQGT8zOB284K8uK2-R7kR4mP_KvqPOKO37GL1QJSOQukAZbkM92znC6lT-u3NiQBFkRS_pPHk63eu_F-8VVvaCqvEk2ALpbGaB2qcjZPRz0mmj29lzVW4yFZ7f4Bmj_AHkhvbFOZOW3oXUtMddOA1cAFkkuKY");'></div>
-            </div>
-            <div>
-              <p class="text-xs text-text-muted-light dark:text-text-muted-dark">2023年10月26日</p>
-              <p class="text-base font-bold leading-normal mt-1">新しいブログ記事を公開しました</p>
-              <a class="text-sm font-medium leading-normal text-primary dark:text-secondary hover:underline" href="info.html">続きを読む</a>
-            </div>
-          </div>
-          <div class="flex flex-col gap-3 group">
-            <div class="overflow-hidden rounded-lg">
-              <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg group-hover:scale-105 transition-transform duration-300" data-alt="A conference room with people attending a seminar." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuApo3Hy_Wxe2gAZfrNX7T0w4_TJhfDiikKEmvxeedPj6c9WoZIb77ZuGIi2td88nTjj-zfr94AfAjOtpC3RDhaHnre1y_HnZ08TsvujVFvJDliiMpxPWzr0sf5EW96WuS516VCOdRQH8yi5Rprdho3AQsBhijPxp7OxIO4gk-h4YsVgPQeCq2qCBxVTq5AyNNtHDXFPQK2iYcFMEWieA6-9lk8YEx-LDIepLpO408GM0rRjIjkE2AKqomD8FQv-zDd4oZJEZfpD0C0_");'></div>
-            </div>
-            <div>
-              <p class="text-xs text-text-muted-light dark:text-text-muted-dark">2023年10月24日</p>
-              <p class="text-base font-bold leading-normal mt-1">セミナー開催のお知らせ</p>
-              <a class="text-sm font-medium leading-normal text-primary dark:text-secondary hover:underline" href="info.html">続きを読む</a>
-            </div>
-          </div>
-          <div class="flex flex-col gap-3 group">
-            <div class="overflow-hidden rounded-lg">
-              <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg group-hover:scale-105 transition-transform duration-300" data-alt="A collection of magazines and newspapers on a table." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDygmsKSzQlh2R-odzbwr732q2T09CIwlVuj9TL8g7qQoRI1wddgR8YuAZOpzIqoqAZ_4_RA8zyLv88gAPyHKlHQrbyD5f69GAQy9aloyXlJPBXlf-H5txUkiGOv1sXoRcMYa2cK9_YvNjogOenB4co-r6DlADxncrSz8dkR_wBm-dGwgKHaEa3s27HPrWsviyTAI4_mi2POkf8RZYfIv8vT4Htno-C03lBBcfgntuJSnkg2rT7O9eeR5UvNFexu3ozo6zhbLchwy3o");'></div>
-            </div>
-            <div>
-              <p class="text-xs text-text-muted-light dark:text-text-muted-dark">2023年10月20日</p>
-              <p class="text-base font-bold leading-normal mt-1">メディア掲載情報</p>
-              <a class="text-sm font-medium leading-normal text-primary dark:text-secondary hover:underline" href="info.html">続きを読む</a>
-            </div>
+        <div id="announcement-slider-section" class="relative w-full mx-auto py-4 opacity-0 transition-opacity duration-500">
+          <button id="slider-prev-btn" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-black/30 hover:bg-black/50 text-white rounded-full flex items-center justify-center transition-colors hidden md:flex">
+            <span class="material-symbols-outlined">chevron_left</span>
+          </button>
+          <button id="slider-next-btn" class="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-black/30 hover:bg-black/50 text-white rounded-full flex items-center justify-center transition-colors hidden md:flex">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </button>
+
+          <div id="announcement-scroller" class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar gap-4 px-4 pb-4" style="scrollbar-width: none; -ms-overflow-style: none;">
+            <div class="w-full text-center py-10 text-gray-500">読み込み中...</div>
           </div>
         </div>
+
+        <style>
+          #announcement-scroller::-webkit-scrollbar { display: none; }
+          .slider-card { flex: 0 0 auto; scroll-snap-align: start; }
+        </style>
       </section>
       <section class="py-16 sm:py-24">
         <div class="flex flex-col gap-10 text-center">
@@ -260,5 +245,151 @@
     </div>
 </nav>
 <script type="module" src="js/common.js"></script>
+<script type="module">
+// --- ★ お知らせスライダー制御 (Announcement Slider Logic) ★ ---
+import { collection, query, where, orderBy, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+// スライダー設定と記事データを取得して表示
+async function initAnnouncementSlider() {
+  const container = document.getElementById('announcement-slider-section');
+  const scroller = document.getElementById('announcement-scroller');
+  if (!container || !scroller) return;
+
+  try {
+    // 1. 設定の読み込み
+    const settingsSnap = await getDoc(doc(window.db, "staticPages", "commonSettings"));
+    const settings = settingsSnap.exists() ? (settingsSnap.data().announcementSlider || {}) : {};
+    
+    // デフォルト設定
+    const config = {
+      viewPc: parseInt(settings.viewPc || 3),
+      viewTab: parseInt(settings.viewTab || 2),
+      viewMob: parseInt(settings.viewMob || 1),
+      speed: parseInt(settings.speed || 3000),
+      direction: settings.direction || 'left'
+    };
+
+    // 2. 記事データの読み込み (本番用：トップ表示ON かつ 公開ON)
+    const q = query(
+      collection(window.db, "articles"),
+      where("isFeatured", "==", true),
+      where("visible", "==", true), 
+      orderBy("date", "desc")
+    );
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      // 記事がない場合（またはデータ不備の場合）は非表示にするかメッセージを出す
+      scroller.innerHTML = '<div class="w-full text-center py-10 text-gray-400">現在、お知らせはありません</div>';
+      container.classList.remove('opacity-0');
+      return;
+    }
+
+    // 3. HTML生成
+    scroller.innerHTML = '';
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const dateStr = data.date ? data.date.replace(/-/g, '.') : '';
+      
+      // カードのHTML
+      const card = document.createElement('div');
+      card.className = 'slider-card bg-white dark:bg-slate-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-slate-700 flex flex-col flex-shrink-0 snap-start cursor-pointer transition-shadow hover:shadow-lg';
+      
+      // 幅の初期計算とリサイズ追従
+      const updateWidth = () => {
+        const w = window.innerWidth;
+        let count = config.viewMob;
+        if (w >= 1024) count = config.viewPc;
+        else if (w >= 768) count = config.viewTab;
+        
+        // gap-4 (16px) を考慮した計算
+        const gapTotal = 16 * (count > 0 ? count - 1 : 0);
+        card.style.width = `calc((100% - ${gapTotal}px) / ${count})`;
+      };
+      
+      updateWidth();
+      window.addEventListener('resize', updateWidth);
+
+      card.innerHTML = `
+        <div class="aspect-video w-full bg-gray-100 dark:bg-slate-700 relative overflow-hidden">
+          <img src="${data.imageUrl}" alt="${data.title}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" onerror="this.style.display='none'">
+        </div>
+        <div class="p-4 flex flex-col flex-grow">
+          <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">${dateStr}</div>
+          <h3 class="font-bold text-gray-800 dark:text-gray-100 text-sm md:text-base line-clamp-2 mb-2 flex-grow">${data.title}</h3>
+          <span class="text-xs text-primary font-bold mt-auto">READ MORE &rarr;</span>
+        </div>
+      `;
+      
+      // 詳細ページへの遷移 (必要に応じて実装)
+      // card.addEventListener('click', () => { window.location.href = `article.html?id=${docSnap.id}`; });
+
+      scroller.appendChild(card);
+    });
+
+    // 4. 自動再生ロジック
+    if (config.speed > 0) {
+      let autoScrollTimer;
+      const startAutoScroll = () => {
+        clearInterval(autoScrollTimer);
+        autoScrollTimer = setInterval(() => {
+          const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+          // カード幅 + gap(16px)
+          const itemWidth = scroller.firstElementChild ? scroller.firstElementChild.getBoundingClientRect().width + 16 : 0;
+          
+          if (config.direction === 'left') {
+            if (scroller.scrollLeft >= maxScroll - 5) {
+              scroller.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+              scroller.scrollBy({ left: itemWidth, behavior: 'smooth' });
+            }
+          } else {
+             if (scroller.scrollLeft <= 5) {
+               scroller.scrollTo({ left: maxScroll, behavior: 'smooth' });
+             } else {
+               scroller.scrollBy({ left: -itemWidth, behavior: 'smooth' });
+             }
+          }
+        }, config.speed);
+      };
+      
+      const stopAutoScroll = () => clearInterval(autoScrollTimer);
+      
+      // 操作時は自動再生を停止
+      scroller.addEventListener('mouseenter', stopAutoScroll);
+      scroller.addEventListener('mouseleave', startAutoScroll);
+      scroller.addEventListener('touchstart', stopAutoScroll, {passive: true});
+      scroller.addEventListener('touchend', startAutoScroll);
+      
+      const prevBtn = document.getElementById('slider-prev-btn');
+      const nextBtn = document.getElementById('slider-next-btn');
+      
+      if (prevBtn) prevBtn.addEventListener('click', () => {
+        stopAutoScroll();
+        const itemWidth = scroller.firstElementChild ? scroller.firstElementChild.getBoundingClientRect().width + 16 : 0;
+        scroller.scrollBy({ left: -itemWidth, behavior: 'smooth' });
+        startAutoScroll();
+      });
+      
+      if (nextBtn) nextBtn.addEventListener('click', () => {
+        stopAutoScroll();
+        const itemWidth = scroller.firstElementChild ? scroller.firstElementChild.getBoundingClientRect().width + 16 : 0;
+        scroller.scrollBy({ left: itemWidth, behavior: 'smooth' });
+        startAutoScroll();
+      });
+
+      startAutoScroll();
+    }
+
+    container.classList.remove('opacity-0');
+
+  } catch (error) {
+    console.error("Slider Init Error:", error);
+  }
+}
+
+// 起動
+document.addEventListener('DOMContentLoaded', initAnnouncementSlider);
+</script>
 </body>
 </html>
