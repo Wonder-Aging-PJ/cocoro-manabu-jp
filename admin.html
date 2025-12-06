@@ -9917,8 +9917,17 @@ window.addContactItemField = addContactItemField;
         }
 
         // カスタムHTML部品を保存
+        // カスタムHTML部品を保存
         async function saveCustomPart(e) {
           e.preventDefault();
+          
+          const submitBtn = document.getElementById('save-custom-part-btn');
+          
+          // ★ 連打防止：処理開始時にボタンを無効化
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<div class="loader !w-4 !h-4 !border-t-white !border-slate-200/50"></div> <span>保存中...</span>';
+          }
           
           const docId = document.getElementById('cp-input-id')?.value;
           const title = document.getElementById('cp-input-title')?.value;
@@ -9929,6 +9938,11 @@ window.addContactItemField = addContactItemField;
           
           if (!title || !htmlContent) {
             showMessage('タイトルとHTMLコードは必須です。', 'error');
+            // エラー時はボタンを復帰
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="material-symbols-outlined">save</span> <span>保存</span>';
+            }
             return;
           }
           
@@ -9944,11 +9958,9 @@ window.addContactItemField = addContactItemField;
             };
             
             if (docId) {
-              // 更新
               await updateDoc(doc(db, 'customParts', docId), partData);
               showMessage('部品を更新しました。', 'success');
             } else {
-              // 新規作成
               partData.createdAt = serverTimestamp();
               await addDoc(collection(db, 'customParts'), partData);
               showMessage('部品を作成しました。', 'success');
@@ -9961,6 +9973,12 @@ window.addContactItemField = addContactItemField;
           } catch (error) {
             showMessage('保存中にエラーが発生しました。', 'error');
             console.error('Error saving custom part:', error);
+          } finally {
+            // ★ 処理終了後にボタンを復帰
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="material-symbols-outlined">save</span> <span>保存</span>';
+            }
           }
         }
 
@@ -10181,13 +10199,7 @@ window.addContactItemField = addContactItemField;
           });
         }
 
-        // タブ切り替え時にカスタムHTML部品を読み込む
-        const customHtmlTabBtn = document.querySelector('[data-tab="custom-html"]');
-        if (customHtmlTabBtn) {
-          customHtmlTabBtn.addEventListener('click', () => {
-            loadCustomParts();
-          });
-        }
+
 
         // ========================================
         // 登録リンク管理 (Saved Links)
