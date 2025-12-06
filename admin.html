@@ -749,14 +749,19 @@
             </div>
 
             <div>
-              <button
-                type="submit"
-                id="submit-book-btn"
-                class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-              >
-                <span class="material-symbols-outlined">add</span>
-                <span>書籍を追加する</span>
-              </button>
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start">
+                <button type="button" id="preview-book-btn" class="w-full sm:w-auto py-3 px-8 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mb-4 sm:mb-0 sm:mr-4">
+                  <span class="material-symbols-outlined">visibility</span> <span>プレビュー</span>
+                </button>
+                <button
+                  type="submit"
+                  id="submit-book-btn"
+                  class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                >
+                  <span class="material-symbols-outlined">add</span>
+                  <span>書籍を追加する</span>
+                </button>
+              </div>
             </div>
           </form>
           <button
@@ -931,14 +936,19 @@
             </div>
 
             <div>
-              <button
-                type="submit"
-                id="submit-media-icon-btn"
-                class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-              >
-                <span class="material-symbols-outlined">add</span>
-                <span>メディア(アイコン)を追加する</span>
-              </button>
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start">
+                <button type="button" id="preview-media-icon-btn" class="w-full sm:w-auto py-3 px-8 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mb-4 sm:mb-0 sm:mr-4">
+                  <span class="material-symbols-outlined">visibility</span> <span>プレビュー</span>
+                </button>
+                <button
+                  type="submit"
+                  id="submit-media-icon-btn"
+                  class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                >
+                  <span class="material-symbols-outlined">add</span>
+                  <span>メディア(アイコン)を追加する</span>
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -1080,14 +1090,19 @@
             </div>
 
             <div>
-              <button
-                type="submit"
-                id="submit-media-banner-btn"
-                class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-              >
-                <span class="material-symbols-outlined">add</span>
-                <span>メディア(バナー)を追加する</span>
-              </button>
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start">
+                <button type="button" id="preview-media-banner-btn" class="w-full sm:w-auto py-3 px-8 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mb-4 sm:mb-0 sm:mr-4">
+                  <span class="material-symbols-outlined">visibility</span> <span>プレビュー</span>
+                </button>
+                <button
+                  type="submit"
+                  id="submit-media-banner-btn"
+                  class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                >
+                  <span class="material-symbols-outlined">add</span>
+                  <span>メディア(バナー)を追加する</span>
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -1219,14 +1234,19 @@
               </div>
             </div>
             <div>
-              <button
-                type="submit"
-                id="submit-site-btn"
-                class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-              >
-                <span class="material-symbols-outlined">add</span>
-                <span>ブログ・HPを追加する</span>
-              </button>
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start">
+                <button type="button" id="preview-site-btn" class="w-full sm:w-auto py-3 px-8 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mb-4 sm:mb-0 sm:mr-4">
+                  <span class="material-symbols-outlined">visibility</span> <span>プレビュー</span>
+                </button>
+                <button
+                  type="submit"
+                  id="submit-site-btn"
+                  class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                >
+                  <span class="material-symbols-outlined">add</span>
+                  <span>ブログ・HPを追加する</span>
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -1314,7 +1334,10 @@
                 </div>
                 <p class="text-xs text-text-muted-light mt-1">※チェックを外すと、同じウィンドウで開きます。</p>
               </div>
-              <div>
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start">
+                <button type="button" id="preview-blog-post-btn" class="w-full sm:w-auto py-3 px-8 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mb-4 sm:mb-0 sm:mr-4">
+                  <span class="material-symbols-outlined">visibility</span> <span>プレビュー</span>
+                </button>
                 <button type="submit" id="submit-blog-post-btn" class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
                   <span class="material-symbols-outlined">add</span>
                   <span>ブログ記事メタを追加する</span>
@@ -1555,6 +1578,13 @@
                 ></textarea>
               </div>
               <div>
+                <button
+                  type="button"
+                  id="preview-timeline-btn"
+                  class="w-full sm:w-auto py-3 px-8 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mb-4 sm:mb-0 sm:mr-4"
+                >
+                  <span class="material-symbols-outlined">visibility</span> <span>プレビュー</span>
+                </button>
                 <button
                   type="submit"
                   id="submit-timeline-btn"
@@ -1925,9 +1955,14 @@
             <label for="saved-link-memo" class="block text-sm font-medium">メモ / 検索用キーワード</label>
             <input type="text" id="saved-link-memo" placeholder="例: 商品紹介用、プロフィール用" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
           </div>
-          <button type="submit" id="submit-saved-link-btn" class="py-2 px-6 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2">
-            <span class="material-symbols-outlined">add</span> <span>リンクを登録</span>
-          </button>
+          <div class="flex items-center">
+             <button type="button" id="preview-saved-link-btn" class="py-2 px-6 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2 mr-4">
+              <span class="material-symbols-outlined">visibility</span> <span>プレビュー</span>
+             </button>
+             <button type="submit" id="submit-saved-link-btn" class="py-2 px-6 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+              <span class="material-symbols-outlined">add</span> <span>リンクを登録</span>
+             </button>
+          </div>
         </form>
 
         <div>
@@ -2837,6 +2872,12 @@
             class="mt-4 w-48 h-auto rounded-lg"
           />
         </div>
+        <div class="mt-6 border-t border-slate-200 dark:border-slate-700 pt-4">
+          <button type="button" id="edit-preview-book-btn" class="w-full py-2 px-4 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">visibility</span>
+            <span>変更内容をプレビュー</span>
+          </button>
+        </div>
       </div>
 
       <!-- 3. メディア(アイコン)編集フォーム -->
@@ -2933,6 +2974,12 @@
             class="mt-4 w-16 h-16 rounded-lg"
           />
         </div>
+        <div class="mt-6 border-t border-slate-200 dark:border-slate-700 pt-4">
+          <button type="button" id="edit-preview-media-icon-btn" class="w-full py-2 px-4 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">visibility</span>
+            <span>変更内容をプレビュー</span>
+          </button>
+        </div>
       </div>
 
       <!-- 4. メディア(バナー)編集フォーム -->
@@ -3007,6 +3054,12 @@
             alt="画像プレビュー"
             class="mt-4 w-48 h-auto rounded-lg"
           />
+        </div>
+        <div class="mt-6 border-t border-slate-200 dark:border-slate-700 pt-4">
+          <button type="button" id="edit-preview-media-banner-btn" class="w-full py-2 px-4 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">visibility</span>
+            <span>変更内容をプレビュー</span>
+          </button>
         </div>
       </div>
 
@@ -3099,6 +3152,13 @@
             alt="画像プレビュー"
             class="mt-4 w-16 h-16 rounded-lg"
           />
+
+        </div>
+        <div class="mt-6 border-t border-slate-200 dark:border-slate-700 pt-4">
+          <button type="button" id="edit-preview-site-btn" class="w-full py-2 px-4 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">visibility</span>
+            <span>変更内容をプレビュー</span>
+          </button>
         </div>
       </div>
       <!-- 6. ナビゲーション編集フォーム -->
@@ -3143,6 +3203,33 @@
           />
         </div>
       </div>
+      <!-- 6.5 経歴編集フォーム (NEW) -->
+      <div id="edit-form-template-timeline" class="space-y-6">
+        <input type="hidden" id="edit-timeline-id" />
+        <div>
+          <label for="edit-timeline-year" class="block text-sm font-medium">年代 (Year/Duration) <span class="text-red-500">*</span></label>
+          <input type="text" id="edit-timeline-year" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" />
+        </div>
+        <div>
+          <label for="edit-timeline-title" class="block text-sm font-medium">タイトル (Title) <span class="text-red-500">*</span></label>
+          <input type="text" id="edit-timeline-title" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" />
+        </div>
+        <div>
+          <label for="edit-timeline-company" class="block text-sm font-medium">組織・機関名 (Company/Org) <span class="text-red-500">*</span></label>
+          <input type="text" id="edit-timeline-company" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" />
+        </div>
+        <div>
+          <label for="edit-timeline-description" class="block text-sm font-medium">詳細 (Description) <span class="text-red-500">*</span></label>
+          <textarea id="edit-timeline-description" rows="3" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary"></textarea>
+        </div>
+        <div class="mt-6 border-t border-slate-200 dark:border-slate-700 pt-4">
+          <button type="button" id="edit-preview-timeline-btn" class="w-full py-2 px-4 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">visibility</span>
+            <span>変更内容をプレビュー</span>
+          </button>
+        </div>
+      </div>
+
       <!-- 7. ブログ記事編集フォーム (P2) -->
       <div id="edit-form-template-blog-posts" class="space-y-6">
         <input type="hidden" id="edit-blog-post-id" />
@@ -3272,6 +3359,12 @@
             alt="画像プレビュー"
             class="mt-4 w-48 h-auto rounded-lg"
           />
+        </div>
+        <div class="mt-6 border-t border-slate-200 dark:border-slate-700 pt-4">
+          <button type="button" id="edit-preview-blog-post-btn" class="w-full py-2 px-4 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">visibility</span>
+            <span>変更内容をプレビュー</span>
+          </button>
         </div>
       </div>
 
@@ -3468,6 +3561,12 @@
         <div>
           <label for="edit-saved-link-memo" class="block text-sm font-medium">メモ / 検索用キーワード</label>
           <input type="text" id="edit-saved-link-memo" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary">
+        </div>
+        <div class="mt-6 border-t border-slate-200 dark:border-slate-700 pt-4">
+          <button type="button" id="edit-preview-saved-link-btn" class="w-full py-2 px-4 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">visibility</span>
+            <span>変更内容をプレビュー</span>
+          </button>
         </div>
       </div>
     </div>
@@ -5510,7 +5609,14 @@ function setupStaticPageSubTabs() {
                   <p class="text-sm text-text-light dark:text-text-dark">${item.description.substring(0, 100)}...</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-2 flex-shrink-0">
-                  <button data-doc-id="${itemId}" data-collection="timeline" data-image-path="" class="edit-btn py-2 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center gap-1">
+                  <button 
+                    data-doc-id="${itemId}" 
+                    data-collection="timeline" 
+                    data-year="${encodeURIComponent(item.year || '')}" 
+                    data-title="${encodeURIComponent(item.title || '')}" 
+                    data-company="${encodeURIComponent(item.company || '')}" 
+                    data-description="${encodeURIComponent(item.description || '')}" 
+                    class="edit-btn py-2 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center gap-1">
                     <span class="material-symbols-outlined !text-base">edit</span>
                     <span>修正</span>
                   </button>
@@ -7308,6 +7414,17 @@ function setupStaticPageSubTabs() {
                 editFormContent.appendChild(template);
                 break;
 
+              case "timeline":
+                editModalTitle.textContent = "経歴を修正";
+                template = document.getElementById("edit-form-template-timeline").cloneNode(true);
+                template.querySelector("#edit-timeline-id").value = data.docId;
+                template.querySelector("#edit-timeline-year").value = decodeURIComponent(data.year || "");
+                template.querySelector("#edit-timeline-title").value = decodeURIComponent(data.title || "");
+                template.querySelector("#edit-timeline-company").value = decodeURIComponent(data.company || "");
+                template.querySelector("#edit-timeline-description").value = decodeURIComponent(data.description || "");
+                editFormContent.appendChild(template);
+                break;
+
               // --- 8. サイトマップ項目 (Phase 3-3) ---
               case "sitemapEntries":
                 editModalTitle.textContent = "サイトマップ項目を修正";
@@ -7630,6 +7747,17 @@ function setupStaticPageSubTabs() {
                   };
                   selectedEditFile = editFileBlogPost; // (Step 7で定義した変数)
                   newImagePathPrefix = "images/photo/blog_posts";
+                  break;
+
+                case "timeline":
+                  updatedData = {
+                    year: document.getElementById("edit-timeline-year").value,
+                    title: document.getElementById("edit-timeline-title").value,
+                    company: document.getElementById("edit-timeline-company").value,
+                    description: document.getElementById("edit-timeline-description").value,
+                  };
+                  selectedEditFile = null; // 画像はないのでnull
+                  newImagePathPrefix = "";
                   break;
                 // --- 8. サイトマップ項目 (Phase 3-3) ---
                 case "sitemapEntries":
@@ -10947,6 +11075,482 @@ document.addEventListener('click', (e) => {
 // --- ★ お知らせスライダー設定 (Announcement Slider Settings) ★ ---
 
 // 1. 設定の読み込み関数
+// --- ★ 書籍プレビュー機能 (Book Preview) ★ ---
+
+async function openBookPreview(isEdit = false) {
+  const prefix = isEdit ? 'edit-' : '';
+  // フォーム値の取得
+  const title = document.getElementById(`${prefix}book-title`).value;
+  const url = document.getElementById(`${prefix}book-url`).value;
+  const buttonText = document.getElementById(`${prefix}book-button-text`).value || "詳細を見る";
+  const description = document.getElementById(`${prefix}book-description`).value;
+  const starRating = parseInt(document.getElementById(`${prefix}book-star-rating`).value || 5);
+  
+  // 画像処理
+  const fileInput = document.getElementById(`${prefix}book-image`);
+  const currentPreview = document.getElementById(isEdit ? 'edit-image-preview-book' : 'image-preview-book');
+  let imageSrc = '';
+  
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    const file = fileInput.files[0];
+    imageSrc = await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  } else if (currentPreview && !currentPreview.classList.contains('hidden') && currentPreview.src) {
+    imageSrc = currentPreview.src;
+  }
+
+  // 星評価のHTML生成
+  let starsHtml = '';
+  for (let i = 0; i < 5; i++) {
+    starsHtml += `<span class="material-symbols-outlined text-yellow-500 text-sm">${i < starRating ? 'star' : 'star_border'}</span>`;
+  }
+
+  // プレビュー用HTML構築（実際のカードデザインを再現）
+  const previewHtml = `
+    <div class="container mx-auto max-w-3xl p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 min-h-screen flex flex-col items-center justify-center">
+      <h2 class="text-2xl font-bold mb-8">書籍カード プレビュー</h2>
+      
+      <div class="flex flex-col md:flex-row items-center md:items-start gap-6 rounded-lg bg-slate-50 dark:bg-slate-800 p-6 shadow-md border border-slate-200 dark:border-slate-700 w-full">
+        <div class="w-48 md:w-56 flex-shrink-0">
+          ${imageSrc ? `<img src="${imageSrc}" alt="${title}" class="rounded-lg shadow-xl w-full h-auto object-cover aspect-[3/4]">` : '<div class="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg">No Image</div>'}
+        </div>
+        <div class="flex flex-col gap-4 text-center md:text-left flex-grow">
+          <div class="flex flex-col gap-1">
+            <p class="text-xl font-bold leading-tight">${title || 'タイトル未設定'}</p>
+            <div class="flex items-center justify-center md:justify-start gap-1 mb-2">
+              ${starsHtml}
+            </div>
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-normal whitespace-pre-wrap">${description || '紹介文なし'}</p>
+          </div>
+          <a href="#" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold leading-normal transition-transform hover:scale-105 mx-auto md:mx-0 w-fit pointer-events-none">
+            <span class="truncate">${buttonText}</span>
+            <span class="material-symbols-outlined ml-2 text-base">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center">
+        <button onclick="window.close()" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">閉じる</button>
+      </div>
+    </div>
+  `;
+
+  localStorage.setItem('snippetPreviewCode', previewHtml);
+  window.open('preview.html', '_blank');
+}
+
+// イベントリスナー（新規追加）
+const previewBookBtn = document.getElementById('preview-book-btn');
+if (previewBookBtn) {
+  previewBookBtn.addEventListener('click', () => openBookPreview(false));
+}
+
+// イベントリスナー（編集モーダル：委任）
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#edit-preview-book-btn')) {
+    openBookPreview(true);
+  }
+});
+
+// --- ★ メディア(バナー)プレビュー機能 (Banner Preview) ★ ---
+
+async function openMediaBannerPreview(isEdit = false) {
+  const prefix = isEdit ? 'edit-' : '';
+  // フォーム値の取得
+  const url = document.getElementById(`${prefix}media-banner-url`).value;
+  const animation = document.getElementById(`${prefix}media-banner-animation`).value; // none, pulse, wiggle...
+  
+  // 画像処理
+  const fileInput = document.getElementById(`${prefix}media-banner-image`);
+  const currentPreview = document.getElementById(isEdit ? 'edit-image-preview-media-banner' : 'image-preview-media-banner');
+  let imageSrc = '';
+  
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    const file = fileInput.files[0];
+    imageSrc = await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  } else if (currentPreview && !currentPreview.classList.contains('hidden') && currentPreview.src) {
+    imageSrc = currentPreview.src;
+  }
+
+  // アニメーションクラスの決定 (Tailwind configに基づく)
+  const animClass = (animation && animation !== 'none') ? `animate-${animation}` : '';
+
+  // プレビュー用HTML構築
+  const previewHtml = `
+    <div class="container mx-auto max-w-3xl p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 min-h-screen flex flex-col items-center justify-center">
+      <h2 class="text-2xl font-bold mb-8">バナー プレビュー</h2>
+      <p class="mb-4 text-sm text-gray-500">アニメーション設定: <strong>${animation}</strong></p>
+      
+      <div class="w-full max-w-lg p-4 border border-dashed border-gray-300 rounded-xl flex justify-center items-center bg-gray-50 dark:bg-gray-800">
+        ${imageSrc 
+          ? `<a href="#" class="block w-full rounded-xl overflow-hidden shadow-lg hover:opacity-90 transition-opacity ${animClass}">
+               <img src="${imageSrc}" alt="バナー" class="w-full h-auto object-cover">
+             </a>` 
+          : '<div class="w-full h-32 flex items-center justify-center text-gray-400">No Image</div>'
+        }
+      </div>
+      
+      <p class="mt-4 text-sm text-primary font-bold break-all">Link: ${url || 'なし'}</p>
+
+      <div class="mt-12 text-center">
+        <button onclick="window.close()" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">閉じる</button>
+      </div>
+    </div>
+  `;
+
+  localStorage.setItem('snippetPreviewCode', previewHtml);
+  window.open('preview.html', '_blank');
+}
+
+// イベントリスナー（新規追加）
+const previewBannerBtn = document.getElementById('preview-media-banner-btn');
+if (previewBannerBtn) {
+  previewBannerBtn.addEventListener('click', () => openMediaBannerPreview(false));
+}
+
+// イベントリスナー（編集モーダル：委任）
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#edit-preview-media-banner-btn')) {
+    openMediaBannerPreview(true);
+  }
+});
+
+// --- ★ メディア(アイコン)プレビュー機能 (Media Icon Preview) ★ ---
+
+async function openMediaIconPreview(isEdit = false) {
+  const prefix = isEdit ? 'edit-' : '';
+  // フォーム値の取得
+  const title = document.getElementById(`${prefix}media-icon-title`).value;
+  const description = document.getElementById(`${prefix}media-icon-description`).value;
+  const url = document.getElementById(`${prefix}media-icon-url`).value;
+  const iconName = document.getElementById(`${prefix}media-icon-name`).value; // article, play_circle...
+  
+  // 画像処理
+  const fileInput = document.getElementById(`${prefix}media-icon-image`);
+  const currentPreview = document.getElementById(isEdit ? 'edit-image-preview-media-icon' : 'image-preview-media-icon');
+  let imageSrc = '';
+  
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    const file = fileInput.files[0];
+    imageSrc = await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  } else if (currentPreview && !currentPreview.classList.contains('hidden') && currentPreview.src) {
+    imageSrc = currentPreview.src;
+  }
+
+  // アイコン表示HTMLの決定（画像優先）
+  let iconDisplayHtml = '';
+  if (imageSrc) {
+    iconDisplayHtml = `<img src="${imageSrc}" alt="${title}" class="w-12 h-12 object-contain rounded-md bg-slate-100 dark:bg-slate-700">`;
+  } else {
+    iconDisplayHtml = `<span class="material-symbols-outlined text-4xl text-primary">${iconName || 'link'}</span>`;
+  }
+
+  // プレビュー用HTML構築
+  const previewHtml = `
+    <div class="container mx-auto max-w-3xl p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 min-h-screen flex flex-col items-center justify-center">
+      <h2 class="text-2xl font-bold mb-8">アイコンリンク プレビュー</h2>
+      
+      <a href="#" class="flex flex-col sm:flex-row items-center gap-4 p-6 bg-slate-50 dark:bg-slate-800 rounded-lg shadow-md border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors w-full max-w-lg pointer-events-none">
+        <div class="flex-shrink-0">
+          ${iconDisplayHtml}
+        </div>
+        <div class="flex-grow text-center sm:text-left">
+          <h3 class="text-lg font-bold text-primary">${title || 'タイトルなし'}</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">${description || '説明文なし'}</p>
+          <p class="text-xs text-slate-400 mt-2 break-all">${url || 'リンクなし'}</p>
+        </div>
+        <span class="material-symbols-outlined text-slate-400">open_in_new</span>
+      </a>
+
+      <div class="mt-12 text-center">
+        <button onclick="window.close()" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">閉じる</button>
+      </div>
+    </div>
+  `;
+
+  localStorage.setItem('snippetPreviewCode', previewHtml);
+  window.open('preview.html', '_blank');
+}
+
+// イベントリスナー（新規追加）
+const previewIconBtn = document.getElementById('preview-media-icon-btn');
+if (previewIconBtn) {
+  previewIconBtn.addEventListener('click', () => openMediaIconPreview(false));
+}
+
+// イベントリスナー（編集モーダル：委任）
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#edit-preview-media-icon-btn')) {
+    openMediaIconPreview(true);
+  }
+});
+
+// --- ★ ブログ・HPプレビュー機能 (Site Preview) ★ ---
+
+async function openSitePreview(isEdit = false) {
+  const prefix = isEdit ? 'edit-' : '';
+  // フォーム値の取得
+  const title = document.getElementById(`${prefix}site-title`).value;
+  const description = document.getElementById(`${prefix}site-description`).value;
+  const url = document.getElementById(`${prefix}site-url`).value;
+  const iconName = document.getElementById(`${prefix}site-icon-name`).value; // insights, psychology...
+  
+  // 画像処理
+  const fileInput = document.getElementById(`${prefix}site-icon-image`); // ID注意: site-icon-image
+  const currentPreview = document.getElementById(isEdit ? 'edit-image-preview-site' : 'image-preview-site');
+  let imageSrc = '';
+  
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    const file = fileInput.files[0];
+    imageSrc = await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  } else if (currentPreview && !currentPreview.classList.contains('hidden') && currentPreview.src) {
+    imageSrc = currentPreview.src;
+  }
+
+  // アイコン表示HTMLの決定（画像優先）
+  let iconDisplayHtml = '';
+  if (imageSrc) {
+    iconDisplayHtml = `<img src="${imageSrc}" alt="${title}" class="w-10 h-10 object-contain rounded-md flex-shrink-0">`;
+  } else {
+    iconDisplayHtml = `<span class="material-symbols-outlined text-3xl text-primary w-10 h-10 flex items-center justify-center flex-shrink-0">${iconName || 'link'}</span>`;
+  }
+
+  // プレビュー用HTML構築（リスト表示のデザインを再現）
+  const previewHtml = `
+    <div class="container mx-auto max-w-3xl p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 min-h-screen flex flex-col items-center justify-center">
+      <h2 class="text-2xl font-bold mb-8">ブログ・HPリンク プレビュー</h2>
+      
+      <div class="flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg shadow border border-slate-200 dark:border-slate-700 w-full max-w-2xl">
+        ${iconDisplayHtml}
+        <div class="flex-grow w-full text-center sm:text-left">
+          <h3 class="text-lg font-bold">${title || 'タイトルなし'}</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400">${description || '説明文なし'}</p>
+          <a href="#" class="text-sm text-primary hover:underline break-all pointer-events-none">${url || 'リンクなし'}</a>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center">
+        <button onclick="window.close()" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">閉じる</button>
+      </div>
+    </div>
+  `;
+
+  localStorage.setItem('snippetPreviewCode', previewHtml);
+  window.open('preview.html', '_blank');
+}
+
+// イベントリスナー（新規追加）
+const previewSiteBtn = document.getElementById('preview-site-btn');
+if (previewSiteBtn) {
+  previewSiteBtn.addEventListener('click', () => openSitePreview(false));
+}
+
+// イベントリスナー（編集モーダル：委任）
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#edit-preview-site-btn')) {
+    openSitePreview(true);
+  }
+});
+
+// --- ★ 登録リンクプレビュー機能 (Saved Link Preview) ★ ---
+
+function openSavedLinkPreview(isEdit = false) {
+  const prefix = isEdit ? 'edit-' : '';
+  // フォーム値の取得
+  const title = document.getElementById(`${prefix}saved-link-title`).value;
+  const url = document.getElementById(`${prefix}saved-link-url`).value;
+  const memo = document.getElementById(`${prefix}saved-link-memo`).value;
+  
+  // プレビュー用HTML構築（リストアイテムのデザインを再現）
+  const previewHtml = `
+    <div class="container mx-auto max-w-3xl p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 min-h-screen flex flex-col items-center justify-center">
+      <h2 class="text-2xl font-bold mb-8">登録リンク プレビュー</h2>
+      
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm w-full pointer-events-none">
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center gap-2 mb-1">
+            <h4 class="text-lg font-bold truncate">${title || 'タイトルなし'}</h4>
+            ${memo ? `<span class="text-xs text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">${memo}</span>` : ''}
+          </div>
+          <div class="flex items-center gap-2 text-sm text-primary truncate">
+            <span class="material-symbols-outlined text-base">link</span>
+            <span class="truncate">${url || 'URLなし'}</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0 w-full sm:w-auto mt-2 sm:mt-0 opacity-50">
+             <button class="py-2 px-3 bg-slate-200 text-slate-700 font-bold rounded-lg text-sm">コピー</button>
+             <button class="py-2 px-3 bg-blue-600 text-white font-bold rounded-lg text-sm">編集</button>
+             <button class="py-2 px-3 bg-red-600 text-white font-bold rounded-lg text-sm">削除</button>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center">
+        <button onclick="window.close()" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">閉じる</button>
+      </div>
+    </div>
+  `;
+
+  localStorage.setItem('snippetPreviewCode', previewHtml);
+  window.open('preview.html', '_blank');
+}
+
+// イベントリスナー（新規追加）
+const previewSavedLinkBtn = document.getElementById('preview-saved-link-btn');
+if (previewSavedLinkBtn) {
+  previewSavedLinkBtn.addEventListener('click', () => openSavedLinkPreview(false));
+}
+
+// イベントリスナー（編集モーダル：委任）
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#edit-preview-saved-link-btn')) {
+    openSavedLinkPreview(true);
+  }
+});
+
+// --- ★ ブログ記事プレビュー機能 (Blog Post Preview) ★ ---
+
+async function openBlogPostPreview(isEdit = false) {
+  const prefix = isEdit ? 'edit-' : '';
+  // フォーム値の取得
+  const title = document.getElementById(`${prefix}blog-post-title`).value;
+  const url = document.getElementById(`${prefix}blog-post-url`).value;
+  const description = document.getElementById(`${prefix}blog-post-description`).value;
+  const category = document.getElementById(`${prefix}blog-post-category-select`).value;
+  const order = document.getElementById(`${prefix}blog-post-order`).value;
+  
+  // 画像処理
+  const fileInput = document.getElementById(`${prefix}blog-post-image`);
+  const currentPreview = document.getElementById(isEdit ? 'edit-image-preview-blog-post' : 'image-preview-blog-post');
+  let imageSrc = '';
+  
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    const file = fileInput.files[0];
+    imageSrc = await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  } else if (currentPreview && !currentPreview.classList.contains('hidden') && currentPreview.src) {
+    imageSrc = currentPreview.src;
+  }
+
+  // プレビュー用HTML構築
+  const previewHtml = `
+    <div class="container mx-auto max-w-3xl p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 min-h-screen flex flex-col items-center justify-center">
+      <h2 class="text-2xl font-bold mb-8">ブログ記事カード プレビュー</h2>
+      
+      <div class="flex flex-col md:flex-row items-start gap-6 p-6 bg-white dark:bg-slate-800 rounded-xl shadow-md border border-slate-200 dark:border-slate-700 w-full">
+        ${imageSrc 
+          ? `<img src="${imageSrc}" alt="${title}" class="w-full md:w-48 h-32 object-cover rounded-lg flex-shrink-0">` 
+          : `<div class="w-full md:w-48 h-32 bg-slate-200 dark:bg-slate-700 rounded-lg flex items-center justify-center text-xs text-slate-500">No Image</div>`
+        }
+        <div class="flex-grow">
+          <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">
+            <span class="font-semibold text-primary">${category || 'カテゴリなし'}</span> | 表示順: ${order}
+          </p>
+          <h3 class="text-xl font-bold mb-2 leading-tight">${title || 'タイトルなし'}</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mb-3 line-clamp-3">${description || '説明文なし'}</p>
+          <a href="#" class="text-primary font-bold text-sm hover:underline inline-flex items-center gap-1 pointer-events-none">
+            詳細を見る <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+      
+      <p class="mt-4 text-xs text-slate-400">Link: ${url || 'なし'}</p>
+
+      <div class="mt-12 text-center">
+        <button onclick="window.close()" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">閉じる</button>
+      </div>
+    </div>
+  `;
+
+  localStorage.setItem('snippetPreviewCode', previewHtml);
+  window.open('preview.html', '_blank');
+}
+
+// イベントリスナー（新規追加）
+const previewBlogPostBtn = document.getElementById('preview-blog-post-btn');
+if (previewBlogPostBtn) {
+  previewBlogPostBtn.addEventListener('click', () => openBlogPostPreview(false));
+}
+
+// イベントリスナー（編集モーダル：委任）
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#edit-preview-blog-post-btn')) {
+    openBlogPostPreview(true);
+  }
+});
+
+// --- ★ 経歴プレビュー機能 (Timeline Preview) ★ ---
+
+function openTimelinePreview(isEdit = false) {
+  const prefix = isEdit ? 'edit-' : '';
+  // フォーム値の取得
+  const year = document.getElementById(`${prefix}timeline-year`).value;
+  const title = document.getElementById(`${prefix}timeline-title`).value;
+  const company = document.getElementById(`${prefix}timeline-company`).value;
+  const description = document.getElementById(`${prefix}timeline-description`).value;
+  
+  // プレビュー用HTML構築（タイムライン風デザイン）
+  const previewHtml = `
+    <div class="container mx-auto max-w-3xl p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 min-h-screen flex flex-col items-center justify-center">
+      <h2 class="text-2xl font-bold mb-8">経歴アイテム プレビュー</h2>
+      
+      <div class="w-full max-w-2xl border-l-2 border-primary pl-8 py-2 ml-4 space-y-2 relative pointer-events-none">
+        <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary border-4 border-white dark:border-slate-900"></div>
+        
+        <div class="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
+          <span class="text-primary font-bold text-lg whitespace-nowrap">${year || '期間未定'}</span>
+          <h3 class="text-xl font-bold">${title || 'タイトルなし'}</h3>
+        </div>
+        
+        <div class="text-sm text-slate-500 dark:text-slate-400 font-medium">
+          ${company || '組織名なし'}
+        </div>
+        
+        <div class="text-base text-slate-600 dark:text-slate-300 mt-2 whitespace-pre-wrap">
+          ${description || '詳細なし'}
+        </div>
+      </div>
+
+      <div class="mt-12 text-center">
+        <button onclick="window.close()" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">閉じる</button>
+      </div>
+    </div>
+  `;
+
+  localStorage.setItem('snippetPreviewCode', previewHtml);
+  window.open('preview.html', '_blank');
+}
+
+// イベントリスナー（新規追加）
+const previewTimelineBtn = document.getElementById('preview-timeline-btn');
+if (previewTimelineBtn) {
+  previewTimelineBtn.addEventListener('click', () => openTimelinePreview(false));
+}
+
+// イベントリスナー（編集モーダル：委任）
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#edit-preview-timeline-btn')) {
+    openTimelinePreview(true);
+  }
+});
+
 async function loadArticleSliderSettings() {
   const form = document.getElementById("update-article-slider-settings-form");
   if (!form) return;
