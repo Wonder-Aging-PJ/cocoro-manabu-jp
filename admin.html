@@ -10055,15 +10055,21 @@ window.addContactItemField = addContactItemField;
         // ========================================
         // 登録リンク管理 (Saved Links)
         // ========================================
-        const savedLinksListContainer = document.getElementById('saved-links-list-container');
+        // const savedLinksListContainer = document.getElementById('saved-links-list-container');
         const savedLinksLoader = document.getElementById('saved-links-loader');
         const savedLinksCountDisplay = document.getElementById('saved-links-count-display');
         const searchSavedLinksInput = document.getElementById('search-saved-links');
         const addSavedLinkForm = document.getElementById('add-saved-link-form');
 
+        let isSavedLinksLoading = false;
+
         async function loadSavedLinks() {
+          const savedLinksListContainer = document.getElementById('saved-links-list-container');
           if (!savedLinksLoader || !savedLinksListContainer) return;
           
+          if (isSavedLinksLoading) return;
+          isSavedLinksLoading = true;
+
           savedLinksLoader.classList.remove('hidden');
           savedLinksListContainer.innerHTML = '';
           
@@ -10151,9 +10157,15 @@ window.addContactItemField = addContactItemField;
             }
             
           } catch (error) {
-            savedLinksLoader.classList.add('hidden');
-            savedLinksListContainer.innerHTML = '<p class="text-center text-red-500">リンクの読み込み中にエラーが発生しました。</p>';
+            // エラー時もコンテナを再取得してメッセージ表示
+            const savedLinksListContainer = document.getElementById('saved-links-list-container');
+            if (savedLinksListContainer) {
+                savedLinksListContainer.innerHTML = '<p class="text-center text-red-500">リンクの読み込み中にエラーが発生しました。</p>';
+            }
             console.error('Error loading saved links:', error);
+          } finally {
+            isSavedLinksLoading = false;
+            savedLinksLoader.classList.add('hidden');
           }
         }
 
@@ -10194,7 +10206,10 @@ window.addContactItemField = addContactItemField;
         // --- ★ 登録リンク管理のイベントリスナー (NEW) ★ ---
         const savedLinksContainer = document.getElementById("saved-links-list-container");
         if (savedLinksContainer) {
-          savedLinksContainer.addEventListener("click", async (e) => {
+          const newContainer = savedLinksContainer.cloneNode(true);
+          savedLinksContainer.parentNode.replaceChild(newContainer, savedLinksContainer);
+
+          newContainer.addEventListener("click", async (e) => {
             // 1. コピーボタン
             const copyBtn = e.target.closest(".copy-link-btn");
             if (copyBtn) {
@@ -10238,6 +10253,13 @@ window.addContactItemField = addContactItemField;
               if (!confirm("このリンクを削除してもよろしいですか？")) return;
 
               try {
+                const deleteBtn = e.target.closest(".delete-btn");
+                if (deleteBtn) deleteBtn.disabled = true; // 連打防止
+                
+                await deleteDoc(doc(db, "savedLinks", docId));
+                showMessage("リンクを削除しました。", "success");
+                loadSavedLinks();
+
               } catch (error) {
                 console.error("Error deleting link:", error);
                 showMessage(`削除エラー: ${error.message}`, "error");
