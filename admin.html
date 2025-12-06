@@ -490,9 +490,14 @@
 
               </div>
               <div>
-                <button type="submit" id="submit-article-btn" class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined">add</span> <span>記事を追加する</span>
-                </button>
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start">
+                  <button type="button" id="preview-article-btn" class="w-full sm:w-auto py-3 px-8 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mb-4 sm:mb-0 sm:mr-4">
+                    <span class="material-symbols-outlined">visibility</span> <span>プレビュー</span>
+                  </button>
+                  <button type="submit" id="submit-article-btn" class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">add</span> <span>記事を追加する</span>
+                  </button>
+                </div>
               </div>
             </form>
 
@@ -2688,6 +2693,12 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="mt-6 border-t border-slate-200 dark:border-slate-700 pt-4">
+          <button type="button" id="edit-preview-article-btn" class="w-full py-2 px-4 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">visibility</span>
+            <span>変更内容をプレビュー</span>
+          </button>
         </div>
       </div>
 
@@ -10866,6 +10877,72 @@ function addContentBlock(data) {
   blockDiv.innerHTML = contentHtml;
   blocksContainer.appendChild(blockDiv);
 }
+
+// --- ★ お知らせプレビュー機能 (Article Preview) ★ ---
+
+// プレビュー生成・表示関数
+async function openArticlePreview(isEdit = false) {
+  // 1. フォームから値を取得
+  const prefix = isEdit ? 'edit-' : '';
+  const title = document.getElementById(`${prefix}article-title`).value;
+  const date = document.getElementById(`${prefix}article-date`).value;
+  const content = document.getElementById(`${prefix}article-content`).value;
+  const fileInput = document.getElementById(`${prefix}article-image`);
+  const currentPreview = document.getElementById(isEdit ? 'edit-image-preview-article' : 'image-preview-article');
+  
+  // 2. 画像の処理 (新規ファイル > 既存プレビュー > なし)
+  let imageSrc = '';
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    // 新しいファイルが選択されている場合
+    const file = fileInput.files[0];
+    imageSrc = await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  } else if (currentPreview && !currentPreview.classList.contains('hidden') && currentPreview.src) {
+    // 既存の画像がある場合
+    imageSrc = currentPreview.src;
+  }
+
+  // 3. プレビュー用HTMLの構築 (index.htmlのスライダーカード風、または詳細ページ風)
+  const previewHtml = `
+    <div class="container mx-auto max-w-2xl p-8 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 min-h-screen">
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-slate-700">
+        ${imageSrc ? `<img src="${imageSrc}" alt="${title}" class="w-full h-64 object-cover">` : ''}
+        <div class="p-6">
+          <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">${date || '日付未設定'}</div>
+          <h1 class="text-2xl font-bold mb-4">${title || 'タイトルなし'}</h1>
+          <div class="prose prose-lg dark:prose-invert max-w-none whitespace-pre-wrap">
+            ${content || '本文なし'}
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 text-center">
+        <button onclick="window.close()" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">閉じる</button>
+      </div>
+    </div>
+  `;
+
+  // 4. localStorageに保存してプレビューを開く
+  localStorage.setItem('snippetPreviewCode', previewHtml);
+  window.open('preview.html', '_blank');
+}
+
+// イベントリスナーの登録 (新規追加)
+const previewArticleBtn = document.getElementById('preview-article-btn');
+if (previewArticleBtn) {
+  previewArticleBtn.addEventListener('click', () => openArticlePreview(false));
+}
+
+// イベントリスナーの登録 (編集モーダル)
+// ※編集モーダルは動的に生成されるため、ドキュメント全体で監視するか、モーダル展開時に設定する必要があります。
+// ここでは安全のため「documentへの委任」を使います。
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#edit-preview-article-btn')) {
+    openArticlePreview(true);
+  }
+});
 
 // --- ★ お知らせスライダー設定 (Announcement Slider Settings) ★ ---
 
