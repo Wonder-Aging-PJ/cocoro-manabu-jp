@@ -1032,43 +1032,116 @@ async function loadPublicSites() {
 
 // --- 5. Firestoreから経歴 (Timeline) を読み込む (profile.html用) ---
 async function loadPublicTimeline() {
+  // --- 修正開始: クライアントサイド・ソートへの変更 ---
   const container = document.getElementById("timeline-container");
+  if (!container) return;
+
+  // ローダー以外をクリアするのではなく、ローダー要素を取得しておく
   const loader = document.getElementById("timeline-loader");
-  if (!container || !loader) return;
-  loader.classList.remove("hidden");
-  container.innerHTML = ''; // コンテナをクリア
+  // コンテナの中身を実質クリア（ローダーがあれば再利用、なければ新規作成）
+  if (loader) {
+    container.innerHTML = "";
+    container.appendChild(loader);
+    loader.classList.remove("hidden"); // ローダー表示
+  } else {
+    container.innerHTML = '<div id="timeline-loader" class="flex justify-start py-4"><div class="loader h-6 w-6 border-t-primary border-primary/20"></div><p class="ml-3 text-sm text-text-muted-light">経歴情報を読み込み中...</p></div>';
+  }
 
   try {
-    const timelineCol = collection(db, 'timeline');
-    const q = query(timelineCol, orderBy('year', 'desc'));
+    // 1. 設定の読み込み (並び順)
+    let sortDir = 'asc';
+    try {
+      const settingsSnap = await getDoc(doc(db, "staticPages", "commonSettings"));
+      if (settingsSnap.exists() && settingsSnap.data().timelineSort) {
+        sortDir = settingsSnap.data().timelineSort;
+      }
+    } catch (e) { console.log(e); }
+
+    // 2. フィルタなしで全件取得
+    const timelineCol = collection(db, "timeline");
+    // const q = query(timelineCol, orderBy("year", "desc")); // Old sort
+    const q = query(timelineCol); // No filter
     const querySnapshot = await getDocs(q);
 
+    // ローダーを隠す
+    const currentLoader = document.getElementById("timeline-loader");
+    if (currentLoader) currentLoader.classList.add("hidden");
+
     if (querySnapshot.empty) {
-      container.innerHTML = '<p class="text-text-muted-light dark:text-text-muted-dark">経歴情報はありません。</p>';
-    } else {
-      querySnapshot.forEach(docSnap => {
-        const item = docSnap.data();
-        const itemEl = document.createElement("div");
-        itemEl.className = "relative";
-        // 既存のHTML構造を維持
-        itemEl.innerHTML = `
-          <div class="absolute -left-[41px] top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-secondary">
-              <div class="h-2 w-2 rounded-full bg-white"></div>
-          </div>
-          <p class="text-sm font-semibold text-secondary mb-1">${item.year}</p>
-          <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">${item.title}</h3>
-          <p class="text-md text-text-muted-light dark:text-text-muted-dark mb-2">${item.company}</p>
-          <p class="text-sm leading-relaxed text-text-light dark:text-text-dark">${formatText(item.description)}</p>
-      `;
-        container.appendChild(itemEl);
-      });
+      const p = document.createElement("p");
+      p.className = "text-text-muted-light dark:text-text-muted-dark";
+      p.textContent = "経歴情報はまだありません。";
+      container.appendChild(p);
+      return;
     }
+
+    // 3. データを配列に変換
+    let items = [];
+    querySnapshot.forEach((doc) => {
+      items.push({ id: doc.id, ...doc.data() });
+    });
+
+    // 4. JavaScriptで並び替え (orderがない場合は 9999 扱い＝末尾)
+    items.sort((a, b) => {
+      const orderA = parseInt(a.order) || 9999;
+      const orderB = parseInt(b.order) || 9999;
+
+      if (sortDir === 'asc') {
+        return orderA - orderB; // 昇順 (小さい順)
+      } else {
+        return orderB - orderA; // 降順 (大きい順)
+      }
+    });
+
+    // 4. 並び替えた順にループして表示 (既存のHTML生成ロジック)
+    items.forEach((data) => {
+      const item = document.createElement("div");
+      item.className = "relative pl-8 border-l-2 border-border-light dark:border-border-dark last:border-0 pb-8 last:pb-0";
+
+      // 左側のドット
+      const dot = document.createElement("div");
+      dot.className = "absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-secondary border-4 border-surface-light dark:border-surface-dark";
+      item.appendChild(dot);
+
+      // 年代
+      const year = document.createElement("span");
+      year.className = "text-sm font-bold text-primary mb-1 block";
+      year.textContent = data.year;
+      item.appendChild(year);
+
+      // タイトル
+      const title = document.createElement("h3");
+      title.className = "text-xl font-bold text-text-light dark:text-text-dark mb-1";
+      title.textContent = data.title;
+      item.appendChild(title);
+
+      // 会社名・組織名
+      if (data.company) {
+        const company = document.createElement("p");
+        company.className = "text-sm font-medium text-text-muted-light dark:text-text-muted-dark mb-2";
+        company.innerHTML = `<span class="material-symbols-outlined align-middle text-sm mr-1">business</span>${data.company}`;
+        item.appendChild(company);
+      }
+
+      // 詳細
+      const desc = document.createElement("p");
+      desc.className = "text-text-muted-light dark:text-text-muted-dark leading-relaxed whitespace-pre-wrap";
+      desc.textContent = data.description;
+      item.appendChild(desc);
+
+      container.appendChild(item);
+    });
   } catch (error) {
-    console.error("経歴の読み込みエラー:", error);
-    container.innerHTML = '<p class="text-red-500">経歴の読み込み中にエラーが発生しました。</p>';
-  } finally {
-    loader.classList.add("hidden"); // ローダーを非表示
+    console.error("Error loading timeline:", error);
+    const currentLoader = document.getElementById("timeline-loader");
+    if (currentLoader) currentLoader.classList.add("hidden");
+
+    const p = document.createElement("p");
+    p.classList.add("text-red-500");
+    p.textContent = "経歴情報の読み込みに失敗しました。";
+    container.appendChild(p);
   }
+  // --- 修正終了 ---
 }
 
 // --- 6. Firestoreからスキル・資格を読み込む (profile.html用) ---

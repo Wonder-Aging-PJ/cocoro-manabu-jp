@@ -1528,7 +1528,12 @@
             <form id="add-timeline-form" class="space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label for="timeline-year" class="block text-sm font-medium">
+  <label for="timeline-order" class="block text-sm font-medium mb-1">表示順 (Order)</label>
+  <input type="number" id="timeline-order" class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800" placeholder="例: 10">
+  <p class="text-xs text-text-muted-light mt-1">※小さい数字が先に表示されます（昇順設定時）</p>
+</div>
+<div>
+  <label for="timeline-year" class="block text-sm font-medium">
                     年代・期間 (例: 2018 - 現在)
                     <span class="text-red-500">*</span>
                   </label>
@@ -1598,7 +1603,13 @@
           </div>
           <div class="mt-12">
             <h3 class="text-xl font-bold mb-6">登録済み経歴一覧</h3>
-            <div id="timeline-list-container" class="space-y-4">
+            <div class="flex justify-end mb-4">
+  <select id="timeline-sort-order" class="rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm py-2 px-4 shadow-sm">
+    <option value="asc" selected>表示順：昇順 (1→9)</option>
+    <option value="desc">表示順：降順 (9→1)</option>
+  </select>
+</div>
+<div id="timeline-list-container" class="space-y-4">
               <div id="timeline-loader" class="flex justify-center py-8">
                 <div class="loader"></div>
               </div>
@@ -3206,7 +3217,11 @@
       <!-- 6.5 経歴編集フォーム (NEW) -->
       <div id="edit-form-template-timeline" class="space-y-6">
         <input type="hidden" id="edit-timeline-id" />
-        <div>
+        <div class="mb-4">
+  <label for="edit-timeline-order" class="block text-sm font-medium mb-1">表示順 (Order)</label>
+  <input type="number" id="edit-timeline-order" class="w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800">
+</div>
+<div>
           <label for="edit-timeline-year" class="block text-sm font-medium">年代 (Year/Duration) <span class="text-red-500">*</span></label>
           <input type="text" id="edit-timeline-year" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" />
         </div>
@@ -4076,6 +4091,7 @@
         const uploadProgressBarContact = document.getElementById("upload-progress-bar-contact");
         // --- グローバル変数 ---
         let currentVerificationId = null;
+        let timelineSortDirection = 'asc'; // Timeline sort direction
         let mfaResolver = null;
         // 追加用ファイル
         let selectedFileArticle = null;
@@ -5574,66 +5590,122 @@ function setupStaticPageSubTabs() {
         // --- 16. 経歴管理 (Timeline CRUD) ---
 
         // 1. 経歴の読み込み
+        // Timeline Sort Event Listener
+        const timelineSortSelect = document.getElementById("timeline-sort-order");
+        if (timelineSortSelect) {
+            timelineSortSelect.addEventListener("change", async (e) => {
+                timelineSortDirection = e.target.value;
+                // Save setting to DB
+                try {
+                    await setDoc(doc(db, "staticPages", "commonSettings"), {
+                        timelineSort: timelineSortDirection
+                    }, { merge: true });
+                    console.log("Sort order saved:", timelineSortDirection);
+                } catch (err) {
+                    console.error("Error saving sort order:", err);
+                }
+                loadTimeline();
+            });
+        }
+
+        // 1. 経歴の読み込み
+        // 1. 経歴の読み込み
+        // 1. 経歴の読み込み
         async function loadTimeline() {
-          const container = document.getElementById("timeline-list-container");
-          const loader = document.getElementById("timeline-loader");
-          if (!loader || !container) return;
-          loader.classList.remove("hidden");
-          container.innerHTML = "";
-          container.appendChild(loader);
+          const timelineList = document.getElementById('timeline-list-container');
+          if (!timelineList) return;
+
+          // Load sort setting from DB (Sync dropdown)
+          try {
+            const settingsSnap = await getDoc(doc(db, "staticPages", "commonSettings"));
+            if (settingsSnap.exists() && settingsSnap.data().timelineSort) {
+                timelineSortDirection = settingsSnap.data().timelineSort;
+                const sortSelect = document.getElementById('timeline-sort-order');
+                if (sortSelect) sortSelect.value = timelineSortDirection;
+            }
+          } catch(e) { console.log(e); }
+          
+          timelineList.innerHTML = '<div class="text-center py-4"><div class="loader"></div></div>';
 
           try {
-            const timelineCol = collection(db, "timeline");
-            const q = query(timelineCol, orderBy("year", "desc")); // 年代降順でソート
+            // 1. フィルタなしで全件取得（古いデータも取得するため）
+            const q = query(collection(db, "timeline")); 
             const querySnapshot = await getDocs(q);
-            loader.classList.add("hidden");
+            
+            // 2. データを配列に変換
+            let items = [];
+            querySnapshot.forEach((doc) => {
+                items.push({ docId: doc.id, ...doc.data() });
+            });
 
-            if (querySnapshot.empty) {
-              container.innerHTML = '<p class="text-center text-text-muted-light dark:text-text-muted-dark">まだ経歴項目がありません。</p>';
-              return;
+            // 3. JavaScriptで並び替え (orderがない場合は 0 扱い)
+            // グローバル変数 timelineSortDirection ('asc' or 'desc') を使用
+            // ※もし変数が未定義ならデフォルト 'asc'
+            const sortDir = (typeof timelineSortDirection !== 'undefined') ? timelineSortDirection : 'asc';
+            
+            items.sort((a, b) => {
+                const orderA = parseInt(a.order) || 0;
+                const orderB = parseInt(b.order) || 0;
+                
+                if (sortDir === 'asc') {
+                    return orderA - orderB; // 昇順 (小さい順)
+                } else {
+                    return orderB - orderA; // 降順 (大きい順)
+                }
+            });
+
+            timelineList.innerHTML = '';
+
+            if (items.length === 0) {
+                timelineList.innerHTML = '<p class="text-center text-text-muted-light dark:text-text-muted-dark py-4">経歴が登録されていません。</p>';
+                return;
             }
 
-            container.innerHTML = "";
+            // 4. 並び替えた順に表示
+            items.forEach((item) => {
+                const div = document.createElement('div');
+                div.className = 'bg-surface-light dark:bg-surface-dark p-4 rounded-lg shadow border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition-transform hover:scale-[1.01]';
+                
+                // 表示順のバッジ（確認用）
+                const orderBadge = `<span class="inline-block bg-slate-100 dark:bg-slate-700 text-slate-500 text-xs px-2 py-1 rounded mr-2">Order: ${item.order || 0}</span>`;
 
-            querySnapshot.forEach((docSnap) => {
-              const item = docSnap.data();
-              const itemId = docSnap.id;
-              const itemEl = document.createElement("div");
-              itemEl.className =
-                "flex flex-col sm:flex-row items-start gap-4 p-4 bg-background-light dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700";
-              itemEl.innerHTML = `
-                <div class="flex-grow w-full">
-                  <p class="text-sm font-bold text-primary">${item.year}</p>
-                  <h3 class="text-lg font-bold mt-1">${item.title}</h3>
-                  <p class="text-sm text-text-muted-light dark:text-text-muted-dark mb-1">${item.company}</p>
-                  <p class="text-sm text-text-light dark:text-text-dark">${item.description.substring(0, 100)}...</p>
-                </div>
-                <div class="flex flex-col sm:flex-row gap-2 flex-shrink-0">
-                  <button 
-                    data-doc-id="${itemId}" 
-                    data-collection="timeline" 
-                    data-year="${encodeURIComponent(item.year || '')}" 
-                    data-title="${encodeURIComponent(item.title || '')}" 
-                    data-company="${encodeURIComponent(item.company || '')}" 
-                    data-description="${encodeURIComponent(item.description || '')}" 
-                    class="edit-btn py-2 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center gap-1">
-                    <span class="material-symbols-outlined !text-base">edit</span>
-                    <span>修正</span>
-                  </button>
-                  <button data-doc-id="${itemId}" data-collection="timeline" data-image-path="" class="delete-btn flex-shrink-0 py-2 px-4 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors text-sm flex items-center gap-1">
-                    <span class="material-symbols-outlined !text-base">delete</span>
-                    <span>削除</span>
-                  </button>
-                </div>
-              `;
-              container.appendChild(itemEl);
+                div.innerHTML = `
+                    <div class="flex-grow">
+                        <div class="flex items-center gap-2 mb-1">
+                            ${orderBadge}
+                            <span class="text-primary font-bold text-sm">${item.year || '期間未設定'}</span>
+                            <h4 class="font-bold text-lg text-text-light dark:text-text-dark">${item.title || 'タイトルなし'}</h4>
+                        </div>
+                        <p class="text-sm text-text-muted-light dark:text-text-muted-dark font-medium">${item.company || ''}</p>
+                        <p class="text-sm text-text-muted-light dark:text-text-muted-dark mt-1 whitespace-pre-wrap line-clamp-2">${item.description || ''}</p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
+                         <button 
+                            data-doc-id="${item.docId}" 
+                            data-collection="timeline" 
+                            data-year="${encodeURIComponent(item.year || '')}" 
+                            data-title="${encodeURIComponent(item.title || '')}" 
+                            data-company="${encodeURIComponent(item.company || '')}" 
+                            data-description="${encodeURIComponent(item.description || '')}" 
+                            data-order="${item.order || 0}"
+                            class="edit-btn py-2 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center gap-1">
+                            <span class="material-symbols-outlined !text-base">edit</span>
+                            <span>修正</span>
+                        </button>
+                        <button class="delete-btn py-2 px-4 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors text-sm flex items-center gap-1" data-doc-id="${item.docId}" data-collection="timeline">
+                            <span class="material-symbols-outlined !text-base">delete</span>
+                            <span>削除</span>
+                        </button>
+                    </div>
+                `;
+                timelineList.appendChild(div);
             });
           } catch (error) {
             console.error("Error loading timeline items: ", error);
             showMessage(`経歴の読み込みエラー: ${error.message}`, "error");
-            loader.classList.add("hidden");
-            container.innerHTML = '<p class="text-center text-red-500">経歴の読み込みに失敗しました。</p>';
+            timelineList.innerHTML = '<p class="text-center text-red-500">経歴の読み込みに失敗しました。</p>';
           }
+          // --- 修正終了 ---
         }
 
         // 2. 経歴の追加フォームイベントリスナー
@@ -5648,6 +5720,7 @@ function setupStaticPageSubTabs() {
             const title = document.getElementById("timeline-title").value;
             const company = document.getElementById("timeline-company").value;
             const description = document.getElementById("timeline-description").value;
+            const order = parseInt(document.getElementById("timeline-order").value) || 0;
 
             if (submitBtn) {
               submitBtn.disabled = true;
@@ -5660,6 +5733,7 @@ function setupStaticPageSubTabs() {
                 title: title,
                 company: company,
                 description: description,
+                order: order,
                 createdAt: serverTimestamp(),
               });
               showMessage("経歴項目が正常に追加されました。");
@@ -7418,6 +7492,7 @@ function setupStaticPageSubTabs() {
                 editModalTitle.textContent = "経歴を修正";
                 template = document.getElementById("edit-form-template-timeline").cloneNode(true);
                 template.querySelector("#edit-timeline-id").value = data.docId;
+                template.querySelector("#edit-timeline-order").value = data.order || 0;
                 template.querySelector("#edit-timeline-year").value = decodeURIComponent(data.year || "");
                 template.querySelector("#edit-timeline-title").value = decodeURIComponent(data.title || "");
                 template.querySelector("#edit-timeline-company").value = decodeURIComponent(data.company || "");
@@ -7752,6 +7827,7 @@ function setupStaticPageSubTabs() {
                 case "timeline":
                   updatedData = {
                     year: document.getElementById("edit-timeline-year").value,
+                    order: parseInt(document.getElementById("edit-timeline-order").value) || 0,
                     title: document.getElementById("edit-timeline-title").value,
                     company: document.getElementById("edit-timeline-company").value,
                     description: document.getElementById("edit-timeline-description").value,
