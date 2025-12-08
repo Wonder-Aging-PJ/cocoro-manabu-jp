@@ -13,6 +13,7 @@ import {
   orderBy,
   where
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
 
 
@@ -20,6 +21,7 @@ import {
 // ★ NEW: グローバルにアクセス可能にするため、windowに紐づける
 window.app = initializeApp(firebaseConfig);
 window.db = getFirestore(window.app);
+window.storage = getStorage(window.app);
 // 認証機能もグローバル化（admin.htmlが使用するため）
 window.auth = getAuth(window.app);
 
@@ -71,6 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ★ NEW: profile.html のパーソナル情報読み込み (Phase 10-1)
   if (document.getElementById('personal-container')) {
     loadPublicPersonalInfo();
+  }
+  // ★ NEW: profile.html のパーソナル情報読み込み (単一ドキュメント版)
+  if (document.getElementById('personal-section-content')) {
+    loadPersonalData();
   }
 
   // ★ NEW: Phase 8-8 index.html のトップ書籍を読み込む
@@ -332,15 +338,26 @@ async function loadCategoriesToSelect() {
 
   try {
     const categoriesCol = collection(db, 'blogCategories');
-    // カテゴリー名 (name) でソート
-    const q = query(categoriesCol, orderBy('name', 'asc'));
+    // フィルタなしで全件取得
+    const q = query(categoriesCol);
     const querySnapshot = await getDocs(q);
+
+    let categories = [];
+    querySnapshot.forEach((docSnap) => {
+      categories.push({ id: docSnap.id, ...docSnap.data() });
+    });
+
+    // ★追加: 表示順 (order) の昇順に並び替え
+    categories.sort((a, b) => {
+      const orderA = (a.order !== undefined) ? a.order : 9999; // 未設定は後ろへ
+      const orderB = (b.order !== undefined) ? b.order : 9999;
+      return orderA - orderB;
+    });
 
     // 既存の「カテゴリー選択」オプションを残し、それ以外をクリア
     select.innerHTML = '<option value="">カテゴリー選択</option>';
 
-    querySnapshot.forEach((docSnap) => {
-      const category = docSnap.data();
+    categories.forEach((category) => {
       const option = document.createElement('option');
       option.value = category.name;
       option.textContent = category.name;
@@ -1460,37 +1477,120 @@ function setupInfoPageLogic() {
 /**
  * Firestore (personalInfo) からパーソナル情報を読み込み、profile.htmlに挿入
  */
-async function loadPublicPersonalInfo() {
-  const container = document.getElementById('personal-container');
+
+
+
+
+/**
+ * ★ パーソナル情報読み込み (Profile: Personal)
+ * Firestore (staticPages/personal) から単一のドキュメントを取得して表示する。
+ * データがない場合は何も表示しない。
+ */
+async function loadPersonalData() {
+  const container = document.getElementById('personal-section-content') || document.getElementById('personal-container');
   if (!container) return;
 
-  container.innerHTML = '<p class="text-center text-text-muted-light dark:text-text-muted-dark">情報を読み込み中...</p>';
-
   try {
-    const infoCol = collection(db, 'personalInfo');
-    const q = query(infoCol, orderBy('order', 'asc'));
+    container.innerHTML = `
+      <div class="flex justify-start py-4">
+        <div class="loader h-6 w-6 border-t-primary border-primary/20"></div>
+        <p class="ml-3 text-sm text-text-muted-light">パーソナル情報を読み込み中...</p>
+      </div>`;
+
+    const personalCol = collection(db, "personal");
+    // Sort by updatedAt desc, or any other order if specified
+    const q = query(personalCol, orderBy("updatedAt", "desc"));
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
-      container.innerHTML = '<p class="text-text-muted-light dark:text-text-muted-dark">パーソナル情報はありません。</p>';
+      container.innerHTML = '';
+      container.classList.add('hidden');
       return;
     }
 
-    let html = '';
-    querySnapshot.forEach(docSnap => {
-      const item = docSnap.data();
-      html += `
-        <div class="border-b border-slate-200 dark:border-slate-700 py-4">
-          <p class="font-bold text-lg">${item.title || ''}</p>
-          <p class="text-text-muted-light dark:text-text-muted-dark mt-2">${formatText(item.description || '')}</p>
+    container.classList.remove('hidden');
+    container.innerHTML = '';
+
+    // Header Injection
+    const header = document.createElement('h2');
+    header.className = 'text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-100 mb-8';
+    header.textContent = 'パーソナル';
+    container.appendChild(header);
+
+    // Create Accordion List Wrapper
+    const accordionList = document.createElement('div');
+    accordionList.className = 'accordion-list space-y-4';
+
+    let visibleCount = 0;
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+
+      // Skip if explicitly set to false (undefined defaults to true)
+      if (data.isVisible === false) return;
+
+      visibleCount++;
+      const accordionItem = document.createElement('div');
+      accordionItem.className = 'accordion-item bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden';
+
+      const iconName = data.icon || 'person';
+
+      accordionItem.innerHTML = `
+        <div class="accordion-header p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+          <div class="flex items-center gap-3">
+             <span class="material-symbols-outlined text-primary">${iconName}</span>
+             <span class="title font-bold text-text-light dark:text-text-dark text-lg">${data.title || '詳細'}</span>
+          </div>
+          <span class="toggle-icon material-symbols-outlined text-text-muted-light">expand_more</span>
+        </div>
+
+        <div class="accordion-body border-t border-slate-100 dark:border-slate-700 p-6">
+          <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+             <!-- Image: Left, Circle, Fixed Size -->
+             ${data.imageUrl ?
+          `<img src="${data.imageUrl}" class="w-24 h-24 rounded-full object-cover border border-slate-200 shadow-sm flex-shrink-0" alt="${data.title || 'Personal Image'}">` :
+          `<div class="w-24 h-24 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center border border-slate-200 shadow-sm flex-shrink-0">
+                  <span class="material-symbols-outlined text-4xl text-primary">${data.icon || 'person'}</span>
+                </div>`
+        }
+
+             <!-- Text: Right -->
+             <div class="flex-1 w-full">
+               <h3 class="text-xl font-bold mb-3 text-text-light dark:text-text-dark border-b border-dashed border-slate-200 dark:border-slate-700 pb-2 inline-block">
+                   ${data.title || '詳細'}
+               </h3>
+               <div class="prose dark:prose-invert text-text-muted-light dark:text-text-muted-dark whitespace-pre-wrap leading-relaxed max-w-none">
+                 ${data.content || ''}
+               </div>
+             </div>
+          </div>
         </div>
       `;
+
+      // Event Listener for Toggle
+      const header = accordionItem.querySelector('.accordion-header');
+      if (header) {
+        header.addEventListener('click', (e) => {
+          const item = e.currentTarget.closest('.accordion-item');
+          if (item) item.classList.toggle('active');
+        });
+      }
+
+      accordionList.appendChild(accordionItem);
     });
-    container.innerHTML = html;
+
+    if (visibleCount === 0) {
+      container.innerHTML = '';
+      container.classList.add('hidden');
+      return;
+    }
+
+    container.appendChild(accordionList);
 
   } catch (error) {
-    console.error("パーソナル情報の読み込みエラー:", error);
-    container.innerHTML = '<p class="text-red-500">情報の読み込み中にエラーが発生しました。</p>';
+    console.error("Error loading personal data:", error);
+    container.innerHTML = '';
+    container.classList.add('hidden');
   }
 }
 
@@ -1525,7 +1625,7 @@ async function renderFixedPageContent(pageName) {
         const height = block.height || 'h-8';
 
         // alignはFlexコンテナで制御するため、div自体には適用しない。mx-autoは中央寄せの際の補助
-        html += `<div class="${width} ${height} mx-auto"></div>`;
+        html += `< div class="${width} ${height} mx-auto" ></div > `;
 
       } else if (block.type === 'contactInfo' && block.itemId) { // itemIdは、それが参照している contactInfo のドキュメントID
         // [B] お問い合わせ情報ブロックの場合
@@ -1540,9 +1640,9 @@ async function renderFixedPageContent(pageName) {
 
           let iconHtml = '';
           if (item.customIconUrl) {
-            iconHtml = `<img src="${item.customIconUrl}" alt="${item.title}" class="w-8 h-8 object-contain mt-1">`;
+            iconHtml = `< img src = "${item.customIconUrl}" alt = "${item.title}" class="w-8 h-8 object-contain mt-1" > `;
           } else {
-            iconHtml = `<span class="material-symbols-outlined text-2xl text-primary mt-1">${item.icon || 'info'}</span>`;
+            iconHtml = `< span class="material-symbols-outlined text-2xl text-primary mt-1" > ${item.icon || 'info'}</span > `;
           }
 
           // item.descriptionにformatTextを適用
@@ -1550,25 +1650,25 @@ async function renderFixedPageContent(pageName) {
 
           // 描画される要素
           html += `
-            <div class="${width} flex ${alignClass}">
-              <div class="flex items-start gap-3 p-4 bg-surface-light dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-md">
-                <div class="flex-shrink-0">${iconHtml}</div>
-                <div class="flex-1">
-                  <p class="font-bold text-base text-text-light dark:text-text-dark">${item.title || ''}</p>
-                  <p class="text-sm text-text-muted-light dark:text-text-muted-dark whitespace-pre-wrap">${formattedDescription}</p>
-                </div>
-              </div>
+        < div class="${width} flex ${alignClass}" >
+          <div class="flex items-start gap-3 p-4 bg-surface-light dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-md">
+            <div class="flex-shrink-0">${iconHtml}</div>
+            <div class="flex-1">
+              <p class="font-bold text-base text-text-light dark:text-text-dark">${item.title || ''}</p>
+              <p class="text-sm text-text-muted-light dark:text-text-muted-dark whitespace-pre-wrap">${formattedDescription}</p>
             </div>
-          `;
+          </div>
+            </div >
+        `;
         }
       }
     }
 
     // 3. 全体をFlexコンテナで囲んで挿入
-    container.innerHTML = `<div class="flex flex-wrap gap-4">${html}</div>`;
+    container.innerHTML = `< div class="flex flex-wrap gap-4" > ${html}</div > `;
 
   } catch (error) {
-    console.error(`固定ページコンテンツ(${pageName})の読み込みエラー:`, error);
+    console.error(`固定ページコンテンツ(${pageName})の読み込みエラー: `, error);
     container.innerHTML = '<p class="text-red-500">情報の読み込み中にエラーが発生しました。</p>';
   }
 }
@@ -1619,7 +1719,7 @@ async function loadTopBooks() {
       const btnText = book.buttonText || "詳細を見る";
 
       bookEl.innerHTML = `
-        <div class="w-48 md:w-56 flex-shrink-0">
+        < div class="w-48 md:w-56 flex-shrink-0" >
           <img alt="Book cover of ${book.title}" class="rounded-lg shadow-xl w-full h-auto object-cover aspect-[3/4]" src="${book.imageUrl}" onerror="this.src='https://placehold.co/300x400/cccccc/ffffff?text=Image+Not+Found'; this.onerror=null;">
         </div>
         <div class="flex flex-col gap-4 text-center md:text-left">
@@ -1659,14 +1759,14 @@ async function loadProfileCta() {
 
       if (ctaData.visible === true) {
         const ctaHtml = `
-          <div class="cta-block p-8 bg-blue-100 dark:bg-blue-900/50 rounded-xl text-center">
+        < div class="cta-block p-8 bg-blue-100 dark:bg-blue-900/50 rounded-xl text-center" >
               <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">${ctaData.mainText || ''}</h3>
               <p class="text-text-muted-light dark:text-text-muted-dark mb-6">${ctaData.subText || ''}</p>
               <a href="${ctaData.buttonUrl || '#'}" role="button" class="inline-flex items-center justify-center gap-2 py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity">
                   <span class="truncate">${ctaData.buttonText || '詳細を見る'}</span>
                   <span class="material-symbols-outlined ml-1 text-base">arrow_forward</span>
               </a>
-          </div>
+          </div >
         `;
         ctaContainer.innerHTML = ctaHtml;
       } else {
@@ -1678,6 +1778,10 @@ async function loadProfileCta() {
     ctaContainer.innerHTML = '<p class="text-sm text-red-500">CTA読込失敗</p>';
   }
 }
+
+/**
+ * Firestore (contactInfo) からお問い合わせ情報を読み込み、profile.htmlに挿入
+ */
 
 /**
  * Firestore (contactInfo) からお問い合わせ情報を読み込み、profile.htmlに挿入
@@ -1725,6 +1829,162 @@ async function loadPublicContactInfo() {
 }
 
 /**
+ * 有効な「お問い合わせセット」を読み込み、profile.htmlに表示する
+ */
+async function loadActiveContactSet() {
+  const container = document.getElementById('contact-set-container');
+  if (!container) return;
+
+  try {
+    const settingsDoc = await getDoc(doc(db, "staticPages", "commonSettings"));
+    if (!settingsDoc.exists() || !settingsDoc.data().activeContactSetId) {
+      container.innerHTML = '';
+      return;
+    }
+    const activeSetId = settingsDoc.data().activeContactSetId;
+
+    const setDoc = await getDoc(doc(db, "contactSets", activeSetId));
+    if (!setDoc.exists()) {
+      container.innerHTML = '';
+      return;
+    }
+    const setData = setDoc.data();
+
+    // Check if there is anything to display (CTA or Items)
+    const hasCta = setData.cta && setData.cta.visible;
+    const hasItems = setData.items && setData.items.length > 0 && setData.items.some(item => item.visible !== false);
+
+    if (!hasCta && !hasItems) {
+      container.innerHTML = '';
+      return;
+    }
+
+    let html = '<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">';
+
+    // Header Injection
+    html += '<h2 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-100 mb-8">お問合わせ</h2>';
+
+    // CTAブロック
+    if (hasCta) {
+      const ctaAlign = setData.cta.align || 'text-center';
+      html += `
+        <div class="cta-block p-8 bg-blue-50 dark:bg-slate-800 rounded-xl border border-blue-100 dark:border-slate-700 ${ctaAlign}">
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">${setData.cta.mainText || ''}</h3>
+            <p class="text-base text-text-muted-light dark:text-text-muted-dark mb-6">${setData.cta.subText || ''}</p>
+            <a href="${setData.cta.buttonUrl || '#'}" class="inline-flex items-center justify-center gap-2 py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity">
+                <span>${setData.cta.buttonText || '詳細を見る'}</span>
+                <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </a>
+        </div>
+      `;
+    }
+
+    // アイコンリスト
+    if (setData.items && setData.items.length > 0) {
+      const columns = setData.itemsColumns || '2';
+      let gridClass = 'grid grid-cols-1 gap-6';
+      if (columns === '2') gridClass = 'grid grid-cols-1 md:grid-cols-2 gap-6';
+      if (columns === '3') gridClass = 'grid grid-cols-1 md:grid-cols-3 gap-6';
+
+      html += `<div class="${gridClass}">`;
+      setData.items.forEach(item => {
+        if (item.visible !== false) {
+          const pos = setData.itemsIconPosition || 'flex-row';
+          const align = setData.itemsAlign || 'text-left';
+          let layoutClass = '';
+
+          if (pos === 'flex-col') {
+            if (align === 'text-center') layoutClass = 'flex-col items-center text-center';
+            else if (align === 'text-right') layoutClass = 'flex-col items-end text-right';
+            else layoutClass = 'flex-col items-start text-left';
+          } else {
+            if (align === 'text-center') layoutClass = 'flex-row items-center justify-center text-center';
+            else if (align === 'text-right') layoutClass = 'flex-row items-center justify-end text-right';
+            else layoutClass = 'flex-row items-center justify-start text-left';
+          }
+
+          // Determine Contact Type (default to 'text' if missing)
+          const contactType = item.contactType || 'text';
+          const labelText = item.labelText || item.description || '';
+          const linkValue = item.linkValue || item.description || '';
+          const title = item.title || '';
+
+          if (contactType === 'button') {
+            // Pattern B: Button (Centered Layout)
+            let href = linkValue.trim();
+            let targetAttr = '';
+
+            const isPhone = /^[\d-]+$/.test(href);
+            const isEmail = href.includes('@') && !href.startsWith('http');
+
+            if (isPhone) {
+              href = `tel:${href}`;
+            } else if (isEmail) {
+              if (!href.startsWith('mailto:')) href = `mailto:${href}`;
+            } else {
+              if (!href.startsWith('http') && !href.startsWith('//')) {
+                // href = `https://${href}`; // Optional auto-fix for URL
+              }
+              targetAttr = 'target="_blank" rel="noopener noreferrer"';
+            }
+
+            // Icon for Button Mode (Smaller, matching text)
+            const btnIconHtml = item.image ?
+              `<img src="${item.image}" class="w-6 h-6 object-contain">` :
+              `<span class="material-symbols-outlined text-xl text-primary">${item.icon || 'info'}</span>`;
+
+            html += `
+                <div class="flex flex-col items-center justify-center p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm gap-4 ${layoutClass}">
+                   <div class="flex items-center justify-center gap-2">
+                       ${btnIconHtml}
+                       <h4 class="text-lg font-bold text-gray-800 dark:text-gray-100">${title}</h4>
+                   </div>
+                   <a href="${href}" ${targetAttr} class="inline-flex items-center justify-center gap-2 py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity w-full sm:w-auto shadow-sm">
+                       <span>${labelText}</span>
+                       <span class="material-symbols-outlined text-sm">open_in_new</span>
+                   </a>
+                </div>
+              `;
+          } else {
+            // Pattern A: Text (Side-by-Side Layout)
+            let displayLink = linkValue;
+            if (linkValue.includes('@') && !linkValue.startsWith('mailto:')) {
+              displayLink = `<a href="mailto:${linkValue}" class="text-primary hover:underline">${linkValue}</a>`;
+            } else if (linkValue.startsWith('http')) {
+              displayLink = `<a href="${linkValue}" target="_blank" class="text-primary hover:underline">${linkValue}</a>`;
+            }
+
+            // Icon for Text Mode (Larger)
+            const txtIconHtml = item.image ?
+              `<img src="${item.image}" class="w-8 h-8 object-contain">` :
+              `<span class="material-symbols-outlined text-3xl text-primary">${item.icon || 'info'}</span>`;
+
+            html += `
+                <div class="flex gap-6 p-8 rounded-2xl bg-blue-50 dark:bg-slate-800 border border-blue-100 dark:border-slate-700 shadow-sm ${layoutClass}">
+                   <div class="flex-shrink-0">${txtIconHtml}</div>
+                   <div class="flex-grow">
+                        ${title ? `<h4 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-1">${title}</h4>` : ''}
+                        <p class="text-base font-medium text-gray-800 dark:text-gray-100 mb-1">${labelText}</p>
+                        ${linkValue !== labelText ? `<p class="text-sm text-gray-500 dark:text-gray-400 font-mono">${displayLink}</p>` : ''}
+                   </div>
+                </div>
+              `;
+          }
+        }
+      });
+      html += `</div>`;
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+
+  } catch (error) {
+    console.error("お問い合わせセットの読み込みエラー:", error);
+    container.innerHTML = '<p class="text-red-500">情報の読み込みに失敗しました。</p>';
+  }
+}
+
+/**
  * テキスト内のURL、電話番号、改行をHTMLタグに変換する共通関数
  * @param {string} text - 変換元のテキスト
  * @return {string} - 変換後のHTML文字列
@@ -1744,100 +2004,7 @@ function formatText(text) {
   return formatted;
 }
 
-/**
- * 有効な「お問い合わせセット」を読み込み、profile.htmlに表示する
- */
-async function loadActiveContactSet() {
-  const container = document.getElementById('contact-set-container');
-  if (!container) return;
 
-  try {
-    // 1. 有効なセットIDを取得
-    const settingsDoc = await getDoc(doc(db, "staticPages", "commonSettings"));
-    if (!settingsDoc.exists() || !settingsDoc.data().activeContactSetId) {
-      container.innerHTML = ''; // 有効なセットがなければ非表示
-      return;
-    }
-    const activeSetId = settingsDoc.data().activeContactSetId;
-
-    // 2. セットの詳細データを取得
-    const setDoc = await getDoc(doc(db, "contactSets", activeSetId));
-    if (!setDoc.exists()) {
-      container.innerHTML = '';
-      return;
-    }
-    const setData = setDoc.data();
-
-    // 3. HTML生成 (Tailwind CSS)
-    let html = '<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">';
-
-    // 3-1. CTAブロック
-    if (setData.cta && setData.cta.visible) {
-      const ctaAlign = setData.cta.align || 'text-center';
-      html += `
-        <div class="cta-block p-8 bg-blue-50 dark:bg-slate-800 rounded-xl border border-blue-100 dark:border-slate-700 ${ctaAlign}">
-            <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">${setData.cta.mainText || ''}</h3>
-            <p class="text-base text-text-muted-light dark:text-text-muted-dark mb-6">${setData.cta.subText || ''}</p>
-            <a href="${setData.cta.buttonUrl || '#'}" class="inline-flex items-center justify-center gap-2 py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity">
-                <span>${setData.cta.buttonText || '詳細を見る'}</span>
-                <span class="material-symbols-outlined text-base">arrow_forward</span>
-            </a>
-        </div>
-      `;
-    }
-
-    // 3-2. アイコンリスト
-    if (setData.items && setData.items.length > 0) {
-      // クラスの動的生成
-      const columns = setData.itemsColumns || '2';
-      let gridClass = 'grid grid-cols-1 gap-6';
-      if (columns === '2') gridClass = 'grid grid-cols-1 md:grid-cols-2 gap-6';
-      if (columns === '3') gridClass = 'grid grid-cols-1 md:grid-cols-3 gap-6';
-
-      html += `<div class="${gridClass}">`;
-      setData.items.forEach(item => {
-        if (item.visible !== false) { // visibleがfalseでなければ表示
-          // レイアウト設定の取得
-          const pos = setData.itemsIconPosition || 'flex-row';
-          const align = setData.itemsAlign || 'text-left';
-          let layoutClass = '';
-
-          if (pos === 'flex-col') {
-            if (align === 'text-center') layoutClass = 'flex-col items-center text-center';
-            else if (align === 'text-right') layoutClass = 'flex-col items-end text-right';
-            else layoutClass = 'flex-col items-start text-left';
-          } else { // flex-row
-            if (align === 'text-center') layoutClass = 'flex-row items-center justify-center text-center';
-            else if (align === 'text-right') layoutClass = 'flex-row items-center justify-end text-right';
-            else layoutClass = 'flex-row items-center justify-start text-left';
-          }
-
-          let iconHtml = item.image ?
-            `<img src="${item.image}" class="w-8 h-8 object-contain">` :
-            `<span class="material-symbols-outlined text-3xl text-primary">${item.icon || 'info'}</span>`;
-
-          html += `
-                <div class="flex gap-6 p-8 rounded-2xl bg-blue-50 dark:bg-slate-800 border border-blue-100 dark:border-slate-700 shadow-sm ${layoutClass}">
-                   <div class="flex-shrink-0">${iconHtml}</div>
-                   <div>
-                      <h4 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">${item.title}</h4>
-                      <p class="text-base text-gray-600 dark:text-gray-400">${formatText(item.description)}</p>
-                   </div>
-                </div>
-             `;
-        }
-      });
-      html += `</div>`;
-    }
-
-    html += '</div>'; // ★ ラッパー終了
-    container.innerHTML = html;
-
-  } catch (error) {
-    console.error("お問い合わせセットの読み込みエラー:", error);
-    container.innerHTML = '<p class="text-red-500">情報の読み込みに失敗しました。</p>';
-  }
-}
 
 /**
  * ページ内のカスタムHTML部品用コンテナを検出し、コンテンツをロードする
@@ -1863,7 +2030,7 @@ export async function loadCustomHtmlParts() {
         // HTMLを挿入 (Tailwindのスタイルも適用される)
         container.innerHTML = data.htmlContent || '';
       } else {
-        console.warn(`Custom part not found: ${partId}`);
+        console.warn(`Custom part not found: ${partId} `);
       }
     }
   } catch (error) {
@@ -2018,3 +2185,28 @@ async function loadNavAlignSettings() {
     console.error("ナビゲーション配置設定の読み込みエラー:", error);
   }
 }
+
+// --- ★ 画像アップロード機能 (共通化) ★ ---
+window.uploadImage = async function (file, folderName) {
+  if (!file) return null;
+  try {
+    // ファイル名をユニークにする (timestamp_filename)
+    const fileName = `${Date.now()}_${file.name}`;
+    // フォルダ名/ファイル名 のパスを作成
+    const storagePath = `${folderName}/${fileName}`;
+
+    // 正しい storage インスタンスを使って参照を作成
+    const storageRef = ref(window.storage, storagePath);
+
+    // アップロード実行
+    const uploadTask = await uploadBytesResumable(storageRef, file);
+
+    // ダウンロードURLを取得して返す
+    const downloadURL = await getDownloadURL(uploadTask.ref);
+    console.log("Upload successful:", downloadURL);
+    return downloadURL;
+  } catch (error) {
+    console.error("Upload failed:", error);
+    throw error;
+  }
+};

@@ -14,6 +14,29 @@
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
+    
+    /* Accordion Styles for Personal Section */
+    .accordion-item .accordion-body {
+      display: none; /* 初期状態は非表示 */
+    }
+    .accordion-item.active .accordion-body {
+      display: block; /* activeクラスがついたら表示 */
+      animation: slideDown 0.3s ease-in-out;
+    }
+    .accordion-header {
+      cursor: pointer;
+      user-select: none;
+    }
+    .accordion-header .toggle-icon {
+      transition: transform 0.3s ease;
+    }
+    .accordion-item.active .toggle-icon {
+      transform: rotate(180deg);
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
   <script id="tailwind-config">
     tailwind.config = {
@@ -116,8 +139,11 @@
               <p class="text-sm font-bold">スキル・資格</p>
             </a>
             <a class="flex flex-col items-center justify-center whitespace-nowrap border-b-2 border-b-transparent text-text-muted-light dark:text-text-muted-dark hover:text-primary dark:hover:text-white pb-3 pt-3 transition-colors" href="#personal">
-              <p class="text-sm font-bold">パーソナル</p>
-            </a>
+  <p class="text-sm font-bold">パーソナル</p>
+</a>
+<a class="flex flex-col items-center justify-center whitespace-nowrap border-b-2 border-b-transparent text-text-muted-light dark:text-text-muted-dark hover:text-primary dark:hover:text-white pb-3 pt-3 transition-colors" href="#contact-set-container">
+  <p class="text-sm font-bold">お問い合わせ</p>
+</a>
           </div>
         </div>
         
@@ -145,37 +171,17 @@
         
         <!-- Personal Information Section (日本語化) -->
         <section class="scroll-mt-24" id="personal">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-100 mb-8">パーソナル</h2>
-          <div class="space-y-4">
-            <!-- Accordion 1 -->
-            <details class="group bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-lg p-4 cursor-pointer">
-              <summary class="flex items-center justify-between font-bold text-gray-800 dark:text-gray-100">
-                趣味・関心
-                <span class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180">expand_more</span>
-              </summary>
-              <p class="mt-3 text-sm leading-relaxed text-text-light dark:text-text-dark">週末はコーヒーを淹れながらジャズを聴くのが好きです。最近はフィルムカメラでの写真撮影に夢中で、都市の風景や自然の光を捉えることに喜びを感じています。年に数回は山に登り、リフレッシュしています。</p>
-            </details>
-            <!-- Accordion 2 -->
-            <details class="group bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-lg p-4 cursor-pointer">
-              <summary class="flex items-center justify-between font-bold text-gray-800 dark:text-gray-100">
-                好きな本・ポッドキャスト
-                <span class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180">expand_more</span>
-              </summary>
-              <p class="mt-3 text-sm leading-relaxed text-text-light dark:text-text-dark">愛読書は『Factfulness』で、データに基づいた思考の重要性を学びました。ポッドキャストは「Rebuild.fm」をよく聴き、技術トレンドや開発文化にアンテナを張っています。</p>
-            </details>
-            <!-- Accordion 3 -->
-            <details class="group bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark rounded-lg p-4 cursor-pointer">
-              <summary class="flex items-center justify-between font-bold text-gray-800 dark:text-gray-100">
-                私のモットー
-                <span class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180">expand_more</span>
-              </summary>
-              <p class="mt-3 text-sm leading-relaxed text-text-light dark:text-text-dark">"Done is better than perfect." 完璧を求めすぎるのではなく、まずは形にしてフィードバックを得ることを大切にしています。このアジャイルな考え方が、仕事でもプライベートでも私の行動指針です。</p>
-            </details>
+          <div id="personal-section-content" class="mt-8">
+            <div class="flex justify-start py-4">
+              <div class="loader h-6 w-6 border-t-primary border-primary/20"></div>
+              <p class="ml-3 text-sm text-text-muted-light">パーソナル情報を読み込み中...</p>
+            </div>
           </div>
         </section>
+        
+        <div id="contact-set-container" class="mt-16 mb-16"></div>
       </div>
     </main>
-    <div id="contact-set-container" class="mt-16 mb-16"></div>
     <nav id="bottom-nav" class="hidden fixed bottom-0 left-0 w-full z-40 bg-surface-light dark:bg-background-dark/80 border-t border-slate-200 dark:border-slate-800">
       <div id="bottom-nav-container" class="flex justify-around max-w-lg mx-auto">
         </div>

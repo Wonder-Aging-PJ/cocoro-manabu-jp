@@ -9,6 +9,25 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
       rel="stylesheet"
     />
+    <style>
+      /* アコーディオン用CSS */
+      .accordion-item .accordion-body {
+        display: none; /* 初期状態は非表示 */
+      }
+      .accordion-item.active .accordion-body {
+        display: block; /* activeクラスがついたら表示 */
+      }
+      .accordion-header {
+        cursor: pointer;
+        user-select: none;
+      }
+      .accordion-header .toggle-icon {
+        transition: transform 0.3s ease;
+      }
+      .accordion-item.active .toggle-icon {
+        transform: rotate(180deg);
+      }
+    </style>
     <script>
       // サイトの共通Tailwind設定
       tailwind.config = {
@@ -1582,20 +1601,12 @@
                   placeholder="具体的な業務内容や成果を記述..."
                 ></textarea>
               </div>
-              <div>
-                <button
-                  type="button"
-                  id="preview-timeline-btn"
-                  class="w-full sm:w-auto py-3 px-8 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mb-4 sm:mb-0 sm:mr-4"
-                >
+              <div class="flex flex-col sm:flex-row items-center gap-4 mt-4">
+                <button type="button" id="preview-timeline-btn" class="w-full sm:w-auto py-3 px-8 bg-gray-600 text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
                   <span class="material-symbols-outlined">visibility</span> <span>プレビュー</span>
                 </button>
-                <button
-                  type="submit"
-                  id="submit-timeline-btn"
-                  class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-                >
-                  <span class="material-symbols-outlined">add</span>
+                <button type="submit" id="submit-timeline-btn" class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined">add_circle</span>
                   <span>経歴項目を追加する</span>
                 </button>
               </div>
@@ -1717,24 +1728,30 @@
                 <input type="text" id="personal-title" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" />
               </div>
               <div>
-                <label for="personal-description" class="block text-sm font-medium">内容・詳細<span class="text-red-500">*</span></label>
-                <textarea id="personal-description" rows="3" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" placeholder="詳細を入力..."></textarea>
+                <label for="personal-content" class="block text-sm font-medium">内容・詳細<span class="text-red-500">*</span></label>
+                <textarea id="personal-content" rows="3" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" placeholder="詳細を入力..."></textarea>
               </div>
               <div>
-                <label for="personal-order" class="block text-sm font-medium">表示順 (数値)<span class="text-red-500">*</span></label>
-                <input type="number" id="personal-order" value="10" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" />
+                <label for="personal-icon" class="block text-sm font-medium">アイコン (Material Symbols) <a href="https://fonts.google.com/icons" target="_blank" class="text-primary text-xs underline">アイコン一覧</a></label>
+                <input type="text" id="personal-icon" placeholder="例: person, favorite" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" />
               </div>
+               <div>
+                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">画像</label>
+                <input type="file" id="personal-image" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:opacity-90 cursor-pointer">
+                <img id="image-preview-personal" class="mt-2 h-32 w-auto object-cover rounded hidden border border-gray-300">
+              </div>
+              <!-- Order field removed as it is not used in single doc logic -->
               <div>
                 <button type="submit" id="submit-personal-btn" class="w-full sm:w-auto py-3 px-8 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined">add</span>
-                  <span>パーソナル情報を追加</span>
+                  <span class="material-symbols-outlined">add_circle</span>
+                  <span>情報を保存する</span>
                 </button>
               </div>
             </form>
           </div>
           <div class="mt-12">
-            <h3 class="text-xl font-bold mb-6">登録済みパーソナル情報一覧</h3>
-            <div id="personal-list-container" class="space-y-4">
+            <h2 class="text-2xl font-bold mb-6">登録済みパーソナル情報一覧</h2>
+            <div id="personal-list" class="space-y-4">
               <div id="personal-loader" class="flex justify-center py-8"><div class="loader"></div></div>
             </div>
           </div>
@@ -3424,13 +3441,19 @@
           <input type="text" id="edit-personal-title" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" />
         </div>
         <div>
-          <label for="edit-personal-description" class="block text-sm font-medium">内容・詳細<span class="text-red-500">*</span></label>
-          <textarea id="edit-personal-description" rows="3" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary"></textarea>
+          <label for="edit-personal-content" class="block text-sm font-medium">内容・詳細<span class="text-red-500">*</span></label>
+          <textarea id="edit-personal-content" rows="3" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary"></textarea>
         </div>
         <div>
-          <label for="edit-personal-order" class="block text-sm font-medium">表示順 (数値)<span class="text-red-500">*</span></label>
-          <input type="number" id="edit-personal-order" required class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" />
+            <label for="edit-personal-icon" class="block text-sm font-medium">アイコン (Material Symbols)</label>
+            <input type="text" id="edit-personal-icon" class="mt-1 block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800 shadow-sm focus:border-primary focus:ring-primary" placeholder="例: person" />
         </div>
+        <div>
+            <label for="edit-personal-image" class="block text-sm font-medium">画像 (アイコンの代わり)</label>
+            <input type="file" id="edit-personal-image" accept="image/*" class="mt-1 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 dark:file:bg-primary/20 dark:file:text-primary dark:hover:file:bg-primary/30" />
+            <img id="edit-image-preview-personal" src="" alt="Preivew" class="hidden mt-4 w-24 h-24 rounded-full object-cover shadow-md" />
+        </div>
+        <!-- Order field removed -->
       </div>
       <div id="edit-form-template-contactInfo" class="space-y-6">
         <input type="hidden" id="edit-contact-id" />
@@ -4340,36 +4363,7 @@
         }
 
         // --- ★ 汎用アップロード関数 (NEW) ★ ---
-        async function uploadImage(storageRef, file, progressBar) {
-          return new Promise((resolve, reject) => {
-            const uploadTask = uploadBytesResumable(storageRef, file);
-            uploadTask.on(
-              "state_changed",
-              (snapshot) => {
-                if (progressBar) {
-                  const progress =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  progressBar.style.width = progress + "%";
-                }
-              },
-              (error) => {
-                console.error("Upload Error:", error);
-                reject(new Error(`画像アップロード失敗: ${error.message}`));
-              },
-              async () => {
-                try {
-                  const downloadURL = await getDownloadURL(
-                    uploadTask.snapshot.ref
-                  );
-                  resolve(downloadURL);
-                } catch (getUrlError) {
-                  console.error("Get URL Error:", getUrlError);
-                  reject(new Error(`画像URL取得失敗: ${getUrlError.message}`));
-                }
-              }
-            );
-          });
-        }
+
 
         // --- 2. タブ切り替えロジック ---
         if (tabsContainer) {
@@ -5909,105 +5903,350 @@ function setupStaticPageSubTabs() {
         // 5. ★ 修正用画像プレビュー (NEW)
         // --- 18. パーソナル情報管理 (PersonalInfo CRUD) ---
 
-        // 1. パーソナル情報の読み込み
-        async function loadPersonalInfo() {
-          if (!personalLoader || !personalListContainer) return;
-          personalLoader.classList.remove("hidden");
-          personalListContainer.innerHTML = "";
-          personalListContainer.appendChild(personalLoader);
+// --- パーソナル情報を保存 (新規・更新兼用) ---
+async function savePersonalInfo(e) {
+  e.preventDefault();
+  const submitBtn = document.getElementById('submit-personal-btn');
+  if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="loader"></div> 保存中...';
+  }
 
-          try {
-            const personalCol = collection(db, "personalInfo");
-            const q = query(personalCol, orderBy("order", "asc"));
-            const querySnapshot = await getDocs(q);
-            personalLoader.classList.add("hidden");
+  try {
+    const title = document.getElementById('personal-title').value;
+    const content = document.getElementById('personal-content').value;
+    const icon = document.getElementById('personal-icon').value; // アイコン取得
+    const fileInput = document.getElementById('personal-image');
+    
+    // 画像アップロード処理
+    let imageUrl = '';
+    if (fileInput && fileInput.files[0]) {
+      const file = fileInput.files[0];
+      if (typeof uploadImage === 'function') {
+          imageUrl = await uploadImage(file, 'personal');
+      } else {
+          console.warn("uploadImage function not found."); 
+      }
+    }
 
-            if (querySnapshot.empty) {
-              personalListContainer.innerHTML = '<p class="text-center text-text-muted-light dark:text-text-muted-dark">まだパーソナル情報がありません。</p>';
-              return;
-            }
+    const data = {
+      title: title || '',
+      content: content || '',
+      icon: icon || '', // アイコン保存
+      updatedAt: serverTimestamp()
+    };
+    
+    if (imageUrl) {
+        data.imageUrl = imageUrl;
+    }
 
-            personalListContainer.innerHTML = "";
+    // ★ 修正点: コレクション (personal) に追加してランダムIDを生成
+    await addDoc(collection(db, "personal"), data);
 
-            querySnapshot.forEach((docSnap) => {
-              const item = docSnap.data();
-              const itemId = docSnap.id;
-              const itemEl = document.createElement("div");
-              itemEl.className =
-                "flex flex-col sm:flex-row items-start gap-4 p-4 bg-background-light dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700";
-              itemEl.innerHTML = `
-                <div class="flex-grow w-full">
-                  <h3 class="text-lg font-bold">${item.title} <span class="text-sm text-text-muted-light">(表示順: ${item.order})</span></h3>
-                  <p class="text-sm text-text-light dark:text-text-dark mt-1">${item.description.substring(0, 100)}...</p>
-                </div>
-                <div class="flex flex-col sm:flex-row gap-2 flex-shrink-0">
-                  <button 
-                    data-doc-id="${itemId}"
-                    data-collection="personalInfo"
-                    data-title="${encodeURIComponent(item.title || "")}"
-                    data-description="${encodeURIComponent(item.description || "")}"
-                    data-order="${item.order || 10}"
-                    class="edit-btn py-2 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center gap-1">
-                    <span class="material-symbols-outlined !text-base">edit</span>
-                    <span>修正</span>
-                  </button>
-                  <button data-doc-id="${itemId}" data-collection="personalInfo" data-image-path="" class="delete-btn flex-shrink-0 py-2 px-4 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors text-sm flex items-center gap-1">
-                    <span class="material-symbols-outlined !text-base">delete</span>
-                    <span>削除</span>
-                  </button>
-                </div>
-              `;
-              personalListContainer.appendChild(itemEl);
+    showMessage('パーソナル情報を追加しました', 'success');
+    
+    // フォームをリセットして再読み込み
+    document.getElementById('add-personal-form').reset();
+    const preview = document.getElementById('image-preview-personal');
+    if(preview) {
+        preview.src = '';
+        preview.classList.add('hidden');
+    }
+    
+    loadPersonalInfo(); // リスト更新
+
+  } catch (error) {
+    console.error("Error saving personal info:", error);
+    showMessage('保存に失敗しました', 'error');
+  } finally {
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span class="material-symbols-outlined">add_circle</span> <span>情報を保存する</span>';
+    }
+  }
+}
+
+// --- パーソナル情報を読み込み (リスト表示・アコーディオンUI) ---
+// --- パーソナル情報を読み込み (CSSクラス制御によるアコーディオンUI) ---
+// --- パーソナル情報を読み込み (リスト表示・アコーディオンUI) ---
+// --- Reverted to Collection-based (personal) to ensure random IDs ---
+// --- パーソナル情報を読み込み (リスト表示・アコーディオンUI) ---
+// --- Reverted to Collection-based (personal) to ensure random IDs ---
+async function loadPersonalInfo() {
+  const list = document.getElementById('personal-list');
+  if (!list) return;
+  
+  list.innerHTML = '<div class="loader"></div>';
+
+  try {
+    // Collection Reference: 'personal' (User confirmed correct collection)
+    const colRef = collection(db, "personal");
+    const q = query(colRef); 
+    const querySnapshot = await getDocs(q);
+    
+    // ★ Diagnostic Logs removed
+
+
+    list.innerHTML = '';
+
+    // セクション全体のコンテナ (ID: personal-section を付与)
+    const section = document.createElement('section');
+    section.id = 'personal-section';
+    section.className = 'w-full';
+
+    // 1. 見出しの生成
+    const h2 = document.createElement('h2');
+    h2.textContent = 'パーソナル';
+    h2.className = 'text-2xl font-bold mb-4 hidden'; 
+    section.appendChild(h2);
+
+    if (querySnapshot.empty) {
+      // console.log("No documents found in 'personal' collection.");
+
+      list.innerHTML = '<p class="text-gray-500 text-center py-4">パーソナル情報は未登録です。</p>';
+      return;
+    }
+
+    if (querySnapshot.size > 0) {
+        // 最初の1件のIDをログに出して、ID取得ロジックが正しいか確認
+        // console.log(`[Diagnostic] Sample ID: ${querySnapshot.docs[0].id}`);
+    }
+
+    // 2. アコーディオン構造の生成
+    const accordionList = document.createElement('div');
+    accordionList.className = 'accordion-list space-y-4';
+    
+
+    querySnapshot.forEach((docSnap) => {
+        const item = docSnap.data();
+        const docId = docSnap.id;
+
+        const accordionItem = document.createElement('div');
+        accordionItem.className = 'accordion-item bg-white dark:bg-slate-800 rounded-lg shadow border border-gray-200 dark:border-slate-700 overflow-hidden';
+
+        // ヘッダー部分
+        const iconName = item.icon || 'person';
+        accordionItem.innerHTML = `
+          <div class="accordion-header p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+            <div class="flex items-center gap-3">
+               <span class="material-symbols-outlined text-primary">${iconName}</span>
+               <span class="title font-bold text-gray-800 dark:text-gray-200 text-lg">${item.title || 'タイトルなし'}</span>
+            </div>
+            <span class="toggle-icon material-symbols-outlined text-gray-500">expand_more</span>
+          </div>
+
+          <!-- Remove inline style to allow CSS class control -->
+          <div class="accordion-body border-t border-gray-100 dark:border-slate-700 p-4">
+            
+            <!-- ★ New Layout: Flexbox -->
+            <div class="personal-detail-view flex items-start gap-5">
+               <!-- Image: Left, Circle, Fixed Size -->
+               <img src="${item.imageUrl || 'https://placehold.co/80x80/e2e8f0/64748b?text=No+Img'}" 
+                    class="personal-avatar w-20 h-20 rounded-full object-cover border border-slate-200 shadow-sm shrink-0" 
+                    alt="Personal Image">
+
+               <!-- Text: Right -->
+               <div class="personal-info flex-1 min-w-0">
+                 <h4 class="item-title text-base font-bold text-gray-800 dark:text-gray-200 mb-1">${item.title || 'タイトルなし'}</h4>
+                 <p class="item-desc text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap leading-relaxed">${item.content || '詳細なし'}</p>
+               </div>
+
+
+               <!-- Action Buttons: Right Edge -->
+               <div class="action-buttons flex flex-col gap-2 shrink-0">
+                 <!-- Toggle Switch -->
+                 <div class="toggle-wrapper flex flex-col items-center justify-center gap-1 mb-1">
+                     <span class="text-[10px] font-bold text-gray-400 dark:text-gray-500">表示</span>
+                     <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer visibility-toggle" 
+                               data-doc-id="${docId}" 
+                               ${(item.isVisible !== false) ? 'checked' : ''}>
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-slate-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                     </label>
+                 </div>
+
+                 <button class="edit-btn py-1.5 px-3 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition-colors flex items-center justify-center gap-1"
+                   data-collection="personal" 
+                   data-doc-id="${docId}"
+                   data-id="${docId}"> 
+                   <span class="material-symbols-outlined text-xs">edit</span> 修正
+                 </button>
+                 <button class="delete-btn py-1.5 px-3 bg-red-600 text-white rounded text-xs hover:bg-red-700 transition-colors flex items-center justify-center gap-1"
+                   data-collection="personal" 
+                   data-doc-id="${docId}">
+                   <span class="material-symbols-outlined text-xs">delete</span> 削除
+                 </button>
+               </div>
+            </div>
+          </div>
+        `;
+
+        // イベントリスナー設定 (Header Toggle)
+        const header = accordionItem.querySelector('.accordion-header');
+        if (header) {
+            header.addEventListener('click', (e) => {
+                const item = e.currentTarget.closest('.accordion-item');
+                if (item) item.classList.toggle('active');
             });
-          } catch (error) {
-            console.error("Error loading personal info: ", error);
-            showMessage(`パーソナル情報の読み込みエラー: ${error.message}`, "error");
-            personalLoader.classList.add("hidden");
-            personalListContainer.innerHTML = '<p class="text-center text-red-500">パーソナル情報の読み込みに失敗しました。</p>';
-          }
         }
+        
+        accordionList.appendChild(accordionItem);
+    });
 
-        // 2. パーソナル情報の追加フォームイベントリスナー
-        function addPersonalFormListener() {
-          if (!addPersonalForm) return;
+    section.appendChild(accordionList);
+    list.appendChild(section);
 
-          addPersonalForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById("personal-title").value;
-            const description = document.getElementById("personal-description").value;
-            const order = parseInt(document.getElementById("personal-order").value, 10);
-
-            if (submitPersonalBtn) {
-              submitPersonalBtn.disabled = true;
-              submitPersonalBtn.innerHTML = '<div class="loader !w-6 !h-6 !border-t-white !border-slate-200/50"></div> <span>処理中...</span>';
-            }
-
+    // ★ Event Delegation for Buttons and Toggle
+    section.addEventListener('change', async function(e) {
+        if (e.target.classList.contains('visibility-toggle')) {
+            const docId = e.target.getAttribute('data-doc-id');
+            const newVisibility = e.target.checked;
+            
             try {
-              await addDoc(collection(db, "personalInfo"), {
-                title: title,
-                description: description,
-                order: order,
-                createdAt: serverTimestamp(),
-              });
-              showMessage("パーソナル情報が正常に追加されました。");
-              resetPersonalForm();
-              loadPersonalInfo();
-            } catch (error) {
-              console.error("Error adding personal info: ", error);
-              showMessage(`パーソナル情報の追加エラー: ${error.message}`, "error");
-            } finally {
-               if (submitPersonalBtn) {
-                submitPersonalBtn.disabled = false;
-                submitPersonalBtn.innerHTML = '<span class="material-symbols-outlined">add</span> <span>パーソナル情報を追加</span>';
-              }
+                const docRef = doc(db, "personal", docId);
+                await updateDoc(docRef, { isVisible: newVisibility });
+                // Note: No reload needed as switch state is already updated by UI.
+                // Could confirm with a toast if desired, but request says "immediate reflect".
+                console.log(`Updated visibility for ${docId} to ${newVisibility}`);
+            } catch (err) {
+                console.error("Error updating visibility:", err);
+                // Revert switch execution if failed
+                e.target.checked = !newVisibility;
+                alert("更新に失敗しました。");
             }
-          });
+        }
+    });
+
+    section.addEventListener('click', function(e) {
+        const editBtn = e.target.closest('.edit-btn');
+        if (editBtn) {
+            e.stopPropagation(); // Stop bubbling to avoid triggering other listeners
+            
+            // datasetではなくgetAttributeで確実に取得
+            const docId = editBtn.getAttribute('data-id') || editBtn.getAttribute('data-doc-id');
+            const collectionName = editBtn.getAttribute('data-collection') || 'personal';
+
+
+             if (docId) {
+                // console.log('Calling openEditModal...');
+                // Call global openEditModal which delegates to openEditPersonalModal
+                if (typeof openEditModal === 'function') {
+                    openEditModal({ collection: collectionName, id: docId });
+                } else {
+                     console.error('openEditModal function not found');
+                }
+            } else {
+                console.error('Error: docId is missing in button attributes!');
+                alert('エラー: データのIDが見つかりません。画面を更新してください。');
+            }
+        }
+        
+        // ★ Delete Button Logic (Added for completeness)
+        const deleteBtn = e.target.closest('.delete-btn');
+        if (deleteBtn) {
+            e.stopPropagation();
+            if(!confirm('本当に削除しますか？')) return;
+
+            const docId = deleteBtn.getAttribute('data-doc-id');
+            const collectionName = deleteBtn.getAttribute('data-collection') || 'personal';
+
+            if(docId) {
+                deleteDoc(doc(db, collectionName, docId))
+                    .then(() => {
+                        showMessage('削除しました', 'success');
+                        loadPersonalInfo(); // Reload list
+                    })
+                    .catch((err) => {
+                        console.error('Delete error:', err);
+                        showMessage('削除に失敗しました', 'error');
+                    });
+            }
+        }
+    });
+    // Duplicated logic removed. The event listener ends at line 6104.
+
+  } catch (error) {
+    console.error("Error loading personal info:", error);
+    list.innerHTML = '<p class="text-red-500 text-center">読み込みエラー</p>';
+  }
+}
+
+// 修正用モーダルを開く専用関数（簡易版）
+// Updated to accept data object with ID (from global openEditModal delegation) or direct ID
+window.openEditPersonalModal = async function(data) {
+    const docId = (data && data.id) ? data.id : (currentEditDocId || null);
+    
+    if (!docId) {
+        console.error("No docId provided for openEditPersonalModal");
+        return;
+    }
+
+    // Set globals for save handler if needed
+    currentEditCollection = 'personal';
+    currentEditDocId = docId;
+
+    const docRef = doc(db, "personal", docId);
+    const docSnap = await getDoc(docRef);
+    if(docSnap.exists()){
+        const data = docSnap.data();
+        document.getElementById('personal-title').value = data.title || '';
+        document.getElementById('personal-content').value = data.content || '';
+        document.getElementById('personal-icon').value = data.icon || ''; // アイコンセット
+        
+        const preview = document.getElementById('image-preview-personal');
+        if(preview && data.imageUrl) {
+            preview.src = data.imageUrl;
+            preview.classList.remove('hidden');
+        } else if (preview) {
+             preview.classList.add('hidden');
+             preview.src = '';
         }
 
-        // 3. フォームリセット
-        function resetPersonalForm() {
-          if (addPersonalForm) addPersonalForm.reset();
-        }
+        showMessage('フォームに内容を読み込みました。修正して「情報を保存する」を押してください。', 'success');
+        document.getElementById('add-personal-form').scrollIntoView({behavior: 'smooth'});
+    }
+};
+
+// 互換性維持のためのラッパー
+function addPersonalFormListener() {
+  const form = document.getElementById('add-personal-form');
+  if (form) {
+    // 重複防止のためCloneして置換
+    const newForm = form.cloneNode(true);
+    form.parentNode.replaceChild(newForm, form);
+    
+    // 送信イベント
+    newForm.addEventListener('submit', savePersonalInfo);
+
+    // 画像プレビューイベント
+    const fileInput = newForm.querySelector('#personal-image');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+             const file = e.target.files[0];
+             if(file) {
+                 const reader = new FileReader();
+                 reader.onload = function(ev) {
+                     const preview = document.getElementById('image-preview-personal');
+                     if(preview) {
+                         preview.src = ev.target.result;
+                         preview.classList.remove('hidden');
+                     }
+                 };
+                 reader.readAsDataURL(file);
+             }
+        });
+    }
+  }
+}
+
+function resetPersonalForm() {
+    document.getElementById('add-personal-form')?.reset();
+    const preview = document.getElementById('image-preview-personal');
+    if(preview) {
+        preview.src = '';
+        preview.classList.add('hidden');
+    }
+}
 
         // --- 19. お問い合わせ情報管理 (ContactInfo CRUD) ---
 
@@ -7044,17 +7283,26 @@ function setupStaticPageSubTabs() {
         }
 
         // 2. 修正モーダルを開く関数
-        function openEditModal(data) {
-          if (!editModal || !editFormContent) return;
+        async function openEditModal(data) {
+          if (!editModal || !editFormContent) {
+             console.error('Error: Modal element not found!'); // ★ Log 1b
+             return;
+          }
 
           // グローバル変数をリセット
           editFileArticle = null;
           editFileBook = null;
           editFileMediaIcon = null;
           editFileMediaBanner = null;
-          editFileSite = null;
+          editFileSite = null; // 既存の行を保持
           currentEditCollection = data.collection;
-          currentEditDocId = data.docId;
+          currentEditDocId = data.id || data.docId; // docId または id を使用
+
+          // Delegation removed to use standard modal
+          // if (currentEditCollection === 'personal' || currentEditCollection === 'personalInfo') { ... }
+
+          if (!editModal || !editFormContent) return; // 既存のチェックを保持
+          const modalTitle = document.getElementById("edit-modal-title"); // 新しい行
           currentEditOldImagePath = data.imagePath || "";
 
           // フォームの中身を一度クリア
@@ -7218,14 +7466,52 @@ function setupStaticPageSubTabs() {
                 editFormContent.appendChild(template);
                 break;
 
+              case "personal":
               case "personalInfo":
                 editModalTitle.textContent = "パーソナル情報を修正";
                 template = templatePersonalInfo.cloneNode(true);
 
-                template.querySelector("#edit-personal-id").value = data.docId;
-                template.querySelector("#edit-personal-title").value = data.title;
-                template.querySelector("#edit-personal-description").value = data.description;
-                template.querySelector("#edit-personal-order").value = data.order;
+                  // ★ Fetch updated data from Firestore (User Request)
+                  try {
+                      const targetId = data.id || data.docId; // Support both property names
+                      if (!targetId) {
+                          console.error("Invalid ID for fetching personal data:", data);
+                          return;
+                      }
+
+                          // console.log(`Fetching document: personal/${targetId}`);
+
+                      
+                      const freshDoc = await getDoc(doc(db, "personal", targetId));
+                      if (freshDoc.exists()) {
+                          const freshData = freshDoc.data();
+                          // console.log("Modal fetched data:", freshData);
+
+
+                          // Populate fields with fresh data
+                          template.querySelector("#edit-personal-id").value = targetId;
+                          template.querySelector("#edit-personal-title").value = freshData.title || "";
+                          template.querySelector("#edit-personal-content").value = freshData.content || freshData.description || "";
+                          // order field removed
+                          template.querySelector("#edit-personal-icon").value = freshData.icon || "";
+
+                          // Image Preview
+                          const pImg = template.querySelector("#edit-image-preview-personal");
+                          if (freshData.imageUrl) {
+                              pImg.src = freshData.imageUrl;
+                              pImg.classList.remove("hidden");
+                          } else {
+                              pImg.classList.add("hidden");
+                              pImg.src = "";
+                          }
+                      } else {
+                          console.error("Document not found in personal collection:", targetId);
+                      }
+                  } catch (e) {
+                      console.error("Error fetching personal data:", e);
+                  }
+                  
+                  template.querySelector("#edit-personal-image").value = "";
 
                 editFormContent.appendChild(template);
                 break;
@@ -7723,14 +8009,14 @@ function setupStaticPageSubTabs() {
                   }
                   break;
 
-                case "personalInfo":
+                case "personal":
                   updatedData = {
                     title: document.getElementById("edit-personal-title").value,
-                    description: document.getElementById("edit-personal-description").value,
-                    order: parseInt(document.getElementById("edit-personal-order").value, 10),
+                    content: document.getElementById("edit-personal-content").value, // description -> content
+                    icon: document.getElementById("edit-personal-icon").value, // Add icon support
                   };
-                  selectedEditFile = null;
-                  newImagePathPrefix = "";
+                  selectedEditFile = document.getElementById("edit-personal-image").files[0]; // Get file from edit form
+                  newImagePathPrefix = "images/photo/personal"; // Define storage path
                   break;
 
                 case "contactInfo":
@@ -7883,25 +8169,22 @@ function setupStaticPageSubTabs() {
 
               // 2. Firestoreドキュメントを更新
               // --- ★ Phase 3-3 (機能追加 4/4): サイトマップの特別保存処理 ★ ---
+              // --- ★ Phase 3-3 (機能追加 4/4): サイトマップの特別保存処理 ★ ---
               if (currentEditCollection === "sitemapEntries") {
                 const newPath = updatedData.path;
 
                 // path (ドキュメントID) が変更されたかチェック
                 if (newPath !== currentEditDocId) {
-                  // IDが変更された場合
-
-                  // 1. 新しいID (newPath) で新しいドキュメントを作成
-                  // (IDが path と同じなのが sitemapEntries の仕様)
-                  updatedData.lastModified = serverTimestamp(); // タイムスタンプも更新
+                  // IDが変更された場合: 新しいIDで作成し、古いIDを削除
+                  updatedData.lastModified = serverTimestamp();
                   const newDocRef = doc(db, "sitemapEntries", newPath);
                   await setDoc(newDocRef, updatedData);
 
-                  // 2. 古いID (currentEditDocId) のドキュメントを削除
                   const oldDocRef = doc(db, "sitemapEntries", currentEditDocId);
                   await deleteDoc(oldDocRef);
                 } else {
-                  // IDが変更されていない場合 (通常のタイトル更新)
-                  updatedData.lastModified = serverTimestamp(); // タイムスタンプも更新
+                  // IDが変更されていない場合: 更新のみ
+                  updatedData.lastModified = serverTimestamp();
                   const docRef = doc(db, "sitemapEntries", currentEditDocId);
                   await updateDoc(docRef, updatedData);
                 }
@@ -7933,11 +8216,12 @@ function setupStaticPageSubTabs() {
                 case "sites":
                   loadSites();
                   break;
+                case "personal":
+                case "personalInfo":
+                  loadPersonalInfo(); // Refresh personal info list
+                  break;
                 case "skills":
                   loadSkills();
-                  break;
-                case "personalInfo":
-                  loadPersonalInfo();
                   break;
                 case "contactInfo":
                   loadContactInfo();
@@ -8465,25 +8749,67 @@ async function deleteContactSet(setId) {
 function addContactItemField(data = {}) {
     const container = document.getElementById("set-contact-items-container");
     const index = container.children.length;
+    
+    // Default to 'text' if not specified
+    const type = data.contactType || 'text'; 
+
     const itemHtml = `
-        <div class="contact-item p-3 bg-white dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600">
-            <div class="flex justify-between items-start mb-2">
-                <span class="text-sm font-bold">項目 ${index + 1}</span>
+        <div class="contact-item p-4 bg-white dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-600 pb-2 mb-2">
+                <span class="text-sm font-bold text-slate-700 dark:text-slate-300">項目 ${index + 1}</span>
                 <div class="flex items-center gap-3">
                     <label class="inline-flex items-center cursor-pointer">
                         <input type="checkbox" class="item-visible sr-only peer" ${data.visible !== false ? 'checked' : ''}>
-                        <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
-                        <span class="ms-2 text-xs font-medium text-gray-900 dark:text-gray-300">表示</span>
+                        <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-500 peer-checked:bg-primary"></div>
+                        <span class="ml-2 text-xs font-medium text-gray-900 dark:text-gray-300">表示</span>
                     </label>
-                    <button type="button" onclick="this.closest('.contact-item').remove()" class="text-red-600 hover:text-red-800 text-sm">削除</button>
+                    <button type="button" onclick="this.closest('.contact-item').remove()" class="text-red-500 hover:text-red-700 text-sm font-bold flex items-center gap-1">
+                        <span class="material-symbols-outlined text-base">delete</span>削除
+                    </button>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-2">
-                <input type="text" class="item-title text-sm rounded border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800" placeholder="項目名 (例: 電話番号)" value="${data.title || ''}" />
-                <input type="text" class="item-icon text-sm rounded border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800" placeholder="アイコン (例: call)" value="${data.icon || ''}" />
+
+            <!-- Display Type Selector -->
+            <div class="flex gap-4 items-center">
+                <span class="text-xs font-bold text-slate-500">表示タイプ:</span>
+                <label class="inline-flex items-center gap-1 cursor-pointer">
+                    <input type="radio" class="item-type-text text-primary focus:ring-primary" name="contact-type-${index}-${Date.now()}" value="text" ${type === 'text' ? 'checked' : ''}>
+                    <span class="text-sm">テキスト (メール等)</span>
+                </label>
+                <label class="inline-flex items-center gap-1 cursor-pointer">
+                    <input type="radio" class="item-type-button text-primary focus:ring-primary" name="contact-type-${index}-${Date.now()}" value="button" ${type === 'button' ? 'checked' : ''}>
+                    <span class="text-sm">ボタン (フォーム等)</span>
+                </label>
             </div>
-            <textarea class="item-description mt-2 w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800" rows="2" placeholder="内容 (例: 03-1234-5678)">${data.description || ''}</textarea>
-            <input type="text" class="item-image mt-2 w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-background-light dark:bg-slate-800" placeholder="画像URL (任意)" value="${data.image || ''}" />
+
+            <!-- Fields -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-slate-500">タイトル (管理用/見出し)</label>
+                    <input type="text" class="item-title w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800" placeholder="例: お問い合わせ" value="${data.title || ''}" />
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-slate-500">アイコン (Google Fonts)</label>
+                    <input type="text" class="item-icon w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800" placeholder="例: mail" value="${data.icon || ''}" />
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-xs font-bold text-slate-500">表示ラベル/テキスト</label>
+                <input type="text" class="item-label w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800" placeholder="表示するテキスト (例: お問い合わせはこちら)" value="${data.labelText || data.description || ''}" />
+                <p class="text-[10px] text-slate-400">※ボタンの場合はボタン内の文字、テキストの場合は表示される文字になります</p>
+            </div>
+            
+            <div class="space-y-1">
+                <label class="text-xs font-bold text-slate-500">リンク先 / アドレス</label>
+                <input type="text" class="item-link w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800" placeholder="メールアドレス または URL" value="${data.linkValue || data.description || ''}" />
+            </div>
+
+            <!-- Legacy Image Hidden/Optional -->
+            <div class="hidden">
+                 <input type="text" class="item-image" value="${data.image || ''}" />
+                 <textarea class="item-description">${data.description || ''}</textarea> 
+            </div>
         </div>
     `;
     container.insertAdjacentHTML("beforeend", itemHtml);
@@ -8513,13 +8839,23 @@ async function saveContactSet(e) {
 
         // Collect contact items
         const items = [];
-        document.querySelectorAll(".contact-item").forEach((item) => {
+        document.querySelectorAll(".contact-item").forEach(itemEl => {
+            const contactType = itemEl.querySelector('.item-type-text:checked') ? 'text' : 
+                                itemEl.querySelector('.item-type-button:checked') ? 'button' : 'text';
+
             items.push({
-                title: item.querySelector(".item-title").value,
-                description: item.querySelector(".item-description").value,
-                icon: item.querySelector(".item-icon").value,
-                image: item.querySelector(".item-image").value,
-                visible: item.querySelector(".item-visible").checked,
+                visible: itemEl.querySelector(".item-visible").checked,
+                title: itemEl.querySelector(".item-title").value,
+                icon: itemEl.querySelector(".item-icon").value,
+                
+                // New Fields
+                contactType: contactType,
+                labelText: itemEl.querySelector(".item-label").value,
+                linkValue: itemEl.querySelector(".item-link").value,
+
+                // Legacy/Hidden Fields (keep them synced depending on type for safety)
+                description: itemEl.querySelector(".item-description")?.value || itemEl.querySelector(".item-label").value, 
+                image: itemEl.querySelector(".item-image")?.value || ""
             });
         });
 
@@ -8575,11 +8911,11 @@ async function showContactSetSnippet(setId) {
         if (data.cta && data.cta.visible) {
             snippetHTML += `
 <!-- CTA Section -->
-<section class="cta-section py-16 bg-gradient-to-r from-primary to-primary-dark text-white">
+<section class="cta-section py-16 bg-cyan-50 text-gray-800">
     <div class="container mx-auto px-4 text-center">
-        <h2 class="text-3xl font-bold mb-4">${data.cta.mainText || ''}</h2>
-        <p class="text-lg mb-8">${data.cta.subText || ''}</p>
-        ${data.cta.buttonText && data.cta.buttonUrl ? `<a href="${data.cta.buttonUrl}" class="inline-block px-8 py-3 bg-white text-primary font-bold rounded-lg hover:bg-gray-100 transition-colors">${data.cta.buttonText}</a>` : ''}
+        <h2 class="text-3xl font-bold mb-4 text-gray-800">${data.cta.mainText || ''}</h2>
+        <p class="text-lg mb-8 text-gray-600">${data.cta.subText || ''}</p>
+        ${data.cta.buttonText && data.cta.buttonUrl ? `<a href="${data.cta.buttonUrl}" class="inline-block px-8 py-3 bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity shadow-sm">${data.cta.buttonText}</a>` : ''}
     </div>
 </section>
 
@@ -8590,23 +8926,84 @@ async function showContactSetSnippet(setId) {
         if (data.items && data.items.length > 0) {
             const visibleItems = data.items.filter(item => item.visible !== false);
             if (visibleItems.length > 0) {
+                // calculate columns logic similar to common.js
+                // default to 2 columns if not set
+                const columns = data.itemsColumns || '2';
+                let gridClass = 'grid grid-cols-1 gap-6';
+                if (columns === '2') gridClass = 'grid grid-cols-1 md:grid-cols-2 gap-6';
+                if (columns === '3') gridClass = 'grid grid-cols-1 md:grid-cols-3 gap-6';
+
+                // To ensure nice centering if few items, we could add mx-auto or just rely on grid gap.
+                // Request said "balanced alignment" -> if 1 item, maybe center it?
+                // common.js didn't look like it had special center logic for single item, but let's check.
+                // common.js just used the grid class. I see lines 1883-1890 using pure grid logic.
+                // However, I will add max-w constraints to prevent full-width stretching if it looks bad.
+                // Actually, common.js code seen:
+                // if (columns === '2') gridClass = 'grid grid-cols-1 md:grid-cols-2 gap-6';
+                // So I will replicate that.
+
                 snippetHTML += `
 <!-- Contact Information Section -->
-<section class="contact-info-section py-12">
+<section class="contact-info-section py-12 bg-cyan-50">
     <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="${gridClass}">
 `;
                 visibleItems.forEach(item => {
-                    snippetHTML += `            <div class="contact-item p-6 bg-white dark:bg-slate-800 rounded-lg shadow-md">
+                    const isButton = item.contactType === 'button';
+                    
+                    // Link Logic (Replicated from common.js)
+                    let href = (item.linkValue || '').trim();
+                    let targetAttr = '';
+                    const isPhone = /^[\d-]+$/.test(href);
+                    const isEmail = href.includes('@') && !href.startsWith('http');
+                    
+                    if (isPhone) {
+                        href = `tel:${href}`;
+                    } else if (isEmail) {
+                        if (!href.startsWith('mailto:')) href = `mailto:${href}`;
+                    } else {
+                        if (!href.startsWith('http') && !href.startsWith('//') && href) {
+                             // href = `https://${href}`; 
+                        }
+                        if(href) targetAttr = 'target="_blank" rel="noopener noreferrer"';
+                    }
+                    if(!href) href = '#'; // Fallback
+
+                    if (isButton) {
+                        // Pattern B: Button (Centered)
+                        // Use <a> tag for the Whole Button or just the button part?
+                        // Common.js uses <a> for the button part.
+                        snippetHTML += `            <div class="contact-item p-6 bg-white dark:bg-slate-800 rounded-lg shadow-md border border-slate-100 hover:shadow-lg transition-shadow flex flex-col items-center justify-center text-center gap-4">
+                <div class="flex items-center justify-center gap-2">
+                    ${item.image ? `<img src="${item.image}" alt="${item.title}" class="w-6 h-6 object-contain">` : item.icon ? `<span class="material-symbols-outlined text-xl text-primary">${item.icon}</span>` : ''}
+                    <h3 class="font-bold text-lg text-gray-800 dark:text-gray-100">${item.title || ''}</h3>
+                </div>
+                <a href="${href}" ${targetAttr} class="inline-flex items-center justify-center gap-2 py-3 px-8 bg-primary text-white font-bold rounded-lg shadow-sm hover:opacity-90 transition-opacity">
+                    <span>${item.labelText || ''}</span>
+                    <span class="material-symbols-outlined text-sm">open_in_new</span>
+                </a>
+            </div>
+`;
+                    } else {
+                        // Pattern A: Text (Side-by-Side)
+                        // Link clickable if phone/email
+                        let displayLink = item.linkValue || '';
+                        if (href && href !== '#' && (isPhone || isEmail || href.startsWith('http'))) {
+                             displayLink = `<a href="${href}" ${targetAttr} class="text-primary hover:underline">${item.linkValue}</a>`;
+                        }
+
+                        snippetHTML += `            <div class="contact-item p-6 bg-white dark:bg-slate-800 rounded-lg shadow-md border border-slate-100 hover:shadow-lg transition-shadow">
                 <div class="flex items-center gap-4">
-                    ${item.image ? `<img src="${item.image}" alt="${item.title}" class="w-12 h-12 rounded-full">` : item.icon ? `<span class="material-symbols-outlined text-4xl text-primary">${item.icon}</span>` : ''}
+                    ${item.image ? `<img src="${item.image}" alt="${item.title}" class="w-12 h-12 object-contain">` : item.icon ? `<span class="material-symbols-outlined text-4xl text-primary">${item.icon}</span>` : ''}
                     <div>
-                        <h3 class="font-bold text-lg">${item.title || ''}</h3>
-                        <p class="text-text-muted-light dark:text-text-muted-dark">${item.description || ''}</p>
+                        <h3 class="font-bold text-lg text-gray-800 dark:text-gray-100">${item.title || ''}</h3>
+                        <p class="text-sm font-bold text-gray-800 dark:text-gray-100 mt-1">${item.labelText || ''}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 break-all">${displayLink}</p>
                     </div>
                 </div>
             </div>
 `;
+                    }
                 });
                 snippetHTML += `        </div>
     </div>
@@ -9689,36 +10086,7 @@ window.addContactItemField = addContactItemField;
         }
 
         // --- ★ 汎用アップロード関数 (NEW) ★ ---
-        async function uploadImage(storageRef, file, progressBar) {
-          return new Promise((resolve, reject) => {
-            const uploadTask = uploadBytesResumable(storageRef, file);
-            uploadTask.on(
-              "state_changed",
-              (snapshot) => {
-                if (progressBar) {
-                  const progress =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  progressBar.style.width = progress + "%";
-                }
-              },
-              (error) => {
-                console.error("Upload Error:", error);
-                reject(new Error(`画像アップロード失敗: ${error.message}`));
-              },
-              async () => {
-                try {
-                  const downloadURL = await getDownloadURL(
-                    uploadTask.snapshot.ref
-                  );
-                  resolve(downloadURL);
-                } catch (getUrlError) {
-                  console.error("Get URL Error:", getUrlError);
-                  reject(new Error(`画像URL取得失敗: ${getUrlError.message}`));
-                }
-              }
-            );
-          });
-        }
+
 
         // --- ★ Phase 3-3: サイトマップスキャンボタンのイベントリスナー (修正) ★ ---
         if (scanSitemapBtn) {
@@ -10876,6 +11244,59 @@ window.addContactItemField = addContactItemField;
         }
     }
 
+      // --- ★ カテゴリー並び替え機能 (Move Category) ★ ---
+      window.moveCategory = async (docId, direction) => {
+        const listContainer = document.getElementById('blog-categories-list-container');
+        // 操作中のガード（連打防止）
+        if (listContainer.classList.contains('opacity-50')) return;
+        listContainer.classList.add('opacity-50', 'pointer-events-none');
+
+        try {
+          // 1. 全データを取得
+          const q = query(collection(db, "blogCategories"));
+          const snapshot = await getDocs(q);
+          let items = [];
+          snapshot.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
+
+          // 2. 現在の順序でソート (未設定は0扱い)
+          items.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+          // 3. 移動対象のインデックスを探す
+          const index = items.findIndex(item => item.id === docId);
+          if (index === -1) throw new Error("Item not found");
+
+          // 4. 配列内で入れ替え
+          if (direction === 'up' && index > 0) {
+            [items[index - 1], items[index]] = [items[index], items[index - 1]];
+          } else if (direction === 'down' && index < items.length - 1) {
+            [items[index + 1], items[index]] = [items[index], items[index + 1]];
+          } else {
+            // 移動不可（先頭で上、末尾で下など）の場合は何もしない
+            listContainer.classList.remove('opacity-50', 'pointer-events-none');
+            return;
+          }
+
+          // 5. 全アイテムに新しい番号 (order) を振り直して一括保存 (Re-indexing)
+          const updates = items.map((item, newIndex) => {
+            const docRef = doc(db, "blogCategories", item.id);
+            return updateDoc(docRef, { order: newIndex });
+          });
+
+          await Promise.all(updates);
+          
+          // 6. リロード
+          loadBlogCategories();
+          showMessage('並び順を更新しました', 'success');
+
+        } catch (error) {
+          console.error("Error moving category:", error);
+          showMessage("並び替えに失敗しました", "error");
+          loadBlogCategories(); // エラー時も表示を戻す
+        } finally {
+          listContainer.classList.remove('opacity-50', 'pointer-events-none');
+        }
+      };
+
       // --- ★ ブログカテゴリー管理ロジック (復旧・追加) ★ ---
       async function loadBlogCategories() {
         const listContainer = document.getElementById("blog-categories-list-container");
@@ -10884,32 +11305,113 @@ window.addContactItemField = addContactItemField;
         if (loader && listContainer) loader.classList.remove("hidden");
 
         try {
-            const q = query(collection(db, "blogCategories"), orderBy("name", "asc"));
+            const q = query(collection(db, "blogCategories"));
             const snapshot = await getDocs(q);
+            
+            let categories = [];
+            snapshot.forEach(doc => {
+                categories.push({ docId: doc.id, ...doc.data() });
+            });
+            
+            // 1. 取得した categories 配列を sort で並び替える
+            categories.sort((a, b) => (a.order || 0) - (b.order || 0));
 
             // 1. カテゴリー管理タブのリスト更新
             if (listContainer) {
                 listContainer.innerHTML = "";
                 if (loader) loader.classList.add("hidden");
 
-                if (snapshot.empty) {
+                if (categories.length === 0) {
                     listContainer.innerHTML = "<p class='text-center text-sm text-slate-500'>カテゴリーなし</p>";
                 } else {
-                    snapshot.forEach(docSnap => {
-                        const div = document.createElement("div");
-                        div.className = "flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700";
-                        div.innerHTML = `<span>${docSnap.data().name}</span>`;
+                    categories.forEach((cat, index) => {
+                        // 最上部は「↑」不可、最下部は「↓」不可
+                        const isFirst = index === 0;
+                        const isLast = index === categories.length - 1;
+
+                        // ボタンHTML
+                        const moveButtons = `
+                          <div class="flex flex-col gap-1 mr-4">
+                            <button type="button" onclick="moveCategory('${cat.docId}', 'up')" ${isFirst ? 'disabled class="opacity-30 cursor-not-allowed text-slate-400"' : 'class="text-slate-600 hover:text-primary hover:bg-slate-100 rounded"'} title="上へ移動">
+                              <span class="material-symbols-outlined text-xl">keyboard_arrow_up</span>
+                            </button>
+                            <button type="button" onclick="moveCategory('${cat.docId}', 'down')" ${isLast ? 'disabled class="opacity-30 cursor-not-allowed text-slate-400"' : 'class="text-slate-600 hover:text-primary hover:bg-slate-100 rounded"'} title="下へ移動">
+                              <span class="material-symbols-outlined text-xl">keyboard_arrow_down</span>
+                            </button>
+                          </div>
+                        `;
                         
+                        const div = document.createElement("div");
+                        div.className = "flex items-center p-3 bg-slate-50 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700";
+                        
+                        div.innerHTML = `
+                            ${moveButtons}
+                            <div class="flex-grow flex justify-between items-center">
+                                <span>${cat.name}</span>
+                                <button type="button" class="text-red-600 text-sm font-bold ml-4" onclick="deleteBlogCategory('${cat.docId}')">削除</button>
+                            </div>
+                        `;
+                        
+                        // Delete logic needs to be attached or global. 
+                        // Since I replaced innerHTML, previous onclick was inline anonymous function.
+                        // I need to either put delete logic inline or make a global function.
+                        // The previous code had: delBtn.onclick = async () => { ... }
+                        // To keep it simple and consistent with moveButtons using onclick string, I'll attach listener after creating element or use a global function.
+                        // But wait, moveCategory is global. deleteBlogCategory doesn't exist yet.
+                        // I should probably stick to `delBtn.onclick` approach for delete if I want to avoid adding another global, 
+                        // OR just add the delete button using DOM API to attach listener properly.
+                        // BUT, I'm injecting string HTML for moveButtons. 
+                        // Let's mix: create div with innerHTML for buttons + name, then append delete button?
+                        // The user instruction said: "生成する div の innerHTML の先頭に ${moveButtons} を追加"
+                        
+                        // Let's refine the loop to use DOM methods for delete button to stay safe, 
+                        // or define deleteBlogCategory globally.
+                        // The previous code was:
+                        /*
                         const delBtn = document.createElement("button");
-                        delBtn.className = "text-red-600 text-sm font-bold";
+                        delBtn.onclick = ...
+                        div.appendChild(delBtn);
+                        */
+                        // Creating the structure with innerHTML is easier for the flex layout.
+                        // Let's try to reconstruct the DOM element properly.
+                    });
+
+                    // Re-implementing the loop with proper DOM construction
+                    categories.forEach((cat, index) => {
+                        const isFirst = index === 0;
+                        const isLast = index === categories.length - 1;
+
+                        const div = document.createElement("div");
+                        div.className = "flex items-center p-3 bg-slate-50 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700";
+
+                        const moveButtonsDiv = document.createElement('div');
+                        moveButtonsDiv.className = "flex flex-col gap-1 mr-4";
+                        moveButtonsDiv.innerHTML = `
+                            <button type="button" onclick="moveCategory('${cat.docId}', 'up')" ${isFirst ? 'disabled class="opacity-30 cursor-not-allowed text-slate-400"' : 'class="text-slate-600 hover:text-primary hover:bg-slate-100 rounded"'} title="上へ移動">
+                              <span class="material-symbols-outlined text-xl">keyboard_arrow_up</span>
+                            </button>
+                            <button type="button" onclick="moveCategory('${cat.docId}', 'down')" ${isLast ? 'disabled class="opacity-30 cursor-not-allowed text-slate-400"' : 'class="text-slate-600 hover:text-primary hover:bg-slate-100 rounded"'} title="下へ移動">
+                              <span class="material-symbols-outlined text-xl">keyboard_arrow_down</span>
+                            </button>
+                        `;
+
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = "flex-grow flex justify-between items-center";
+                        contentDiv.innerHTML = `<span>${cat.name}</span>`;
+
+                        const delBtn = document.createElement("button");
+                        delBtn.className = "text-red-600 text-sm font-bold ml-4";
                         delBtn.textContent = "削除";
                         delBtn.onclick = async () => {
                             if(confirm("削除しますか？")) {
-                                await deleteDoc(doc(db, "blogCategories", docSnap.id));
+                                await deleteDoc(doc(db, "blogCategories", cat.docId));
                                 loadBlogCategories();
                             }
                         };
-                        div.appendChild(delBtn);
+                        
+                        contentDiv.appendChild(delBtn);
+                        div.appendChild(moveButtonsDiv);
+                        div.appendChild(contentDiv);
                         listContainer.appendChild(div);
                     });
                 }
@@ -10925,13 +11427,13 @@ window.addContactItemField = addContactItemField;
                 if(sel) {
                     const current = sel.value;
                     sel.innerHTML = '<option value="" disabled selected>カテゴリーを選択</option>';
-                    if (snapshot.empty) {
+                    if (categories.length === 0) {
                          sel.innerHTML = '<option value="" disabled>カテゴリーが登録されていません</option>';
                     } else {
-                        snapshot.forEach(doc => {
+                        categories.forEach(cat => {
                             const opt = document.createElement("option");
-                            opt.value = doc.data().name;
-                            opt.textContent = doc.data().name;
+                            opt.value = cat.name;
+                            opt.textContent = cat.name;
                             sel.appendChild(opt);
                         });
                     }
@@ -10958,7 +11460,7 @@ window.addContactItemField = addContactItemField;
             if(submitBtn) submitBtn.disabled = true;
 
             try {
-                await addDoc(collection(db, "blogCategories"), { name: input.value.trim(), createdAt: serverTimestamp() });
+                await addDoc(collection(db, "blogCategories"), { name: input.value.trim(), order: 9999, createdAt: serverTimestamp() });
                 input.value = "";
                 showMessage("ブログカテゴリーを追加しました");
                 loadBlogCategories();
