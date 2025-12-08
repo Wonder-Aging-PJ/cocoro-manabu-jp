@@ -1719,7 +1719,7 @@ async function loadTopBooks() {
       const btnText = book.buttonText || "詳細を見る";
 
       bookEl.innerHTML = `
-        < div class="w-48 md:w-56 flex-shrink-0" >
+        <div class="w-48 md:w-56 flex-shrink-0">
           <img alt="Book cover of ${book.title}" class="rounded-lg shadow-xl w-full h-auto object-cover aspect-[3/4]" src="${book.imageUrl}" onerror="this.src='https://placehold.co/300x400/cccccc/ffffff?text=Image+Not+Found'; this.onerror=null;">
         </div>
         <div class="flex flex-col gap-4 text-center md:text-left">
