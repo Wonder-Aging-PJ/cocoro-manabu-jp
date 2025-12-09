@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Snippet Preview</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <script>
      // カスタムカラー定義 (tailwind.config.jsの内容を反映)
@@ -23,7 +24,10 @@
              'text-muted-dark': '#adb5bd',
              'surface-light': '#ffffff',
              'surface-dark': '#1a2a33',
-           }
+           },
+           fontFamily: {
+             display: ["Manrope", "Noto Sans JP", "sans-serif"]
+           },
          }
        }
      }
@@ -32,7 +36,7 @@
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
   </style>
 </head>
-<body class="bg-gray-100 p-10 flex justify-center items-start min-h-screen">
+<body class="bg-gray-100 p-10 flex justify-center items-start min-h-screen font-display">
   <div id="preview-container" class="w-full max-w-5xl">
     </div>
   <script type="module">

@@ -211,6 +211,9 @@ async function loadHeaderCta() {
     if (docSnap.exists() && docSnap.data().headerCta) {
       const ctaData = docSnap.data().headerCta;
 
+      // Debug log for troubleshooting visibility issue
+      console.log("Header CTA Data:", ctaData);
+
       // visible が false または true (undefinedではない) かチェック
       if (ctaData.visible === true) {
         // ボタンを表示
@@ -230,12 +233,15 @@ async function loadHeaderCta() {
 
       } else {
         // visible が false の場合
-        if (ctaContainerPC) ctaContainerPC.innerHTML = ''; // 非表示 (ローダーを消す)
-        if (ctaContainerMobile) ctaContainerMobile.innerHTML = ''; // 非表示 (ローダーを消す)
+        console.log("Header CTA is hidden by setting.");
+        if (ctaContainerPC) ctaContainerPC.innerHTML = ''; // 非表示
+        if (ctaContainerMobile) ctaContainerMobile.innerHTML = ''; // 非表示
       }
     } else {
       // データがまだない場合
-      throw new Error("CTA設定が見つかりません");
+      console.log("Header CTA data not found or disabled.");
+      if (ctaContainerPC) ctaContainerPC.innerHTML = '';
+      if (ctaContainerMobile) ctaContainerMobile.innerHTML = '';
     }
   } catch (error) {
     console.error("ヘッダーCTAの読み込みエラー:", error);

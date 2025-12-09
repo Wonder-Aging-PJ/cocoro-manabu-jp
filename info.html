@@ -62,7 +62,7 @@
     }
   </script>
 </head>
-<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
 <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
 
   <!-- ★ 共通ヘッダー (レスポンシブ対応) ★ -->
@@ -75,16 +75,12 @@
         <!-- PC用メニュー (md以上で表示) -->
         <div id="header-nav-container" class="hidden md:flex flex-1 justify-center items-center gap-8">
           <nav class="flex items-center gap-5 lg:gap-6" id="main-nav"></nav>
-          <a href="free-course.html" role="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0">
-            <span class="truncate">無料講座</span>
-          </a>
+          <div id="header-cta-container"></div>
         </div>
 
         <!-- スマホ用メニューボタン (md未満で表示) -->
         <div class="md:hidden flex items-center gap-4">
-           <a href="free-course.html" role="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90 transition-opacity flex-shrink-0">
-            <span class="truncate">無料講座</span>
-          </a>
+           <div id="mobile-cta-container"></div>
           <button id="mobile-menu-toggle" class="text-text-light dark:text-text-dark p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
             <span class="material-symbols-outlined">menu</span>
           </button>
